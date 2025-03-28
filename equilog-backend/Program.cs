@@ -4,7 +4,6 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        // This is a comment!
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddAuthorization();
