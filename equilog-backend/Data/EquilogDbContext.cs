@@ -1,6 +1,9 @@
-﻿namespace equilog_backend.Data;
+﻿using Microsoft.EntityFrameworkCore;
 
-public class EquilogDbContext
+namespace equilog_backend.Data;
+
+public class EquilogDbContext(DbContextOptions<EquilogDbContext> options)
+    :DbContext(options)
 {
     
 }
