@@ -2,5 +2,8 @@
 
 public enum OperationResult
 {
-    
+    Success,
+    GeneralError,
+    ValidationError,
+    NotFound
 }
