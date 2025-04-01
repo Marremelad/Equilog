@@ -1,6 +1,8 @@
-﻿namespace equilog_backend.Services;
+﻿using equilog_backend.Data;
 
-public class EventService
+namespace equilog_backend.Services;
+
+public class EventService(EquilogDbContext context)
 {
     
 }
