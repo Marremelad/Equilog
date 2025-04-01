@@ -8,37 +8,20 @@ namespace equilog_backend.Models
         [Key]
         public int HorseId { get; set; }
 
-        [Required]
-        [StringLength(60)]
-        public string Name { get; set; }
+        [StringLength(30)]
+        public required string Name { get; set; }
         public DateTime? DateOfBirth { get; set; } // empty if unknown (?)
 
-        // Enum HorseGender (?)
-        [Required]
-        public HorseGender Gender { get; set; }
+        // Ticket for HorseGender requested, add when accepted.
+        //public required HorseGender Gender { get; set; }
 
-        // Maybe add Enum for breed too?
+        // Maybe change Color and Breed to Enums? Discuss.
         [StringLength(30)]
         public string? Color { get; set; }
 
-        [StringLength(30)]
+        [StringLength(60)]
         public string? Breed { get; set; }
 
-        // NAV
-
-        [Required]
-
-        //Horse must be connected to 1 stable. If horse visits another stable, maybe we use a temporary horse-copy/extention(?) for that stable
-        public int StableId { get; set; }
-
-        [ForeignKey("StableId")]
-        public virtual Stable Stable { get; set; }
-
-        // List of tasks connected to specific horse
-        public virtual ICollection<HorseTask> HorseTasks { get; set; } = new List<HorseTask>();
-
-        // List of users connected to the horse. 
-        public virtual ICollection<UserHorse> UserHorses { get; set; } = new List<UserHorse>();
-
+        // Add Nav properties when viable
     }
 }
