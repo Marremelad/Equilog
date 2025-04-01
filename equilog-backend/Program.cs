@@ -1,4 +1,5 @@
 using equilog_backend.Data;
+using equilog_backend.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend;
@@ -18,6 +19,8 @@ public class Program
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
         });
+
+        builder.Services.AddScoped<EventService>();
         
         var app = builder.Build();
 
