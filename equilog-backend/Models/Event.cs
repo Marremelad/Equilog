@@ -10,7 +10,7 @@ public class Event
     [StringLength(50)]
     public required string Title { get; set; }
 
-    public DateTime StartDateTime { get; set; }
+    public required DateTime StartDateTime { get; set; }
 
-    public DateTime EndDateTime { get; set; }
+    public required DateTime EndDateTime { get; set; }
 }
