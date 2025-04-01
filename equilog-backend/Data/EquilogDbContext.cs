@@ -7,4 +7,5 @@ public class EquilogDbContext(DbContextOptions<EquilogDbContext> options)
     :DbContext(options)
 {
     public DbSet<Event> Events { get; set; }
+    public DbSet<Horse> Horses { get; set; }
 }
