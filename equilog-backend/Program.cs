@@ -35,5 +35,7 @@ public class Program
         app.UseAuthorization();
         
         app.Run();
+        
+        // Hello world!
     }
 }
