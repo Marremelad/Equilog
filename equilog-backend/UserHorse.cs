@@ -16,4 +16,6 @@ public class UserHorse
     [ForeignKey("Horse")]
     public required int HorseIdFk { get; set; }
     public virtual required Horse Horse { get; set; }
+
+    public required string UserRole { get; set; } // Change to enum.
 }
