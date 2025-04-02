@@ -22,4 +22,6 @@ public class User
     public virtual List<UserStable>? UserStables { get; set; }
     
     public virtual List<UserHorse>? UserHorses { get; set; }
+    
+    public virtual List<UserEvent>? UserEvents { get; set; }
 }
