@@ -1,4 +1,6 @@
-﻿namespace equilog_backend.Common;
+﻿using equilog_backend.Common.Enums;
+
+namespace equilog_backend.Common;
 
 public class Response<T>
 {
