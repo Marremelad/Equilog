@@ -1,4 +1,4 @@
-﻿namespace equilog_backend.Enums;
+﻿namespace equilog_backend.Common.Enums;
 
 public enum OperationResult
 {
