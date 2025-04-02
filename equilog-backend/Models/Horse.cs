@@ -6,22 +6,19 @@ namespace equilog_backend.Models
     public class Horse
     {
         [Key]
-        public int HorseId { get; set; }
+        public int Id { get; set; }
 
-        [StringLength(30)]
+        [StringLength(50)]
         public required string Name { get; set; }
-        public DateTime? DateOfBirth { get; set; } // empty if unknown (?)
 
-        // Ticket for HorseGender requested, add when accepted.
-        //public required HorseGender Gender { get; set; }
-
-        // Maybe change Color and Breed to Enums? Discuss.
-        [StringLength(30)]
+        public DateTime? Age { get; set; }
+        
+        [StringLength(50)]
         public string? Color { get; set; }
 
-        [StringLength(60)]
+        [StringLength(50)]
         public string? Breed { get; set; }
-
-        // Add Nav properties when viable
+        
+        public virtual List<UserHorse>? UserHorses { get; set; }
     }
 }
