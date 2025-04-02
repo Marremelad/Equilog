@@ -1,4 +1,5 @@
 using equilog_backend.Data;
+using equilog_backend.Endpoints;
 using equilog_backend.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +34,8 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+        
+        EventEndpoints.RegisterEndpoints(app);
         
         app.Run();
     }
