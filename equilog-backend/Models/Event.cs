@@ -18,4 +18,6 @@ public class Event
     [ForeignKey("Stable")]
     public int StableIdFk { get; set; }
     public virtual required Stable Stable { get; set; }
+    
+    public virtual List<UserEvent>? UserEvents { get; set; }
 }
