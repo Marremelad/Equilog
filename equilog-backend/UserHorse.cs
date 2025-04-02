@@ -10,11 +10,11 @@ public class UserHorse
     public int Id { get; set; }
 
     [ForeignKey("User")]
-    public required int UserIdFk { get; set; }
+    public int UserIdFk { get; set; }
     public virtual required User User { get; set; }
     
     [ForeignKey("Horse")]
-    public required int HorseIdFk { get; set; }
+    public int HorseIdFk { get; set; }
     public virtual required Horse Horse { get; set; }
 
     public required string UserRole { get; set; } // Change to enum.

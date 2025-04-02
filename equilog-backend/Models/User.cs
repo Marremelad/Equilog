@@ -19,5 +19,7 @@ public class User
     [StringLength(20)]
     public string? PhoneNumber { get; set; }
     
+    public virtual List<UserStable>? UserStables { get; set; }
+    
     public virtual List<UserHorse>? UserHorses { get; set; }
 }

@@ -20,5 +20,7 @@ namespace equilog_backend.Models
         public string? Breed { get; set; }
         
         public virtual List<UserHorse>? UserHorses { get; set; }
+        
+        public virtual List<StableHorse>? StableHorses { get; set; }
     }
 }
