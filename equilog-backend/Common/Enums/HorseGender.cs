@@ -4,7 +4,6 @@
     {
         Mare,
         Gelding,
-        Stallion,
-        Unknown
+        Stallion
     }
 }
