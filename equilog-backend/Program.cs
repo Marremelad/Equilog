@@ -36,7 +36,8 @@ public class Program
         app.UseAuthorization();
         
         EventEndpoints.RegisterEndpoints(app);
-        
+        HorseEndpoints.RegisterEndpoints(app);
+
         app.Run();
     }
 }
