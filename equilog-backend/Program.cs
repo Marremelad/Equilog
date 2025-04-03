@@ -22,6 +22,7 @@ public class Program
         });
 
         builder.Services.AddScoped<EventService>();
+        builder.Services.AddScoped<HorseService>();
         
         var app = builder.Build();
 

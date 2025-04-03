@@ -18,7 +18,6 @@ namespace equilog_backend.Services
             catch (Exception ex)
             {
                 return Response<List<Horse>>.Failure(ex.Message);
-
             }
         }
     }
