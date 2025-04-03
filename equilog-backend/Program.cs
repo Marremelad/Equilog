@@ -15,6 +15,7 @@ public class Program
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         builder.Services.AddDbContext<EquilogDbContext>(options =>
         {
