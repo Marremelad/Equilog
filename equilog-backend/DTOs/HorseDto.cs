@@ -2,7 +2,7 @@
 
 namespace equilog_backend.DTOs
 {
-    public class HorseDTO
+    public class HorseDto
     {
         // for mapping/output ONLY
         public int Id { get; set; }
