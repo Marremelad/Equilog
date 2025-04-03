@@ -4,7 +4,7 @@ namespace equilog_backend.Mapping
 {
     public class AutoMapperTests
     {
-        public void AutoMapper_Configuration_IsValid()
+        public string AutoMapperConfigurationIsValid()
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -14,11 +14,11 @@ namespace equilog_backend.Mapping
             try
             {
                 config.AssertConfigurationIsValid();
-                Console.WriteLine("AutoMapper configuration is valid.");
+                return "AutoMapper configuration is valid.";
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                return ex.Message;
             }
         }
     }
