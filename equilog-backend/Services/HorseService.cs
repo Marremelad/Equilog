@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using equilog_backend.Common;
 using AutoMapper;
 using equilog_backend.DTOs;
+using System.Collections.Generic;
 namespace equilog_backend.Services
 {
     public class HorseService(EquilogDbContext context, IMapper mapper)
@@ -12,8 +13,7 @@ namespace equilog_backend.Services
         {
             try
             {
-                var horses = await context.Horses.ToListAsync();
-                var horseDtos = mapper.Map<List<HorseDto>>(horses);
+                var horseDtos = mapper.Map<List<HorseDto>>(await context.Horses.ToListAsync());
 
                 return Response<List<HorseDto>>.Success(horseDtos);
             }
