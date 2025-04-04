@@ -2,13 +2,13 @@
 
 namespace equilog_backend.Mapping
 {
-    public class AutoMapperTests
+    public class AutoMapperTest
     {
         public string AutoMapperConfigurationIsValid()
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile<HorseProfile>();
+                cfg.AddProfile<MappingProfile>();
             });
 
             try
