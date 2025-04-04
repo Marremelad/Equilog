@@ -4,9 +4,9 @@ using equilog_backend.DTOs;
 
 namespace equilog_backend.Mapping
 {
-    public class MappingProfiles : Profile
+    public class MappingProfile : Profile
     {
-        public MappingProfiles()
+        public MappingProfile()
         {
             CreateMap<Horse, HorseDto>();
         }
