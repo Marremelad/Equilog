@@ -10,9 +10,11 @@ namespace equilog_backend.Models
 
         [ForeignKey("User")]
         public int UserIdFk { get; set; }
+        public virtual required User User { get; set; }
 
         [ForeignKey("Stable")]
         public int StableIdFk { get; set; }
+        public virtual required Stable Stable { get; set; }
 
         [StringLength(510)]
         public required string Title { get; set; }
