@@ -9,8 +9,10 @@ public class Stable
 
     [StringLength(50)]
     public required string Name { get; set; }
-    
+
     public virtual List<UserStable>? UserStables { get; set; }
-    
+
     public virtual List<StableHorse>? StableHorses { get; set; }
+
+    public virtual List<StablePost>? StablePost { get; set; }
 }

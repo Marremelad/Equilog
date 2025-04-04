@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace equilog_backend.Data;
 
 public class EquilogDbContext(DbContextOptions<EquilogDbContext> options)
-    :DbContext(options)
+    : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Horse> Horses { get; set; }
@@ -14,5 +14,5 @@ public class EquilogDbContext(DbContextOptions<EquilogDbContext> options)
     public DbSet<UserHorse> UserHorses { get; set; }
     public DbSet<StableHorse> StableHorses { get; set; }
     public DbSet<UserEvent> UserEvents { get; set; }
-    
+    public DbSet<StablePost> StablePosts { get; set; }
 }
