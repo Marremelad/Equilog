@@ -16,7 +16,6 @@ public class Program
         AppConfiguration.AddDomainServices(services);
         AppConfiguration.AddCorsServices(services);
         
-
         var app = builder.Build();
 
         AppInitialization.InitializeDevEnvironment(app);
