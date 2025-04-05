@@ -34,6 +34,7 @@ public class AppConfiguration
     {
         services.AddScoped<EventService>();
         services.AddScoped<HorseService>();
+        services.AddScoped<UserService>();
     }
     
     public static void AddCorsServices(IServiceCollection services)
