@@ -32,5 +32,6 @@ public class AppInitialization
     {
         EventEndpoints.RegisterEndpoints(app);
         HorseEndpoints.RegisterEndpoints(app);
+        UserEndpoints.RegisterEndpoints(app);
     }
 }

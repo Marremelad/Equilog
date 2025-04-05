@@ -16,6 +16,7 @@ public class Program
         AppConfiguration.AddDomainServices(services);
         AppConfiguration.AddCorsServices(services);
         
+
         var app = builder.Build();
 
         AppInitialization.InitializeDevEnvironment(app);
@@ -23,7 +24,7 @@ public class Program
         AppInitialization.InitializeCors(app);
         AppInitialization.InitializeAuthorization(app);
         AppInitialization.InitializeEndpoints(app);
-        
+
         app.Run();
     }
 }
