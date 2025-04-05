@@ -9,6 +9,8 @@ namespace equilog_backend.Mapping
         public MappingProfile()
         {
             CreateMap<Horse, HorseDto>();
+
+            CreateMap<User, UserDto>();
         }
     }
 }

@@ -24,7 +24,8 @@ public class Program
 
         builder.Services.AddScoped<EventService>();
         builder.Services.AddScoped<HorseService>();
-        
+        builder.Services.AddScoped<UserService>();
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -39,6 +40,7 @@ public class Program
         
         EventEndpoints.RegisterEndpoints(app);
         HorseEndpoints.RegisterEndpoints(app);
+        UserEndpoints.RegisterEndpoints(app);
 
         app.Run();
     }
