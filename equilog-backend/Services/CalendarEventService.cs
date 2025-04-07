@@ -93,6 +93,31 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper)
             return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
-       
     } 
+    
+    private async Task<ApiResponse<CalendarEventDto?>> DeleteCalendarEvent(int id)
+    {
+        try
+        {
+            var calendarEvent = await context.CalendarEvents
+                .Where(ce => ce.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (calendarEvent == null)
+                return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.NotFound,
+                    "Error: Calendar event not found");
+
+            context.CalendarEvents.Remove(calendarEvent);
+            await context.SaveChangesAsync();
+
+            return ApiResponse<CalendarEventDto>.Success(HttpStatusCode.NoContent,
+                null,
+                $"Calendar event with id {id} was deleted successfully");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
 }
