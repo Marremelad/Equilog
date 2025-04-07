@@ -112,7 +112,7 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper)
 
             return ApiResponse<CalendarEventDto>.Success(HttpStatusCode.NoContent,
                 null,
-                $"Calendar event with id {id} was deleted successfully");
+                $"Calendar event with id '{id}' was deleted successfully");
         }
         catch (Exception ex)
         {
