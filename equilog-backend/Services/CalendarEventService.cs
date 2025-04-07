@@ -56,6 +56,9 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper)
                 return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.NotFound,
                     "Error: Calendar event not found");
 
+            mapper.Map(updatedCalendarEvent, calendarEvent);
+            await context.SaveChangesAsync();
+
             return ApiResponse<CalendarEventDto>.Success(HttpStatusCode.OK,
                 mapper.Map<CalendarEventDto>(updatedCalendarEvent),
                 null);
