@@ -16,29 +16,36 @@ public class HorseService(EquilogDbContext context, IMapper mapper)
         {
             var horseDtos = mapper.Map<List<HorseDto>>(await context.Horses.ToListAsync());
 
-            return ApiResponse<List<HorseDto>>.Success(HttpStatusCode.OK, horseDtos, null);
+            return ApiResponse<List<HorseDto>>.Success(HttpStatusCode.OK, horseDtos,
+                null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<HorseDto>>.Failure(HttpStatusCode.InternalServerError ,ex.Message);
+            return ApiResponse<List<HorseDto>>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
         }
     }
 
     public async Task<ApiResponse<HorseDto?>> GetHorse(int id)
     {
         try
-        {  var horse = await context.Horses
+        {  
+            var horse = await context.Horses
                 .Where(h => h.Id == id)
                 .FirstOrDefaultAsync();
 
-            if (horse == null) return ApiResponse<HorseDto>.Failure(HttpStatusCode.NotFound,
+            if (horse == null)
+                return ApiResponse<HorseDto>.Failure(HttpStatusCode.NotFound,
                 "Error: Horse not found");
 
-            return ApiResponse<HorseDto>.Success(HttpStatusCode.OK, mapper.Map<HorseDto>(horse), null);
+            return ApiResponse<HorseDto>.Success(HttpStatusCode.OK,
+                mapper.Map<HorseDto>(horse),
+                null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<HorseDto>.Failure(HttpStatusCode.InternalServerError, ex.Message);
+            return ApiResponse<HorseDto>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
         }
     }
 
@@ -51,12 +58,14 @@ public class HorseService(EquilogDbContext context, IMapper mapper)
             context.Horses.Add(horse);
             await context.SaveChangesAsync();
 
-            return ApiResponse<HorseDto>.Success(HttpStatusCode.Created, mapper.Map<HorseDto>(horse),
+            return ApiResponse<HorseDto>.Success(HttpStatusCode.Created,
+                mapper.Map<HorseDto>(horse),
                 "Horse created successfully");
         }
         catch (Exception ex)
         {
-            return ApiResponse<HorseDto>.Failure(HttpStatusCode.InternalServerError, ex.Message);
+            return ApiResponse<HorseDto>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
         }
            
     }
@@ -69,18 +78,21 @@ public class HorseService(EquilogDbContext context, IMapper mapper)
                 .Where(h => h.Id == updatedHorse.Id)
                 .FirstOrDefaultAsync();
                 
-            if (horse == null) return ApiResponse<HorseDto>.Failure(HttpStatusCode.NotFound ,
+            if (horse == null) 
+                return ApiResponse<HorseDto>.Failure(HttpStatusCode.NotFound ,
                 "Error: Horse not found");
 
             mapper.Map(updatedHorse, horse);
             await context.SaveChangesAsync();
 
-            return ApiResponse<HorseDto>.Success(HttpStatusCode.OK, mapper.Map<HorseDto>(horse),
+            return ApiResponse<HorseDto>.Success(HttpStatusCode.OK,
+                mapper.Map<HorseDto>(horse),
                 "Horse information updated successfully");
         }
         catch (Exception ex)
         {
-            return ApiResponse<HorseDto>.Failure(HttpStatusCode.InternalServerError ,ex.Message);
+            return ApiResponse<HorseDto>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
         }
     }
 
@@ -92,18 +104,21 @@ public class HorseService(EquilogDbContext context, IMapper mapper)
                 .Where(h => h.Id == id)
                 .FirstOrDefaultAsync();
 
-            if (horse == null) return ApiResponse<HorseDto>.Failure(HttpStatusCode.NotFound,
+            if (horse == null)
+                return ApiResponse<HorseDto>.Failure(HttpStatusCode.NotFound,
                 "Error: Horse not found");
 
             context.Horses.Remove(horse);
             await context.SaveChangesAsync();
 
-            return ApiResponse<HorseDto>.Success(HttpStatusCode.NoContent, mapper.Map<HorseDto>(horse),
+            return ApiResponse<HorseDto>.Success(HttpStatusCode.NoContent,
+                mapper.Map<HorseDto>(horse),
                 $"Horse with id '{id}' was deleted successfully");
         }
         catch (Exception ex)
         {
-            return ApiResponse<HorseDto>.Failure(HttpStatusCode.InternalServerError, ex.Message);
+            return ApiResponse<HorseDto>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
         }
     }
 }
