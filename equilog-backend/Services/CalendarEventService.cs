@@ -95,7 +95,7 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper)
         }
     } 
     
-    private async Task<ApiResponse<CalendarEventDto?>> DeleteCalendarEvent(int id)
+    public async Task<ApiResponse<CalendarEventDto?>> DeleteCalendarEvent(int id)
     {
         try
         {
