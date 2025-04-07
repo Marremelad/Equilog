@@ -20,7 +20,7 @@ public class CalendarEventEndpoints
             .WithName("GetEvent");
 
         // Update calendar event.
-        app.MapGet("/api/calendar-event/update", UpdateEvent)
+        app.MapPut("/api/calendar-event/update", UpdateEvent)
             .WithName("UpdateEvent");
     }
 
@@ -30,7 +30,7 @@ public class CalendarEventEndpoints
 
         return apiResponse.StatusCode switch
         {
-            HttpStatusCode.OK => Results.Ok(apiResponse.Value),
+            HttpStatusCode.OK => Results.Ok(apiResponse),
             _ => Results.Problem(apiResponse.Message, statusCode: 500)
         };
     }
