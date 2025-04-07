@@ -9,17 +9,17 @@ namespace equilog_backend.Services;
 
 public class CalendarEventService(EquilogDbContext context, IMapper mapper)
 {
-    public async Task<ApiResponse<List<EventDto>?>> GetEvents()
+    public async Task<ApiResponse<List<CalendarEventDto>?>> GetEvents()
     {
         try
         {
-            var eventDto = mapper.Map<List<EventDto>>(await context.CalendarEvents.ToListAsync());
+            var eventDto = mapper.Map<List<CalendarEventDto>>(await context.CalendarEvents.ToListAsync());
 
-            return ApiResponse<List<EventDto>>.Success(HttpStatusCode.OK, eventDto, null);
+            return ApiResponse<List<CalendarEventDto>>.Success(HttpStatusCode.OK, eventDto, null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<EventDto>>.Failure(HttpStatusCode.InternalServerError, ex.Message);
+            return ApiResponse<List<CalendarEventDto>>.Failure(HttpStatusCode.InternalServerError, ex.Message);
         }
     }
 }

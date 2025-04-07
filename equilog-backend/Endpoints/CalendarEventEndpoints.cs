@@ -12,7 +12,7 @@ public class CalendarEventEndpoints
     {
         app.MapGet("/events", GetEvents)
             .WithName("GetEvents")
-            .Produces<ApiResponse<List<EventDto>>>()
+            .Produces<ApiResponse<List<CalendarEventDto>>>()
             .Produces(500);
     }
 

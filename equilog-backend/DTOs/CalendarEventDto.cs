@@ -2,7 +2,7 @@
 
 namespace equilog_backend.DTOs;
 
-public class EventDto
+public class CalendarEventDto
 {
     [Required]
     public required int Id { get; set; }
