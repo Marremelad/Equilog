@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using equilog_backend.Models;
+using equilog_backend.Common.Enums;
 
-namespace equilog_backend;
+namespace equilog_backend.Models;
 
 public class UserHorse
 {
@@ -17,5 +17,5 @@ public class UserHorse
     public required int HorseIdFk { get; set; }
     public virtual Horse? Horse { get; set; }
 
-    public required string UserRole { get; set; } // Change to enum.
+    public required UserHorseRole UserRole { get; set; }
 }
