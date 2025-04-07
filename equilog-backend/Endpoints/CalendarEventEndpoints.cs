@@ -13,7 +13,7 @@ public class CalendarEventEndpoints
             .WithName("GetEvents");
 
         // Get calendar event by id.
-        app.MapGet("api/calendar-event/{id:int}", GetEvent)
+        app.MapGet("/api/calendar-event/{id:int}", GetEvent)
             .WithName("GetEvent");
 
         app.MapPost("/api/calendar-event/create", CreateCalendarEvent)
@@ -22,6 +22,10 @@ public class CalendarEventEndpoints
         // Update calendar event.
         app.MapPut("/api/calendar-event/update", UpdateEvent)
             .WithName("UpdateEvent");
+        
+        // Delete calendar event.
+        app.MapDelete("/api/calendar-event/delete/{id:int}", DeleteCalendarEvent)
+            .WithName("DeleteCalendarEvent");
     }
 
     private static async Task<IResult> GetEvents(CalendarEventService calendarEventService)
