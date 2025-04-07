@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs;
@@ -6,23 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
 
-public class EventService(EquilogDbContext context)
+public class EventService(EquilogDbContext context, IMapper mapper)
 {
     public async Task<ApiResponse<List<EventDto>?>> GetEvents()
     {
         try
         {
-            var events = await context.Events
-                .Select(e => new EventDto
-                {
-                    Id = e.Id,
-                    Title = e.Title,
-                    StartDateTime = e.StartDateTime,
-                    EndDateTime = e.EndDateTime
-                })
-                .ToListAsync();
+            var eventDto = mapper.Map<List<EventDto>>(await context.Events.ToListAsync());
 
-            return ApiResponse<List<EventDto>>.Success(HttpStatusCode.OK, events, null);
+            return ApiResponse<List<EventDto>>.Success(HttpStatusCode.OK, eventDto, null);
         }
         catch (Exception ex)
         {
