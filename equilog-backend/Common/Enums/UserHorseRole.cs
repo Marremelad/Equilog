@@ -1,6 +1,6 @@
 ﻿namespace equilog_backend.Common.Enums;
 
-public enum UserHorseRoles
+public enum UserHorseRole
 {
     Owner,
     Rider,
