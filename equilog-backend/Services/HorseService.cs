@@ -113,7 +113,7 @@ public class HorseService(EquilogDbContext context, IMapper mapper)
             await context.SaveChangesAsync();
 
             return ApiResponse<HorseDto>.Success(HttpStatusCode.NoContent,
-                mapper.Map<HorseDto>(horse),
+                null,
                 $"Horse with id '{id}' was deleted successfully");
         }
         catch (Exception ex)
