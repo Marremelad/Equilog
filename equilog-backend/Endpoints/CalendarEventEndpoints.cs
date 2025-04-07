@@ -71,6 +71,16 @@ public class CalendarEventEndpoints
             _ => Results.Problem(apiResponse.Message, statusCode: 500)
         };
     }
-    
-    // Delete CalendarEvent.
+
+    private static async Task<IResult> DeleteCalendarEvent(CalendarEventService calendarEventService, int id)
+    {
+        var apiResponse = await calendarEventService.DeleteCalendarEvent(id);
+
+        return apiResponse.StatusCode switch
+        {
+            HttpStatusCode.NoContent => Results.Json(apiResponse, statusCode: 204),
+            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
+            _ => Results.Problem(apiResponse.Message, statusCode: 500)
+        };
+    }
 }
