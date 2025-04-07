@@ -1,7 +1,4 @@
 ﻿using System.Net;
-using equilog_backend.Common;
-using equilog_backend.Common.Enums;
-using equilog_backend.DTOs;
 using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.Services;
 
@@ -16,15 +13,20 @@ public class CalendarEventEndpoints
             .WithName("GetEvents");
 
         // Get calendar event by id.
-        app.MapGet("api/calendar-event/{id:int}", GetEvent)
+        app.MapGet("/api/calendar-event/{id:int}", GetEvent)
             .WithName("GetEvent");
 
+        // Create calendar event.
         app.MapPost("/api/calendar-event/create", CreateCalendarEvent)
             .WithName("CreateCalendarEvent");
 
         // Update calendar event.
         app.MapPut("/api/calendar-event/update", UpdateEvent)
             .WithName("UpdateEvent");
+        
+        // Delete calendar event.
+        app.MapDelete("/api/calendar-event/delete/{id:int}", DeleteCalendarEvent)
+            .WithName("DeleteCalendarEvent");
     }
 
     private static async Task<IResult> GetEvents(CalendarEventService calendarEventService)
@@ -74,6 +76,16 @@ public class CalendarEventEndpoints
             _ => Results.Problem(apiResponse.Message, statusCode: 500)
         };
     }
-    
-    // Delete CalendarEvent.
+
+    private static async Task<IResult> DeleteCalendarEvent(CalendarEventService calendarEventService, int id)
+    {
+        var apiResponse = await calendarEventService.DeleteCalendarEvent(id);
+
+        return apiResponse.StatusCode switch
+        {
+            HttpStatusCode.NoContent => Results.Json(apiResponse, statusCode: 204),
+            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
+            _ => Results.Problem(apiResponse.Message, statusCode: 500)
+        };
+    }
 }
