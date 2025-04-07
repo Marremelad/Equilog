@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
 
-public class EventService(EquilogDbContext context, IMapper mapper)
+public class CalendarEventService(EquilogDbContext context, IMapper mapper)
 {
     public async Task<ApiResponse<List<EventDto>?>> GetEvents()
     {

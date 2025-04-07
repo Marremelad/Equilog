@@ -16,9 +16,9 @@ public class EventEndpoints
             .Produces(500);
     }
 
-    private static async Task<IResult> GetEvents(EventService eventService)
+    private static async Task<IResult> GetEvents(CalendarEventService calendarEventService)
     {
-        var response = await eventService.GetEvents();
+        var response = await calendarEventService.GetEvents();
 
         return response.StatusCode switch
         {
