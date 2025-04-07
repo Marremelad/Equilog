@@ -11,37 +11,23 @@ public class HorseEndpoints
     {
         // Get all horses.
         app.MapGet("/api/horse", GetHorses)
-            .WithName("GetHorses")
-            .Produces<ApiResponse<List<HorseDto>>>()
-            .Produces<ApiResponse<List<HorseDto>>>(500); // Look up if this is best practice.
+            .WithName("GetHorses");
         
         // Get Horse.
         app.MapGet("api/horse/{id:int}", GetHorse)
-            .WithName("GetHorse")
-            .Produces<ApiResponse<HorseDto>>()
-            .Produces(404)
-            .Produces(500);
+            .WithName("GetHorse");
         
         // Create horse.
         app.MapPost("/api/horse", CreateHorse)
-            .WithName("CreateHorse")
-            .Produces<ApiResponse<HorseDto>>(201)
-            .Produces(500);
+            .WithName("CreateHorse");
         
         // Update horse properties.
         app.MapPut("/api/horse", UpdateHorse)
-            .WithName("UpdateHorse")
-            .Accepts<HorseDto>("application/json")
-            .Produces<ApiResponse<HorseDto>>()
-            .Produces(404)
-            .Produces(500);
+            .WithName("UpdateHorse");
 
         // Delete horse.
         app.MapDelete("/api/horse/{id:int}", DeleteHorse)
-            .WithName("DeleteHorse")
-            .Produces<ApiResponse<HorseDto>>(204)
-            .Produces(404)
-            .Produces(500);
+            .WithName("DeleteHorse");
     }
 
     private static async Task<IResult> GetHorses(HorseService horseService)
