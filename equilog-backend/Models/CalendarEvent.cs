@@ -16,8 +16,8 @@ public class CalendarEvent
     public required DateTime EndDateTime { get; set; }
 
     [ForeignKey("Stable")]
-    public int StableIdFk { get; set; }
-    public virtual required Stable Stable { get; set; }
+    public required int StableIdFk { get; set; }
+    public virtual Stable? Stable { get; set; }
     
     public virtual List<UserCalendarEvent>? UserCalendarEvents { get; set; }
 }

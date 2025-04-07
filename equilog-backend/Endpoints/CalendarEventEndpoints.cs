@@ -19,6 +19,9 @@ public class CalendarEventEndpoints
         app.MapGet("api/calendar-event/{id:int}", GetEvent)
             .WithName("GetEvent");
 
+        app.MapPost("/api/calendar-event/create", CreateCalendarEvent)
+            .WithName("CreateCalendarEvent");
+
         // Update calendar event.
         app.MapPut("/api/calendar-event/update", UpdateEvent)
             .WithName("UpdateEvent");
@@ -46,6 +49,18 @@ public class CalendarEventEndpoints
             _ => Results.Problem(apiResponse.Message, statusCode: 500)
         };
     }
+    
+    private static async Task<IResult> CreateCalendarEvent(CalendarEventService calendarEventService,
+        CalendarEventCreateDto newCalendarEvent)
+    {
+        var apiResponse = await calendarEventService.CreateCalendarEvent(newCalendarEvent);
+
+        return apiResponse.StatusCode switch
+        {
+            HttpStatusCode.Created => Results.Json(apiResponse, statusCode: 201),
+            _ => Results.Problem(apiResponse.Message, statusCode: 500)
+        };
+    }
 
     private static async Task<IResult> UpdateEvent(CalendarEventService calendarEventService,
         CalendarEventUpdateDto updatedEvent)
@@ -59,4 +74,6 @@ public class CalendarEventEndpoints
             _ => Results.Problem(apiResponse.Message, statusCode: 500)
         };
     }
+    
+    // Delete CalendarEvent.
 }
