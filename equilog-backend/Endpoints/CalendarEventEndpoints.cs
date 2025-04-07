@@ -1,7 +1,4 @@
 ﻿using System.Net;
-using equilog_backend.Common;
-using equilog_backend.Common.Enums;
-using equilog_backend.DTOs;
 using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.Services;
 
