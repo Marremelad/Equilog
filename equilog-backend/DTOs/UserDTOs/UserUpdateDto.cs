@@ -8,6 +8,9 @@ namespace equilog_backend.DTOs.UserDTOs
         public required int Id { get; set; }
 
         [Required]
-        public required string Name { get; set; }
+        public required string FirstName { get; set; }
+
+        [Required]
+        public required string LastName { get; set; }
     }
 }
