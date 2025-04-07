@@ -16,7 +16,8 @@ public class HorseService(EquilogDbContext context, IMapper mapper)
         {
             var horseDtos = mapper.Map<List<HorseDto>>(await context.Horses.ToListAsync());
 
-            return ApiResponse<List<HorseDto>>.Success(HttpStatusCode.OK, horseDtos,
+            return ApiResponse<List<HorseDto>>.Success(HttpStatusCode.OK,
+                horseDtos,
                 null);
         }
         catch (Exception ex)
