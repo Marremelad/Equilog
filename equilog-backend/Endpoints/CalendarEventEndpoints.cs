@@ -26,4 +26,16 @@ public class CalendarEventEndpoints
             _ => Results.Problem(response.Message, statusCode: 500)
         };
     }
+
+    private static async Task<IResult> GetEvent(CalendarEventService calendarEventService, int id)
+    {
+        var apiResponse = await calendarEventService.GetEvent(id);
+
+        return apiResponse.StatusCode switch
+        {
+            HttpStatusCode.OK => Results.Ok(apiResponse),
+            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
+            _ => Results.Problem(apiResponse.Message, statusCode: 500)
+        };
+    }
 }

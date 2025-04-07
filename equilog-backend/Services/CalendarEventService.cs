@@ -13,13 +13,34 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper)
     {
         try
         {
-            var eventDto = mapper.Map<List<CalendarEventDto>>(await context.CalendarEvents.ToListAsync());
+            var calendarEventDto = mapper.Map<List<CalendarEventDto>>(await context.CalendarEvents.ToListAsync());
 
-            return ApiResponse<List<CalendarEventDto>>.Success(HttpStatusCode.OK, eventDto, null);
+            return ApiResponse<List<CalendarEventDto>>.Success(HttpStatusCode.OK, calendarEventDto,
+                null);
         }
         catch (Exception ex)
         {
             return ApiResponse<List<CalendarEventDto>>.Failure(HttpStatusCode.InternalServerError, ex.Message);
+        }
+    }
+    
+    public async Task<ApiResponse<CalendarEventDto?>> GetEvent(int id)
+    {
+        try
+        {
+            var calendarEvent = await context.CalendarEvents
+                .Where(ce => ce.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (calendarEvent == null) return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.NotFound,
+                    "Error: Event not found");
+
+            return ApiResponse<CalendarEventDto>.Success(HttpStatusCode.OK, mapper.Map<CalendarEventDto>(calendarEvent),
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.InternalServerError, ex.Message);
         }
     }
 }
