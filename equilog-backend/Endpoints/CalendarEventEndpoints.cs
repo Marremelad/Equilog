@@ -16,6 +16,7 @@ public class CalendarEventEndpoints
         app.MapGet("/api/calendar-event/{id:int}", GetEvent)
             .WithName("GetEvent");
 
+        // Create calendar event.
         app.MapPost("/api/calendar-event/create", CreateCalendarEvent)
             .WithName("CreateCalendarEvent");
 
