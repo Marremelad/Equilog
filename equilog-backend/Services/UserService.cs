@@ -10,7 +10,7 @@ namespace equilog_backend.Services
 {
     public class UserService(EquilogDbContext context, IMapper mapper)
     {
-        public async Task<ApiResponse<List<UserDto>?>> GetAllUsers()
+        public async Task<ApiResponse<List<UserDto>?>> GetUsers()
         {
             try
             {
@@ -92,6 +92,7 @@ namespace equilog_backend.Services
                     ex.Message);
             }
         }
+
         public async Task<ApiResponse<UserDto?>> DeleteUser(int id)
         {
             try
