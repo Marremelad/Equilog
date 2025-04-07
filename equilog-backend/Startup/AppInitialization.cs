@@ -30,7 +30,7 @@ public class AppInitialization
 
     public static void InitializeEndpoints(WebApplication app)
     {
-        EventEndpoints.RegisterEndpoints(app);
+        CalendarEventEndpoints.RegisterEndpoints(app);
         HorseEndpoints.RegisterEndpoints(app);
         UserEndpoints.RegisterEndpoints(app);
     }

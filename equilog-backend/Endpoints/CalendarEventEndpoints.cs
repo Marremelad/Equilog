@@ -6,7 +6,7 @@ using equilog_backend.Services;
 
 namespace equilog_backend.Endpoints;
 
-public class EventEndpoints
+public class CalendarEventEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
