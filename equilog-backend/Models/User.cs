@@ -23,7 +23,7 @@ public class User
 
     public virtual List<UserHorse>? UserHorses { get; set; }
 
-    public virtual List<UserEvent>? UserEvents { get; set; }
+    public virtual List<UserCalendarEvent>? UserEvents { get; set; }
 
     public virtual List<StablePost>? StablePost { get; set; }
 }
