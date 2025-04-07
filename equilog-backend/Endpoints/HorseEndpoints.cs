@@ -19,7 +19,7 @@ public class HorseEndpoints
         app.MapGet("api/horse/{id:int}", GetHorse)
             .WithName("GetHorse")
             .Produces<ApiResponse<HorseDto>>()
-            // .Produces(404)
+            .Produces(404)
             .Produces(500);
         
         // Create horse.

@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using equilog_backend.Common.Enums;
 
 namespace equilog_backend.Common;
 
