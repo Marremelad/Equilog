@@ -1,4 +1,4 @@
-﻿using equilog_backend.Common.Enums;
+﻿using System.Net;
 using equilog_backend.Services;
 
 namespace equilog_backend.Endpoints
@@ -11,10 +11,10 @@ namespace equilog_backend.Endpoints
             {
                 var response = await userService.GetAllUsers();
 
-                return response.OperationResult switch
+                return response.StatusCode switch
                 {
-                    OperationResult.Success => Results.Ok(response.Value),
-                    _ => Results.Problem(response.Error, statusCode: 500)
+                    HttpStatusCode.OK => Results.Ok(response.Value),
+                    _ => Results.Problem(response.Message, statusCode: 500)
                 };
             });
         }

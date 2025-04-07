@@ -1,4 +1,5 @@
-﻿using equilog_backend.Common;
+﻿using System.Net;
+using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ namespace equilog_backend.Services;
 
 public class EventService(EquilogDbContext context)
 {
-    public async Task<Response<List<EventDto>?>> GetAllEvents()
+    public async Task<ApiResponse<List<EventDto>?>> GetEvents()
     {
         try
         {
@@ -21,11 +22,11 @@ public class EventService(EquilogDbContext context)
                 })
                 .ToListAsync();
 
-            return Response<List<EventDto>>.Success(events);
+            return ApiResponse<List<EventDto>>.Success(HttpStatusCode.OK, events, null);
         }
         catch (Exception ex)
         {
-            return Response<List<EventDto>>.Failure(ex.Message);
+            return ApiResponse<List<EventDto>>.Failure(HttpStatusCode.InternalServerError, ex.Message);
         }
     }
 }
