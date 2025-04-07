@@ -11,9 +11,10 @@ public class CalendarEventEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         app.MapGet("/events", GetEvents)
-            .WithName("GetEvents")
-            .Produces<ApiResponse<List<CalendarEventDto>>>()
-            .Produces(500);
+            .WithName("GetEvents");
+
+        app.MapGet("api/calendar-event", GetEvent)
+            .WithName("GetEvent");
     }
 
     private static async Task<IResult> GetEvents(CalendarEventService calendarEventService)
