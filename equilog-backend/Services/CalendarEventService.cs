@@ -16,7 +16,8 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper)
         {
             var calendarEventDto = mapper.Map<List<CalendarEventDto>>(await context.CalendarEvents.ToListAsync());
 
-            return ApiResponse<List<CalendarEventDto>>.Success(HttpStatusCode.OK,calendarEventDto,
+            return ApiResponse<List<CalendarEventDto>>.Success(HttpStatusCode.OK,
+                calendarEventDto,
                 null);
         }
         catch (Exception ex)
