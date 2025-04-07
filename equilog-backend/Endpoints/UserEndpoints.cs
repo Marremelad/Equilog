@@ -32,7 +32,7 @@ namespace equilog_backend.Endpoints
 
         private static async Task<IResult> GetUsers(UserService userService)
         {
-            var apiResponse = await userService.GetAllUsers();
+            var apiResponse = await userService.GetUsers();
 
             return apiResponse.StatusCode switch
             {
@@ -40,6 +40,7 @@ namespace equilog_backend.Endpoints
                 _ => Results.Problem(apiResponse.Message, statusCode: 500)
             };
         }
+
         private static async Task<IResult> GetUser(UserService userService, int id)
         {
             var apiResponse = await userService.GetUser(id);
@@ -47,9 +48,11 @@ namespace equilog_backend.Endpoints
             return apiResponse.StatusCode switch
             {
                 HttpStatusCode.OK => Results.Ok(apiResponse.Value),
+                HttpStatusCode.NotFound => Results.NotFound(apiResponse),
                 _ => Results.Problem(apiResponse.Message, statusCode: 500)
             };
         }
+
         private static async Task<IResult> CreateUser(UserService userService, UserCreateDto newUser)
         {
             var apiResponse = await userService.CreateUser(newUser);
