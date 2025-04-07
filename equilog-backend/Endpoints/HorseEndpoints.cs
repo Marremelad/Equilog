@@ -13,7 +13,7 @@ public class HorseEndpoints
             .WithName("GetHorses");
         
         // Get Horse.
-        app.MapGet("api/horse/{id:int}", GetHorse)
+        app.MapGet("/api/horse/{id:int}", GetHorse)
             .WithName("GetHorse");
         
         // Create horse.
