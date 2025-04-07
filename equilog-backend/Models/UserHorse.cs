@@ -17,5 +17,6 @@ public class UserHorse
     public required int HorseIdFk { get; set; }
     public virtual Horse? Horse { get; set; }
 
-    public required UserHorseRole UserRole { get; set; }
+    [StringLength(20)]
+    public required string UserRole { get; set; }
 }
