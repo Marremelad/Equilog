@@ -13,7 +13,7 @@ public class EventService(EquilogDbContext context, IMapper mapper)
     {
         try
         {
-            var eventDto = mapper.Map<List<EventDto>>(await context.Events.ToListAsync());
+            var eventDto = mapper.Map<List<EventDto>>(await context.CalendarEvents.ToListAsync());
 
             return ApiResponse<List<EventDto>>.Success(HttpStatusCode.OK, eventDto, null);
         }
