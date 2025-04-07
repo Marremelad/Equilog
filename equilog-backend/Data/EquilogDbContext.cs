@@ -9,10 +9,10 @@ public class EquilogDbContext(DbContextOptions<EquilogDbContext> options)
     public DbSet<User> Users { get; set; }
     public DbSet<Horse> Horses { get; set; }
     public DbSet<Stable> Stables { get; set; }
-    public DbSet<Event> Events { get; set; }
+    public DbSet<CalendarEvent> Events { get; set; }
     public DbSet<UserStable> UserStables { get; set; }
     public DbSet<UserHorse> UserHorses { get; set; }
     public DbSet<StableHorse> StableHorses { get; set; }
-    public DbSet<UserEvent> UserEvents { get; set; }
+    public DbSet<UserCalendarEvent> UserEvents { get; set; }
     public DbSet<StablePost> StablePosts { get; set; }
 }

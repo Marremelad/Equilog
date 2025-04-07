@@ -16,7 +16,7 @@ namespace equilog_backend.Mapping
             CreateMap<HorseCreateDto, HorseDto>();
             CreateMap<HorseCreateDto, Horse>();
 
-            CreateMap<Event, EventDto>().ReverseMap();
+            CreateMap<CalendarEvent, EventDto>().ReverseMap();
         }
     }
 }

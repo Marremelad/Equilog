@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace equilog_backend.Models;
 
-public class Event
+public class CalendarEvent
 {
     [Key]
     public int Id { get; set; }
@@ -19,5 +19,5 @@ public class Event
     public int StableIdFk { get; set; }
     public virtual required Stable Stable { get; set; }
     
-    public virtual List<UserEvent>? UserEvents { get; set; }
+    public virtual List<UserCalendarEvent>? UserCalendarEvents { get; set; }
 }
