@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
@@ -72,7 +72,7 @@ namespace equilog_backend.Services
             try
             {
                 var user = await context.Users
-                    .Where(h => h.Id == updatedUser.Id)
+                    .Where(u => u.Id == updatedUser.Id)
                     .FirstOrDefaultAsync();
 
                 if (user == null)
