@@ -18,12 +18,12 @@ public class CalendarEventEndpoints
 
     private static async Task<IResult> GetEvents(CalendarEventService calendarEventService)
     {
-        var response = await calendarEventService.GetEvents();
+        var apiResponse = await calendarEventService.GetEvents();
 
-        return response.StatusCode switch
+        return apiResponse.StatusCode switch
         {
-            HttpStatusCode.OK => Results.Ok(response.Value),
-            _ => Results.Problem(response.Message, statusCode: 500)
+            HttpStatusCode.OK => Results.Ok(apiResponse.Value),
+            _ => Results.Problem(apiResponse.Message, statusCode: 500)
         };
     }
 
