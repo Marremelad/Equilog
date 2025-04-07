@@ -2,7 +2,6 @@
 using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
-using equilog_backend.DTOs;
 using equilog_backend.DTOs.CalendarEventDTOs;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,4 +43,28 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper)
             return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.InternalServerError, ex.Message);
         }
     }
+
+    public async Task<ApiResponse<CalendarEventDto?>> UpdateCalendarEvent(CalendarEventUpdateDto updatedCalendarEvent)
+    {
+        try
+        {
+            var calendarEvent = await context.CalendarEvents
+                .Where(ce => ce.Id == updatedCalendarEvent.Id)
+                .FirstOrDefaultAsync();
+
+            if (calendarEvent == null)
+                return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.NotFound,
+                    "Error: Calendar event not found");
+
+            return ApiResponse<CalendarEventDto>.Success(HttpStatusCode.OK,
+                mapper.Map<CalendarEventDto>(updatedCalendarEvent),
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+       
+    } 
 }
