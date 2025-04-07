@@ -5,6 +5,7 @@ namespace equilog_backend.DTOs.CalendarEventDTOs;
 public class CalendarEventCreateDto
 {
     [Required]
+    [StringLength(50)]
     public required string Title { get; set; }
 
     [Required]
