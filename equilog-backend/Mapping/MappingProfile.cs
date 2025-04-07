@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using equilog_backend.Models;
 using equilog_backend.DTOs;
+using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.DTOs.HorseDTOs;
 
 namespace equilog_backend.Mapping

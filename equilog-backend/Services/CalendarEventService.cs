@@ -3,6 +3,7 @@ using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs;
+using equilog_backend.DTOs.CalendarEventDTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;

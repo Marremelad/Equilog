@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace equilog_backend.DTOs;
+namespace equilog_backend.DTOs.CalendarEventDTOs;
 
 public class CalendarEventDto
 {
