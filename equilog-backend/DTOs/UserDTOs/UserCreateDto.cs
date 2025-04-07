@@ -5,9 +5,6 @@ namespace equilog_backend.DTOs.UserDTOs
     public class UserCreateDto
     {
         [Required]
-        public required int Id { get; set; }
-
-        [Required]
         [StringLength(50)]
         public required string FirstName { get; set; }
 
