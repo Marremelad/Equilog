@@ -9,10 +9,10 @@ public class UserCalendarEvent
     public int Id { get; set; }
 
     [ForeignKey("User")]
-    public int UserIdFk { get; set; }
-    public virtual required User User { get; set; }
+    public required int UserIdFk { get; set; }
+    public virtual User? User { get; set; }
 
     [ForeignKey("Event")]
-    public int EventIdFk { get; set; }
-    public virtual required CalendarEvent CalendarEvent { get; set; }
+    public required int EventIdFk { get; set; }
+    public virtual CalendarEvent? CalendarEvent { get; set; }
 }

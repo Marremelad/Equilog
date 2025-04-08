@@ -12,8 +12,8 @@ using equilog_backend.Data;
 namespace equilog_backend.Migrations
 {
     [DbContext(typeof(EquilogDbContext))]
-    [Migration("20250407094132_NewModelNamesCalendarEvents")]
-    partial class NewModelNamesCalendarEvents
+    [Migration("20250407155335_Init3.0")]
+    partial class Init30
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -140,7 +140,7 @@ namespace equilog_backend.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("Pinned")
+                    b.Property<bool>("IsPinned")
                         .HasColumnType("bit");
 
                     b.Property<int>("StableIdFk")
@@ -203,7 +203,7 @@ namespace equilog_backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CalendarEventId")
+                    b.Property<int?>("CalendarEventId")
                         .HasColumnType("int");
 
                     b.Property<int>("EventIdFk")
@@ -219,6 +219,34 @@ namespace equilog_backend.Migrations
                     b.HasIndex("UserIdFk");
 
                     b.ToTable("UserCalendarEvents");
+                });
+
+            modelBuilder.Entity("equilog_backend.Models.UserHorse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("HorseIdFk")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserIdFk")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserRole")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HorseIdFk");
+
+                    b.HasIndex("UserIdFk");
+
+                    b.ToTable("UserHorses");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.UserStable", b =>
@@ -242,33 +270,6 @@ namespace equilog_backend.Migrations
                     b.HasIndex("UserIdFk");
 
                     b.ToTable("UserStables");
-                });
-
-            modelBuilder.Entity("equilog_backend.UserHorse", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("HorseIdFk")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserIdFk")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserRole")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HorseIdFk");
-
-                    b.HasIndex("UserIdFk");
-
-                    b.ToTable("UserHorses");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.CalendarEvent", b =>
@@ -324,9 +325,7 @@ namespace equilog_backend.Migrations
                 {
                     b.HasOne("equilog_backend.Models.CalendarEvent", "CalendarEvent")
                         .WithMany("UserCalendarEvents")
-                        .HasForeignKey("CalendarEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CalendarEventId");
 
                     b.HasOne("equilog_backend.Models.User", "User")
                         .WithMany("UserEvents")
@@ -335,6 +334,25 @@ namespace equilog_backend.Migrations
                         .IsRequired();
 
                     b.Navigation("CalendarEvent");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("equilog_backend.Models.UserHorse", b =>
+                {
+                    b.HasOne("equilog_backend.Models.Horse", "Horse")
+                        .WithMany("UserHorses")
+                        .HasForeignKey("HorseIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("equilog_backend.Models.User", "User")
+                        .WithMany("UserHorses")
+                        .HasForeignKey("UserIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Horse");
 
                     b.Navigation("User");
                 });
@@ -354,25 +372,6 @@ namespace equilog_backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Stable");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("equilog_backend.UserHorse", b =>
-                {
-                    b.HasOne("equilog_backend.Models.Horse", "Horse")
-                        .WithMany("UserHorses")
-                        .HasForeignKey("HorseIdFk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("equilog_backend.Models.User", "User")
-                        .WithMany("UserHorses")
-                        .HasForeignKey("UserIdFk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Horse");
 
                     b.Navigation("User");
                 });

@@ -13,6 +13,6 @@ public class StableHorse
     public virtual required Stable Stable { get; set; }
     
     [ForeignKey("Horse")]
-    public int HorseIdFk { get; set; }
-    public virtual required Horse Horse { get; set; }
+    public required int HorseIdFk { get; set; }
+    public virtual Horse? Horse { get; set; }
 }
