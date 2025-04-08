@@ -34,10 +34,11 @@ public class AppConfiguration
 
     public static void AddDomainServices(IServiceCollection services)
     {
+        services.AddScoped<IUserService, UserService>();
+        
         services.AddScoped<CalendarEventService>();
-        // services.AddScoped<HorseService>();
+        
         services.AddScoped<IHorseService, HorseService>();
-        services.AddScoped<UserService>();
     }
     
     public static void AddCorsServices(IServiceCollection services)
