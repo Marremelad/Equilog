@@ -38,6 +38,8 @@ public class AppConfiguration
         services.AddScoped<ICalendarEventService, CalendarEventService>();
         
         services.AddScoped<IHorseService, HorseService>();
+
+        services.AddScoped<IStableService, StableService>();
     }
     
     public static void AddCorsServices(IServiceCollection services)

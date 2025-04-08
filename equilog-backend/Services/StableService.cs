@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
 
-public class StableService(EquilogDbContext context, IMapper mapper)
+public class StableService(EquilogDbContext context, IMapper mapper) : IStableService
 {
    public async Task<ApiResponse<List<StableDto>?>> GetStables()
    {
