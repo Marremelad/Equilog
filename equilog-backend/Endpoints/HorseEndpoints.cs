@@ -52,7 +52,7 @@ public class HorseEndpoints
         };
     }
 
-    private static async Task<IResult> CreateHorse(IHorseService horseService ,HorseCreateDto newHorse)
+    private static async Task<IResult> CreateHorse(IHorseService horseService, HorseCreateDto newHorse)
     {
         var apiResponse = await horseService.CreateHorse(newHorse);
 

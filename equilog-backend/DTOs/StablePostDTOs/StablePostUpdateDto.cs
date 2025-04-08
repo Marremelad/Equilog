@@ -4,6 +4,8 @@ namespace equilog_backend.DTOs.StablePostDTOs;
 
 public class StablePostUpdateDto
 {
+    public required int Id { get; set; }
+    
     [Required]
     public required string Title { get; set; }
 
