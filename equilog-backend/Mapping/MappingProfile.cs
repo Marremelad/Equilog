@@ -10,8 +10,6 @@ namespace equilog_backend.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<User, UserDto>().ReverseMap();
-            
             CreateMap<Horse, HorseDto>().ReverseMap();
             CreateMap<HorseUpdateDto, Horse>();
             CreateMap<HorseCreateDto, HorseDto>();
