@@ -26,4 +26,24 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             ex.Message);
       }
    }
+
+   public async Task<ApiResponse<StableDto?>> GetStable()
+   {
+      
+   }
+
+   public async Task<ApiResponse<StableDto?>> CreateStable()
+   {
+      throw new NotImplementedException();
+   }
+
+   public async Task<ApiResponse<StableDto?>> UpdateStable()
+   {
+      throw new NotImplementedException();
+   }
+
+   public async Task<ApiResponse<StableDto?>> DeleteStable()
+   {
+      throw new NotImplementedException();
+   }
 }
