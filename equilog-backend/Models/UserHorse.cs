@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using equilog_backend.Models;
 
-namespace equilog_backend;
+namespace equilog_backend.Models;
 
 public class UserHorse
 {

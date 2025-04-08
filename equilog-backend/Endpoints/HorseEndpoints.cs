@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using equilog_backend.DTOs.HorseDTOs;
-using equilog_backend.Services;
+using equilog_backend.Interfaces;
 
 namespace equilog_backend.Endpoints;
 
@@ -29,7 +29,7 @@ public class HorseEndpoints
             .WithName("DeleteHorse");
     }
 
-    private static async Task<IResult> GetHorses(HorseService horseService)
+    private static async Task<IResult> GetHorses(IHorseService horseService)
     {
         var apiResponse = await horseService.GetHorses();
             
@@ -40,7 +40,7 @@ public class HorseEndpoints
         };
     }
 
-    private static async Task<IResult> GetHorse(HorseService horseService, int id)
+    private static async Task<IResult> GetHorse(IHorseService horseService, int id)
     {
         var apiResponse = await horseService.GetHorse(id);
 
@@ -52,7 +52,7 @@ public class HorseEndpoints
         };
     }
 
-    private static async Task<IResult> CreateHorse(HorseService horseService, HorseCreateDto newHorse)
+    private static async Task<IResult> CreateHorse(IHorseService horseService ,HorseCreateDto newHorse)
     {
         var apiResponse = await horseService.CreateHorse(newHorse);
 
@@ -63,7 +63,7 @@ public class HorseEndpoints
         };
     }
 
-    private static async Task<IResult> UpdateHorse(HorseService horseService, HorseUpdateDto updatedHorse)
+    private static async Task<IResult> UpdateHorse(IHorseService horseService, HorseUpdateDto updatedHorse)
     {
         var apiResponse = await horseService.UpdateHorse(updatedHorse);
             
@@ -75,7 +75,7 @@ public class HorseEndpoints
         };
     }
 
-    private static async Task<IResult> DeleteHorse(HorseService horseService, int id)
+    private static async Task<IResult> DeleteHorse(IHorseService horseService, int id)
     {
         var apiResponse = await horseService.DeleteHorse(id);
 
