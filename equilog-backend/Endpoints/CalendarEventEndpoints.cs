@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using equilog_backend.DTOs.CalendarEventDTOs;
+using equilog_backend.Interfaces;
 using equilog_backend.Services;
 
 namespace equilog_backend.Endpoints;
@@ -29,7 +30,7 @@ public class CalendarEventEndpoints
             .WithName("DeleteCalendarEvent");
     }
 
-    private static async Task<IResult> GetEvents(CalendarEventService calendarEventService)
+    private static async Task<IResult> GetEvents(ICalendarEventService calendarEventService)
     {
         var apiResponse = await calendarEventService.GetEvents();
 
@@ -40,7 +41,7 @@ public class CalendarEventEndpoints
         };
     }
 
-    private static async Task<IResult> GetEvent(CalendarEventService calendarEventService, int id)
+    private static async Task<IResult> GetEvent(ICalendarEventService calendarEventService, int id)
     {
         var apiResponse = await calendarEventService.GetEvent(id);
 
@@ -52,7 +53,7 @@ public class CalendarEventEndpoints
         };
     }
     
-    private static async Task<IResult> CreateCalendarEvent(CalendarEventService calendarEventService,
+    private static async Task<IResult> CreateCalendarEvent(ICalendarEventService calendarEventService,
         CalendarEventCreateDto newCalendarEvent)
     {
         var apiResponse = await calendarEventService.CreateCalendarEvent(newCalendarEvent);
@@ -64,7 +65,7 @@ public class CalendarEventEndpoints
         };
     }
 
-    private static async Task<IResult> UpdateEvent(CalendarEventService calendarEventService,
+    private static async Task<IResult> UpdateEvent(ICalendarEventService calendarEventService,
         CalendarEventUpdateDto updatedEvent)
     {
         var apiResponse = await calendarEventService.UpdateCalendarEvent(updatedEvent);
@@ -77,7 +78,7 @@ public class CalendarEventEndpoints
         };
     }
 
-    private static async Task<IResult> DeleteCalendarEvent(CalendarEventService calendarEventService, int id)
+    private static async Task<IResult> DeleteCalendarEvent(ICalendarEventService calendarEventService, int id)
     {
         var apiResponse = await calendarEventService.DeleteCalendarEvent(id);
 

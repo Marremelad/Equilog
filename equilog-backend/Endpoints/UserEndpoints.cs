@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using equilog_backend.DTOs.UserDTOs;
-using equilog_backend.Services;
+using equilog_backend.Interfaces;
 
 namespace equilog_backend.Endpoints
 {
@@ -30,7 +30,7 @@ namespace equilog_backend.Endpoints
                 .WithName("DeleteUser");
         }
 
-        private static async Task<IResult> GetUsers(UserService userService)
+        private static async Task<IResult> GetUsers(IUserService userService)
         {
             var apiResponse = await userService.GetUsers();
 
@@ -41,7 +41,7 @@ namespace equilog_backend.Endpoints
             };
         }
 
-        private static async Task<IResult> GetUser(UserService userService, int id)
+        private static async Task<IResult> GetUser(IUserService userService, int id)
         {
             var apiResponse = await userService.GetUser(id);
 
@@ -53,7 +53,7 @@ namespace equilog_backend.Endpoints
             };
         }
 
-        private static async Task<IResult> CreateUser(UserService userService, UserCreateDto newUser)
+        private static async Task<IResult> CreateUser(IUserService userService, UserCreateDto newUser)
         {
             var apiResponse = await userService.CreateUser(newUser);
 
@@ -64,7 +64,7 @@ namespace equilog_backend.Endpoints
             };
         }
 
-        private static async Task<IResult> UpdateUser(UserService userService, UserUpdateDto updatedUser)
+        private static async Task<IResult> UpdateUser(IUserService userService, UserUpdateDto updatedUser)
         {
             var apiResponse = await userService.UpdateUser(updatedUser);
 
@@ -76,7 +76,7 @@ namespace equilog_backend.Endpoints
             };
         }
 
-        private static async Task<IResult> DeleteUser(UserService userService, int id)
+        private static async Task<IResult> DeleteUser(IUserService userService, int id)
         {
             var apiResponse = await userService.DeleteUser(id);
 

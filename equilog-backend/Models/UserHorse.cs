@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using equilog_backend.Common.Enums;
 
 namespace equilog_backend.Models;
 

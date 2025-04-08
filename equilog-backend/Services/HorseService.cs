@@ -4,18 +4,19 @@ using AutoMapper;
 using System.Net;
 using equilog_backend.Common;
 using equilog_backend.DTOs.HorseDTOs;
+using equilog_backend.Interfaces;
 using equilog_backend.Models;
 
 namespace equilog_backend.Services;
 
-public class HorseService(EquilogDbContext context, IMapper mapper)
+public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseService
 {
     public async Task<ApiResponse<List<HorseDto>?>> GetHorses()
     {
         try
         {
             var horseDtos = mapper.Map<List<HorseDto>>(await context.Horses.ToListAsync());
-
+    
             return ApiResponse<List<HorseDto>>.Success(HttpStatusCode.OK,
                 horseDtos,
                 null);

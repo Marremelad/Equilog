@@ -1,5 +1,5 @@
 ﻿using equilog_backend.Data;
-using equilog_backend.DTOs.CalendarEventDTOs;
+using equilog_backend.Interfaces;
 using equilog_backend.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,9 +33,11 @@ public class AppConfiguration
 
     public static void AddDomainServices(IServiceCollection services)
     {
-        services.AddScoped<CalendarEventService>();
-        services.AddScoped<HorseService>();
-        services.AddScoped<UserService>();
+        services.AddScoped<IUserService, UserService>();
+        
+        services.AddScoped<ICalendarEventService, CalendarEventService>();
+        
+        services.AddScoped<IHorseService, HorseService>();
     }
     
     public static void AddCorsServices(IServiceCollection services)

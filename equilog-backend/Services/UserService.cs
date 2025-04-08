@@ -3,12 +3,13 @@ using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.UserDTOs;
+using equilog_backend.Interfaces;
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services
 {
-    public class UserService(EquilogDbContext context, IMapper mapper)
+    public class UserService(EquilogDbContext context, IMapper mapper) : IUserService
     {
         public async Task<ApiResponse<List<UserDto>?>> GetUsers()
         {
