@@ -7,7 +7,7 @@ public interface IStableService
 {
     public Task<ApiResponse<List<StableDto>?>> GetStables();
 
-    public Task<ApiResponse<StableDto?>> GetStable();
+    public Task<ApiResponse<StableDto?>> GetStable(int id);
 
     public Task<ApiResponse<StableDto?>> CreateStable();
 
