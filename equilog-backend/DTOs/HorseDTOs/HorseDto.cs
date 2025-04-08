@@ -2,13 +2,13 @@
 
 public class HorseDto
 {
-    public required int Id { get; set; }
-        
+    public int Id { get; set; }
+
     public required string Name { get; set; }
-        
+
     public DateTime? Age { get; set; }
         
     public string? Color { get; set; }
-        
+
     public string? Breed { get; set; }
 }
