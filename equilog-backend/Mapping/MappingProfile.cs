@@ -2,6 +2,7 @@
 using equilog_backend.Models;
 using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.DTOs.HorseDTOs;
+using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.UserDTOs;
 
 namespace equilog_backend.Mapping
@@ -10,21 +11,21 @@ namespace equilog_backend.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<User, UserDto>().ReverseMap();
-            
             CreateMap<Horse, HorseDto>().ReverseMap();
-            CreateMap<HorseUpdateDto, Horse>();
-            CreateMap<HorseCreateDto, HorseDto>();
             CreateMap<HorseCreateDto, Horse>();
+            CreateMap<HorseUpdateDto, Horse>();
 
             CreateMap<CalendarEvent, CalendarEventDto>().ReverseMap();
             CreateMap<CalendarEventCreateDto, CalendarEvent>();
-            CreateMap<CalendarEventUpdateDto, CalendarEventDto>();
+            CreateMap<CalendarEventUpdateDto, CalendarEvent>();
 
             CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<UserUpdateDto, User>();
-            CreateMap<UserCreateDto, UserDto>();
             CreateMap<UserCreateDto, User>();
+            CreateMap<UserUpdateDto, User>();
+
+            CreateMap<Stable, StableDto>().ReverseMap();
+            CreateMap<StableCreateDto, Stable>();
+            CreateMap<StableUpdateDto, Stable>();
         }
     }
 }
