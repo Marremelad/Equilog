@@ -100,6 +100,27 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
 
    public async Task<ApiResponse<StableDto?>> DeleteStable(int id)
    {
-      throw new NotImplementedException();
+      try
+      {
+         var stable = await context.Stables
+            .Where(s => s.Id == id)
+            .FirstOrDefaultAsync();
+
+         if (stable == null)
+            return ApiResponse<StableDto>.Failure(HttpStatusCode.NotFound,
+               "Error: stable not found");
+
+         context.Stables.Remove(stable);
+         await context.SaveChangesAsync();
+
+         return ApiResponse<StableDto>.Success(HttpStatusCode.NoContent,
+            null,
+            $"Stable with id '{id}' was deleted successfully");
+      }
+      catch (Exception ex)
+      {
+         return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
+            ex.Message);
+      }
    }
 }
