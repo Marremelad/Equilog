@@ -19,6 +19,10 @@ public class StableEnpoints
         // Create stable.
         app.MapPost("/api/stable/create", CreateStable)
             .WithName("CreateStable");
+        
+        // Update Stable.
+        app.MapPut("/api/stable/update", UpdateStable)
+            .WithName("UpdateStable");
     }
 
     private static async Task<IResult> GetStables(IStableService stableService)
@@ -51,6 +55,18 @@ public class StableEnpoints
         return apiResponse.StatusCode switch
         {
             HttpStatusCode.Created => Results.Json(apiResponse, statusCode: 201),
+            _ => Results.Problem(apiResponse.Message, statusCode: 500)
+        };
+    }
+
+    private static async Task<IResult> UpdateStable(IStableService stableService, StableUpdateDto updatedStable)
+    {
+        var apiResponse = await stableService.UpdateStable(updatedStable);
+
+        return apiResponse.StatusCode switch
+        {
+            HttpStatusCode.OK => Results.Ok(apiResponse),
+            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
             _ => Results.Problem(apiResponse.Message, statusCode: 500)
         };
     }

@@ -2,6 +2,7 @@
 using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
+using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
@@ -73,7 +74,28 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
 
    public async Task<ApiResponse<StableDto?>> UpdateStable(StableUpdateDto updatedStable)
    {
-      throw new NotImplementedException();
+      try
+      {
+         var stable = await context.Stables
+            .Where(s => s.Id == updatedStable.Id)
+            .FirstOrDefaultAsync();
+
+         if (stable == null)
+            return ApiResponse<StableDto>.Failure(HttpStatusCode.NotFound,
+               "Error: Stable not found");
+
+         mapper.Map(updatedStable, stable);
+         await context.SaveChangesAsync();
+
+         return ApiResponse<StableDto>.Success(HttpStatusCode.OK,
+            mapper.Map<StableDto>(stable),
+            "Stable information updated successfully");
+      }
+      catch (Exception ex)
+      {
+         return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
+            ex.Message);
+      }
    }
 
    public async Task<ApiResponse<StableDto?>> DeleteStable(int id)
