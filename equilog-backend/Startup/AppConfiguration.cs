@@ -35,7 +35,7 @@ public class AppConfiguration
     {
         services.AddScoped<IUserService, UserService>();
         
-        services.AddScoped<CalendarEventService>();
+        services.AddScoped<ICalendarEventService, CalendarEventService>();
         
         services.AddScoped<IHorseService, HorseService>();
     }

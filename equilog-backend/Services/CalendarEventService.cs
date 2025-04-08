@@ -3,12 +3,13 @@ using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.CalendarEventDTOs;
+using equilog_backend.Interfaces;
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
 
-public class CalendarEventService(EquilogDbContext context, IMapper mapper)
+public class CalendarEventService(EquilogDbContext context, IMapper mapper) : ICalendarEventService
 {
     public async Task<ApiResponse<List<CalendarEventDto>?>> GetEvents()
     {
