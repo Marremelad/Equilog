@@ -7,10 +7,12 @@ public class StableEnpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        
+        // Get all stables.
+        app.MapGet("/api/stable", GetStables)
+            .WithName("GetStables");
     }
 
-    public async Task<IResult> GetStables(IStableService stableService)
+    private static async Task<IResult> GetStables(IStableService stableService)
     {
         var apiResponse = await stableService.GetStables();
 
