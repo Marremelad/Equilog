@@ -11,21 +11,21 @@ namespace equilog_backend.Mapping
     {
         public MappingProfile()
         {
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<UserCreateDto, User>();
+            CreateMap<UserUpdateDto, User>();
+            
             CreateMap<Horse, HorseDto>().ReverseMap();
             CreateMap<HorseCreateDto, Horse>();
             CreateMap<HorseUpdateDto, Horse>();
+            
+            CreateMap<Stable, StableDto>().ReverseMap();
+            CreateMap<StableCreateDto, Stable>();
+            CreateMap<StableUpdateDto, Stable>();
 
             CreateMap<CalendarEvent, CalendarEventDto>().ReverseMap();
             CreateMap<CalendarEventCreateDto, CalendarEvent>();
             CreateMap<CalendarEventUpdateDto, CalendarEvent>();
-
-            CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<UserCreateDto, User>();
-            CreateMap<UserUpdateDto, User>();
-
-            CreateMap<Stable, StableDto>().ReverseMap();
-            CreateMap<StableCreateDto, Stable>();
-            CreateMap<StableUpdateDto, Stable>();
         }
     }
 }

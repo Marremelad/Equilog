@@ -17,15 +17,15 @@ public class HorseEndpoints
             .WithName("GetHorse");
         
         // Create horse.
-        app.MapPost("/api/horse", CreateHorse)
+        app.MapPost("/api/horse/create", CreateHorse)
             .WithName("CreateHorse");
         
         // Update horse properties.
-        app.MapPut("/api/horse", UpdateHorse)
+        app.MapPut("/api/horse/update", UpdateHorse)
             .WithName("UpdateHorse");
 
         // Delete horse.
-        app.MapDelete("/api/horse/{id:int}", DeleteHorse)
+        app.MapDelete("/api/horse/delete/{id:int}", DeleteHorse)
             .WithName("DeleteHorse");
     }
 

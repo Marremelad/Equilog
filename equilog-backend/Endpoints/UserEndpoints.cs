@@ -11,22 +11,22 @@ namespace equilog_backend.Endpoints
             
             // Get all users.
             app.MapGet("/api/user", GetUsers)
-                .WithName("Getusers");
+                .WithName("GetUsers");
 
             // Get user.
             app.MapGet("/api/user/{id:int}", GetUser)
                 .WithName("GetUser");
 
             // Create user.
-            app.MapPost("/api/user", CreateUser)
+            app.MapPost("/api/user/create", CreateUser)
                 .WithName("CreateUser");
 
             // Update user properties.
-            app.MapPut("/api/user", UpdateUser)
+            app.MapPut("/api/user/update", UpdateUser)
                 .WithName("UpdateUser");
 
             // Delete user.
-            app.MapDelete("/api/user/{id:int}", DeleteUser)
+            app.MapDelete("/api/user/delete/{id:int}", DeleteUser)
                 .WithName("DeleteUser");
         }
 
