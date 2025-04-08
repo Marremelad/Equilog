@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.Interfaces;
-using equilog_backend.Services;
 
 namespace equilog_backend.Endpoints;
 
