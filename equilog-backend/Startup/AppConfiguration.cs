@@ -1,5 +1,4 @@
 ﻿using equilog_backend.Data;
-using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Services;
 using Microsoft.EntityFrameworkCore;
