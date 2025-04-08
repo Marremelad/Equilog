@@ -24,6 +24,8 @@ namespace equilog_backend.Mapping
             CreateMap<UserCreateDto, User>();
 
             CreateMap<Stable, StableDto>().ReverseMap();
+            CreateMap<StableCreateDto, Stable>();
+            CreateMap<StableUpdateDto, StableDto>();
         }
     }
 }
