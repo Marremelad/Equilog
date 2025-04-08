@@ -35,11 +35,13 @@ public class AppConfiguration
     {
         services.AddScoped<IUserService, UserService>();
         
-        services.AddScoped<ICalendarEventService, CalendarEventService>();
-        
         services.AddScoped<IHorseService, HorseService>();
-
+        
         services.AddScoped<IStableService, StableService>();
+        
+        services.AddScoped<IStablePostService, StablePostService>();
+        
+        services.AddScoped<ICalendarEventService, CalendarEventService>();
     }
     
     public static void AddCorsServices(IServiceCollection services)
