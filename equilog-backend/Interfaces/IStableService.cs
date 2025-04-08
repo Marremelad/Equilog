@@ -9,9 +9,9 @@ public interface IStableService
 
     public Task<ApiResponse<StableDto?>> GetStable(int id);
 
-    public Task<ApiResponse<StableDto?>> CreateStable();
+    public Task<ApiResponse<StableDto?>> CreateStable(StableCreateDto newStable);
 
-    public Task<ApiResponse<StableDto?>> UpdateStable();
+    public Task<ApiResponse<StableDto?>> UpdateStable(StableUpdateDto updatedStable);
 
-    public Task<ApiResponse<StableDto?>> DeleteStable();
+    public Task<ApiResponse<StableDto?>> DeleteStable(int id);
 }

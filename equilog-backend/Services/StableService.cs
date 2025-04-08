@@ -50,17 +50,17 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
       }
    }
 
-   public async Task<ApiResponse<StableDto?>> CreateStable()
+   public async Task<ApiResponse<StableDto?>> CreateStable(StableCreateDto newStable)
    {
       throw new NotImplementedException();
    }
 
-   public async Task<ApiResponse<StableDto?>> UpdateStable()
+   public async Task<ApiResponse<StableDto?>> UpdateStable(StableUpdateDto updatedStable)
    {
       throw new NotImplementedException();
    }
 
-   public async Task<ApiResponse<StableDto?>> DeleteStable()
+   public async Task<ApiResponse<StableDto?>> DeleteStable(int id)
    {
       throw new NotImplementedException();
    }
