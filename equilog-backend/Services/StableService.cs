@@ -4,6 +4,7 @@ using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
+using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
@@ -52,7 +53,22 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
 
    public async Task<ApiResponse<StableDto?>> CreateStable(StableCreateDto newStable)
    {
-      throw new NotImplementedException();
+      try
+      {
+         var stable = mapper.Map<Stable>(newStable);
+
+         context.Stables.Add(stable);
+         await context.SaveChangesAsync();
+
+         return ApiResponse<StableDto>.Success(HttpStatusCode.Created,
+            mapper.Map<StableDto>(stable),
+            "Stable created successfully");
+      }
+      catch (Exception ex)
+      {
+         return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
+            ex.Message);
+      }
    }
 
    public async Task<ApiResponse<StableDto?>> UpdateStable(StableUpdateDto updatedStable)
