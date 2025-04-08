@@ -33,5 +33,6 @@ public class AppInitialization
         CalendarEventEndpoints.RegisterEndpoints(app);
         HorseEndpoints.RegisterEndpoints(app);
         UserEndpoints.RegisterEndpoints(app);
+        StableEnpoints.RegisterEndpoints(app);
     }
 }
