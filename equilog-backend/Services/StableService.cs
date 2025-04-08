@@ -27,9 +27,27 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
       }
    }
 
-   public async Task<ApiResponse<StableDto?>> GetStable()
+   public async Task<ApiResponse<StableDto?>> GetStable(int id)
    {
-      
+      try
+      {
+         var stable = await context.Stables
+            .Where(s => s.Id == id)
+            .FirstOrDefaultAsync();
+
+         if (stable == null)
+            return ApiResponse<StableDto>.Failure(HttpStatusCode.NotFound,
+               "Error: Stable not found");
+
+         return ApiResponse<StableDto>.Success(HttpStatusCode.OK,
+            mapper.Map<StableDto>(stable),
+            null);
+      }
+      catch (Exception ex)
+      {
+         return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
+            ex.Message);
+      }
    }
 
    public async Task<ApiResponse<StableDto?>> CreateStable()
