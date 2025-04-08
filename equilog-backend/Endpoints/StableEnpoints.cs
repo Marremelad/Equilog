@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using equilog_backend.Interfaces;
-using Microsoft.Win32.SafeHandles;
 
 namespace equilog_backend.Endpoints;
 
@@ -11,6 +10,10 @@ public class StableEnpoints
         // Get all stables.
         app.MapGet("/api/stable", GetStables)
             .WithName("GetStables");
+        
+        // Get stable.
+        app.MapGet("/api/stable/{id:int}", GetStable)
+            .WithName("GetStable");
     }
 
     private static async Task<IResult> GetStables(IStableService stableService)
