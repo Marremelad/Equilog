@@ -9,29 +9,29 @@ public class CalendarEventEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         // Get all calendar events.
-        app.MapGet("/api/calendar-event", GetEvents)
-            .WithName("GetEvents");
+        app.MapGet("/api/calendar-event", GetCalendarEvents)
+            .WithName("GetCalendarEvents");
 
         // Get calendar event by id.
-        app.MapGet("/api/calendar-event/{id:int}", GetEvent)
-            .WithName("GetEvent");
+        app.MapGet("/api/calendar-event/{id:int}", GetCalendarEvent)
+            .WithName("GetCalendarEvent");
 
         // Create calendar event.
         app.MapPost("/api/calendar-event/create", CreateCalendarEvent)
             .WithName("CreateCalendarEvent");
 
         // Update calendar event.
-        app.MapPut("/api/calendar-event/update", UpdateEvent)
-            .WithName("UpdateEvent");
+        app.MapPut("/api/calendar-event/update", UpdateCalendarEvent)
+            .WithName("UpdateCalendarEvent");
         
         // Delete calendar event.
         app.MapDelete("/api/calendar-event/delete/{id:int}", DeleteCalendarEvent)
             .WithName("DeleteCalendarEvent");
     }
 
-    private static async Task<IResult> GetEvents(ICalendarEventService calendarEventService)
+    private static async Task<IResult> GetCalendarEvents(ICalendarEventService calendarEventService)
     {
-        var apiResponse = await calendarEventService.GetEvents();
+        var apiResponse = await calendarEventService.GetCalendarEvents();
 
         return apiResponse.StatusCode switch
         {
@@ -40,9 +40,9 @@ public class CalendarEventEndpoints
         };
     }
 
-    private static async Task<IResult> GetEvent(ICalendarEventService calendarEventService, int id)
+    private static async Task<IResult> GetCalendarEvent(ICalendarEventService calendarEventService, int id)
     {
-        var apiResponse = await calendarEventService.GetEvent(id);
+        var apiResponse = await calendarEventService.GetCalendarEvent(id);
 
         return apiResponse.StatusCode switch
         {
@@ -64,7 +64,7 @@ public class CalendarEventEndpoints
         };
     }
 
-    private static async Task<IResult> UpdateEvent(ICalendarEventService calendarEventService,
+    private static async Task<IResult> UpdateCalendarEvent(ICalendarEventService calendarEventService,
         CalendarEventUpdateDto updatedEvent)
     {
         var apiResponse = await calendarEventService.UpdateCalendarEvent(updatedEvent);

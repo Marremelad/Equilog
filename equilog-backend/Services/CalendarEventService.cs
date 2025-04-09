@@ -11,7 +11,7 @@ namespace equilog_backend.Services;
 
 public class CalendarEventService(EquilogDbContext context, IMapper mapper) : ICalendarEventService
 {
-    public async Task<ApiResponse<List<CalendarEventDto>?>> GetEvents()
+    public async Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEvents()
     {
         try
         {
@@ -28,7 +28,7 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
         }
     }
     
-    public async Task<ApiResponse<CalendarEventDto?>> GetEvent(int id)
+    public async Task<ApiResponse<CalendarEventDto?>> GetCalendarEvent(int id)
     {
         try
         {
