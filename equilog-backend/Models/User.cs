@@ -7,6 +7,15 @@ public class User
     [Key]
     public int Id { get; set; }
 
+    [StringLength(30)]
+    public required string UserName { get; set; } = string.Empty;
+
+    [StringLength(100)]
+    public string PasswordHash { get; set; } = string.Empty;
+
+    [StringLength(50)]
+    public string Salt { get; set; } = string.Empty;
+    
     [StringLength(50)]
     public required string FirstName { get; set; }
 
