@@ -12,6 +12,7 @@ public class Program
         AppConfiguration.AddDocumentationServices(services);
         AppConfiguration.AddLibraryServices(services);
         AppConfiguration.AddFrameworkServices(services);
+        AppConfiguration.AddAuthServices(services, builder);
         AppConfiguration.AddPersistenceServices(services, builder);
         AppConfiguration.AddDomainServices(services);
         AppConfiguration.AddCorsServices(services);
