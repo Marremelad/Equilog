@@ -1,7 +1,9 @@
 ﻿using equilog_backend.Data;
 using equilog_backend.Interfaces;
+using equilog_backend.Security;
 using equilog_backend.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace equilog_backend.Startup;
 
@@ -21,6 +23,12 @@ public class AppConfiguration
     {
         services.AddAuthorization();
         services.AddEndpointsApiExplorer();
+    }
+    
+    public static void AddAuthServices(IServiceCollection services, WebApplicationBuilder builder)
+    {
+        services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+        services.AddSingleton(provider => provider.GetRequiredService<IOptions<JwtSettings>>().Value);
     }
 
     public static void AddPersistenceServices(IServiceCollection services, WebApplicationBuilder builder)
