@@ -26,17 +26,15 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                 new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("firstName", user.FirstName),
-                new Claim("lastName", user.LastName)
             ]),
             Expires = DateTime.Now.AddMinutes(jwtSettings.DurationInMinutes),
             Issuer = jwtSettings.Issuer,
             Audience = jwtSettings.Audience,
-            SigningCredentials = new SigningCredentials(
+            SigningCredentials = new SigningCredentials( // Specifies how the JWT signature should be composed.
                 new SymmetricSecurityKey(key), 
                 SecurityAlgorithms.HmacSha512Signature)
         };
-    
+        
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
