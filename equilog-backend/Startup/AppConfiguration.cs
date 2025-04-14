@@ -41,6 +41,8 @@ public class AppConfiguration
 
     public static void AddDomainServices(IServiceCollection services)
     {
+        services.AddScoped<IAuthService, AuthService>();
+        
         services.AddScoped<IUserService, UserService>();
         
         services.AddScoped<IHorseService, HorseService>();

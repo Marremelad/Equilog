@@ -30,6 +30,7 @@ public class AppInitialization
 
     public static void InitializeEndpoints(WebApplication app)
     {
+        AuthEndpoints.RegisterEndpoints(app);
         UserEndpoints.RegisterEndpoints(app);
         HorseEndpoints.RegisterEndpoints(app);
         StableEnpoints.RegisterEndpoints(app);

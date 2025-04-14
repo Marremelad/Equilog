@@ -44,8 +44,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         try
         {
             var existingUserByUsername = await context.Users
-                .FirstOrDefaultAsync(u => u.UserName.Equals(registerDto.UserName,
-                    StringComparison.CurrentCultureIgnoreCase));
+                .FirstOrDefaultAsync(u => u.UserName.ToLower() == registerDto.UserName.ToLower());
 
             if (existingUserByUsername != null)
             {
@@ -55,8 +54,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             }
 
             var existingUserByEmail = await context.Users
-                .FirstOrDefaultAsync(u => u.Email.Equals(registerDto.Email,
-                    StringComparison.CurrentCultureIgnoreCase));
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == registerDto.Email.ToLower());
 
             if (existingUserByEmail != null)
             {
@@ -71,12 +69,12 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             var user = new User
             {
                 UserName = registerDto.UserName,
+                PasswordHash = passwordHash,
+                Salt = salt,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 Email = registerDto.Email,
-                PhoneNumber = registerDto.PhoneNumber,
-                PasswordHash = passwordHash,
-                Salt = salt
+                PhoneNumber = registerDto.PhoneNumber
             };
 
             context.Users.Add(user);
@@ -107,8 +105,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         try
         {
             var user = await context.Users
-                .FirstOrDefaultAsync(u => u.UserName.Equals(loginDto.UserName,
-                    StringComparison.CurrentCultureIgnoreCase));
+                .FirstOrDefaultAsync(u => u.UserName.ToLower() == loginDto.UserName.ToLower());
 
             if (user == null)
                 return ApiResponse<AuthResponseDto?>.Failure(
@@ -132,7 +129,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             return ApiResponse<AuthResponseDto>.Success(
                 HttpStatusCode.OK,
                 response,
-                null); 
+                "Login successful"); 
         }
         catch (Exception ex)
         {
