@@ -86,7 +86,7 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
             await context.SaveChangesAsync();
 
             return ApiResponse<CalendarEventDto>.Success(HttpStatusCode.OK,
-                mapper.Map<CalendarEventDto>(updatedCalendarEvent),
+                mapper.Map<CalendarEventDto>(calendarEvent),
                 null);
         }
         catch (Exception ex)

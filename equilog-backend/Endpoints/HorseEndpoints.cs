@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using equilog_backend.Common;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Interfaces;
 
@@ -31,59 +32,26 @@ public class HorseEndpoints
 
     private static async Task<IResult> GetHorses(IHorseService horseService)
     {
-        var apiResponse = await horseService.GetHorses();
-            
-        return apiResponse.StatusCode switch
-        {
-            HttpStatusCode.OK => Results.Ok(apiResponse),
-            _ => Results.Problem(apiResponse.Message, statusCode: 500)
-        };
+        return Result.Generate(await horseService.GetHorses());
     }
 
     private static async Task<IResult> GetHorse(IHorseService horseService, int id)
     {
-        var apiResponse = await horseService.GetHorse(id);
-
-        return apiResponse.StatusCode switch
-        {
-            HttpStatusCode.OK => Results.Ok(apiResponse),
-            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
-            _ => Results.Problem(apiResponse.Message, statusCode: 500)
-        };
+        return Result.Generate(await horseService.GetHorse(id));
     }
 
     private static async Task<IResult> CreateHorse(IHorseService horseService, HorseCreateDto newHorse)
     {
-        var apiResponse = await horseService.CreateHorse(newHorse);
-
-        return apiResponse.StatusCode switch
-        {
-            HttpStatusCode.Created => Results.Json(apiResponse, statusCode: 201),
-            _ => Results.Problem(apiResponse.Message, statusCode: 500)
-        };
+        return Result.Generate(await horseService.CreateHorse(newHorse));
     }
 
     private static async Task<IResult> UpdateHorse(IHorseService horseService, HorseUpdateDto updatedHorse)
     {
-        var apiResponse = await horseService.UpdateHorse(updatedHorse);
-            
-        return apiResponse.StatusCode switch
-        {
-            HttpStatusCode.OK => Results.Ok(apiResponse),
-            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
-            _ => Results.Problem(apiResponse.Message, statusCode: 500)
-        };
+        return Result.Generate(await horseService.UpdateHorse(updatedHorse));
     }
 
     private static async Task<IResult> DeleteHorse(IHorseService horseService, int id)
     {
-        var apiResponse = await horseService.DeleteHorse(id);
-
-        return apiResponse.StatusCode switch
-        {
-            HttpStatusCode.NoContent => Results.Json(apiResponse, statusCode: 204),
-            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
-            _ => Results.Problem(apiResponse.Message, statusCode: 500)
-        };
+        return Result.Generate(await horseService.DeleteHorse(id));
     }
 }
