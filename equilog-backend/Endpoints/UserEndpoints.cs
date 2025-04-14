@@ -33,27 +33,27 @@ namespace equilog_backend.Endpoints
 
         private static async Task<IResult> GetUsers(IUserService userService)
         {
-            return Response.Generate(await userService.GetUsers());
+            return Result.Generate(await userService.GetUsers());
         }
 
         private static async Task<IResult> GetUser(IUserService userService, int id)
         {
-            return Response.Generate(await userService.GetUser(id));
+            return Result.Generate(await userService.GetUser(id));
         }
 
         private static async Task<IResult> CreateUser(IUserService userService, UserCreateDto newUser)
         {
-            return Response.Generate(await userService.CreateUser(newUser));
+            return Result.Generate(await userService.CreateUser(newUser));
         }
 
         private static async Task<IResult> UpdateUser(IUserService userService, UserUpdateDto updatedUser)
         {
-            return Response.Generate(await userService.UpdateUser(updatedUser));
+            return Result.Generate(await userService.UpdateUser(updatedUser));
         }
 
         private static async Task<IResult> DeleteUser(IUserService userService, int id)
         {
-            return Response.Generate(await userService.DeleteUser(id));
+            return Result.Generate(await userService.DeleteUser(id));
         }
     }
 }

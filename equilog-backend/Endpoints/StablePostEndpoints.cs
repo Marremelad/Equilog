@@ -32,26 +32,26 @@ public class StablePostEndpoints
 
     private static async Task<IResult> GetStablePosts(IStablePostService stablePostService)
     {
-        return Response.Generate(await stablePostService.GetStablePosts());
+        return Result.Generate(await stablePostService.GetStablePosts());
     }
 
     private static async Task<IResult> GetStablePost(IStablePostService stablePostService, int id)
     {
-        return Response.Generate(await stablePostService.GetStablePost(id));
+        return Result.Generate(await stablePostService.GetStablePost(id));
     }
 
     private static async Task<IResult> CreateStablePost(IStablePostService stablePostService, StablePostCreateDto newStablePost)
     {
-        return Response.Generate(await stablePostService.CreateStablePost(newStablePost));
+        return Result.Generate(await stablePostService.CreateStablePost(newStablePost));
     }
 
     private static async Task<IResult> UpdateStablePost(IStablePostService stablePostService, StablePostUpdateDto updatedStablePost)
     {
-        return Response.Generate(await stablePostService.UpdateStablePost(updatedStablePost));
+        return Result.Generate(await stablePostService.UpdateStablePost(updatedStablePost));
     }
 
     private static async Task<IResult> DeleteStablePost(IStablePostService stablePostService, int id)
     {
-        return Response.Generate(await stablePostService.DeleteStablePost(id));
+        return Result.Generate(await stablePostService.DeleteStablePost(id));
     }
 }

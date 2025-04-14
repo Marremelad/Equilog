@@ -32,28 +32,28 @@ public class CalendarEventEndpoints
 
     private static async Task<IResult> GetCalendarEvents(ICalendarEventService calendarEventService)
     {
-        return Response.Generate(await calendarEventService.GetCalendarEvents());
+        return Result.Generate(await calendarEventService.GetCalendarEvents());
     }
 
     private static async Task<IResult> GetCalendarEvent(ICalendarEventService calendarEventService, int id)
     {
-        return Response.Generate(await calendarEventService.GetCalendarEvent(id));
+        return Result.Generate(await calendarEventService.GetCalendarEvent(id));
     }
     
     private static async Task<IResult> CreateCalendarEvent(ICalendarEventService calendarEventService,
         CalendarEventCreateDto newCalendarEvent)
     {
-        return Response.Generate(await calendarEventService.CreateCalendarEvent(newCalendarEvent));
+        return Result.Generate(await calendarEventService.CreateCalendarEvent(newCalendarEvent));
     }
 
     private static async Task<IResult> UpdateCalendarEvent(ICalendarEventService calendarEventService,
         CalendarEventUpdateDto updatedEvent)
     {
-        return Response.Generate(await calendarEventService.UpdateCalendarEvent(updatedEvent));
+        return Result.Generate(await calendarEventService.UpdateCalendarEvent(updatedEvent));
     }
 
     private static async Task<IResult> DeleteCalendarEvent(ICalendarEventService calendarEventService, int id)
     {
-        return Response.Generate(await calendarEventService.DeleteCalendarEvent(id));
+        return Result.Generate(await calendarEventService.DeleteCalendarEvent(id));
     }
 }

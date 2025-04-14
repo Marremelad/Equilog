@@ -32,26 +32,26 @@ public class StableEnpoints
 
     private static async Task<IResult> GetStables(IStableService stableService)
     {
-        return Response.Generate(await stableService.GetStables());
+        return Result.Generate(await stableService.GetStables());
     }
 
     private static async Task<IResult> GetStable(IStableService stableService, int id)
     {
-        return Response.Generate(await stableService.GetStable(id));
+        return Result.Generate(await stableService.GetStable(id));
     }
 
     private static async Task<IResult> CreateStable(IStableService stableService, StableCreateDto newStable)
     {
-        return Response.Generate(await stableService.CreateStable(newStable));
+        return Result.Generate(await stableService.CreateStable(newStable));
     }
 
     private static async Task<IResult> UpdateStable(IStableService stableService, StableUpdateDto updatedStable)
     {
-        return Response.Generate(await stableService.UpdateStable(updatedStable));
+        return Result.Generate(await stableService.UpdateStable(updatedStable));
     }
 
     private static async Task<IResult> DeleteStable(IStableService stableService, int id)
     {
-        return Response.Generate(await stableService.DeleteStable(id));
+        return Result.Generate(await stableService.DeleteStable(id));
     }
 }
