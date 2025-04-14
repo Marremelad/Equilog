@@ -14,5 +14,7 @@ public class UserStable
 
     [ForeignKey("Stable")]
     public required int StableIdFk { get; set; }
-    public virtual Stable? Stable { get; set; } 
+    public virtual Stable? Stable { get; set; }
+
+    public required int Role { get; set; } // 0 = Master admin | 1 = User admin | 2 = user.
 }
