@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using equilog_backend.Common;
 using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.Interfaces;
 
@@ -32,60 +33,27 @@ namespace equilog_backend.Endpoints
 
         private static async Task<IResult> GetUsers(IUserService userService)
         {
-            var apiResponse = await userService.GetUsers();
-
-            return apiResponse.StatusCode switch
-            {
-                HttpStatusCode.OK => Results.Ok(apiResponse.Value),
-                _ => Results.Problem(apiResponse.Message, statusCode: 500)
-            };
+            return Response.Generate(await userService.GetUsers());
         }
 
         private static async Task<IResult> GetUser(IUserService userService, int id)
         {
-            var apiResponse = await userService.GetUser(id);
-
-            return apiResponse.StatusCode switch
-            {
-                HttpStatusCode.OK => Results.Ok(apiResponse.Value),
-                HttpStatusCode.NotFound => Results.NotFound(apiResponse),
-                _ => Results.Problem(apiResponse.Message, statusCode: 500)
-            };
+            return Response.Generate(await userService.GetUser(id));
         }
 
         private static async Task<IResult> CreateUser(IUserService userService, UserCreateDto newUser)
         {
-            var apiResponse = await userService.CreateUser(newUser);
-
-            return apiResponse.StatusCode switch
-            {
-                HttpStatusCode.Created => Results.Json(apiResponse, statusCode: 201),
-                _ => Results.Problem(apiResponse.Message, statusCode: 500)
-            };
+            return Response.Generate(await userService.CreateUser(newUser));
         }
 
         private static async Task<IResult> UpdateUser(IUserService userService, UserUpdateDto updatedUser)
         {
-            var apiResponse = await userService.UpdateUser(updatedUser);
-
-            return apiResponse.StatusCode switch
-            {
-                HttpStatusCode.OK => Results.Ok(apiResponse),
-                HttpStatusCode.NotFound => Results.NotFound(apiResponse),
-                _ => Results.Problem(apiResponse.Message, statusCode: 500)
-            };
+            return Response.Generate(await userService.UpdateUser(updatedUser));
         }
 
         private static async Task<IResult> DeleteUser(IUserService userService, int id)
         {
-            var apiResponse = await userService.DeleteUser(id);
-
-            return apiResponse.StatusCode switch
-            {
-                HttpStatusCode.NoContent => Results.Json(apiResponse, statusCode: 204),
-                HttpStatusCode.NotFound => Results.NotFound(apiResponse),
-                _ => Results.Problem(apiResponse.Message, statusCode: 500)
-            };
+            return Response.Generate(await userService.DeleteUser(id));
         }
     }
 }
