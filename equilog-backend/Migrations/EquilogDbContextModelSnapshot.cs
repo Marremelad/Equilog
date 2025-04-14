@@ -59,8 +59,8 @@ namespace equilog_backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("Age")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("Age")
+                        .HasColumnType("date");
 
                     b.Property<string>("Breed")
                         .HasMaxLength(50)
@@ -253,6 +253,9 @@ namespace equilog_backend.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<int>("StableIdFk")
                         .HasColumnType("int");

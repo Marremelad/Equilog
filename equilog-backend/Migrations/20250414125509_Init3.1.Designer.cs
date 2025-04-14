@@ -12,8 +12,8 @@ using equilog_backend.Data;
 namespace equilog_backend.Migrations
 {
     [DbContext(typeof(EquilogDbContext))]
-    [Migration("20250407155335_Init3.0")]
-    partial class Init30
+    [Migration("20250414125509_Init3.1")]
+    partial class Init31
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,8 +62,8 @@ namespace equilog_backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("Age")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("Age")
+                        .HasColumnType("date");
 
                     b.Property<string>("Breed")
                         .HasMaxLength(50)
@@ -256,6 +256,9 @@ namespace equilog_backend.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<int>("StableIdFk")
                         .HasColumnType("int");
