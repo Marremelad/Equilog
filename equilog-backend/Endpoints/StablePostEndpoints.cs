@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using equilog_backend.Common;
 using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.Interfaces;
 
@@ -31,59 +32,26 @@ public class StablePostEndpoints
 
     private static async Task<IResult> GetStablePosts(IStablePostService stablePostService)
     {
-        var apiResponse = await stablePostService.GetStablePosts();
-            
-        return apiResponse.StatusCode switch
-        {
-            HttpStatusCode.OK => Results.Ok(apiResponse),
-            _ => Results.Problem(apiResponse.Message, statusCode: 500)
-        };
+        return Response.Generate(await stablePostService.GetStablePosts());
     }
 
     private static async Task<IResult> GetStablePost(IStablePostService stablePostService, int id)
     {
-        var apiResponse = await stablePostService.GetStablePost(id);
-
-        return apiResponse.StatusCode switch
-        {
-            HttpStatusCode.OK => Results.Ok(apiResponse),
-            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
-            _ => Results.Problem(apiResponse.Message, statusCode: 500)
-        };
+        return Response.Generate(await stablePostService.GetStablePost(id));
     }
 
     private static async Task<IResult> CreateStablePost(IStablePostService stablePostService, StablePostCreateDto newStablePost)
     {
-        var apiResponse = await stablePostService.CreateStablePost(newStablePost);
-
-        return apiResponse.StatusCode switch
-        {
-            HttpStatusCode.Created => Results.Json(apiResponse, statusCode: 201),
-            _ => Results.Problem(apiResponse.Message, statusCode: 500)
-        };
+        return Response.Generate(await stablePostService.CreateStablePost(newStablePost));
     }
 
     private static async Task<IResult> UpdateStablePost(IStablePostService stablePostService, StablePostUpdateDto updatedStablePost)
     {
-        var apiResponse = await stablePostService.UpdateStablePost(updatedStablePost);
-            
-        return apiResponse.StatusCode switch
-        {
-            HttpStatusCode.OK => Results.Ok(apiResponse),
-            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
-            _ => Results.Problem(apiResponse.Message, statusCode: 500)
-        };
+        return Response.Generate(await stablePostService.UpdateStablePost(updatedStablePost));
     }
 
     private static async Task<IResult> DeleteStablePost(IStablePostService stablePostService, int id)
     {
-        var apiResponse = await stablePostService.DeleteStablePost(id);
-
-        return apiResponse.StatusCode switch
-        {
-            HttpStatusCode.NoContent => Results.Json(apiResponse, statusCode: 204),
-            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
-            _ => Results.Problem(apiResponse.Message, statusCode: 500)
-        };
+        return Response.Generate(await stablePostService.DeleteStablePost(id));
     }
 }
