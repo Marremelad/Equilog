@@ -1,8 +1,8 @@
 ﻿using System.Net;
-
+using equilog_backend.Interfaces;
 namespace equilog_backend.Common;
 
-public class ApiResponse<T>
+public class ApiResponse<T> : IApiResponse
 {
     public bool IsSuccess { get; set; }
     public HttpStatusCode StatusCode { get; set; }
