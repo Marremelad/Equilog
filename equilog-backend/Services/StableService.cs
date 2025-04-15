@@ -2,7 +2,6 @@
 using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
-using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
