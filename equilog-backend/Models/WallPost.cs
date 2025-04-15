@@ -16,6 +16,9 @@ namespace equilog_backend.Models
         public string? Body { get; set; }
 
         public DateTime? PostDate { get; set; }
+
         public DateTime? LastEdited { get; set; }
+
+        public virtual Stable? Stable { get; set; }
     }
 }
