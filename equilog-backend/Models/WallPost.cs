@@ -6,8 +6,7 @@ namespace equilog_backend.Models
     public class WallPost
     {
         [Key]
-        [ForeignKey("Stable")]
-        public int StableIdFk { get; set; }
+        public int Id { get; set; }
 
         [StringLength(50)]
         public string? Title { get; set; }
@@ -19,6 +18,8 @@ namespace equilog_backend.Models
 
         public DateTime? LastEdited { get; set; }
 
+        [ForeignKey("Stable")]
+        public int StableIdFk { get; set; }
         public virtual Stable? Stable { get; set; }
     }
 }
