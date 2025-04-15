@@ -6,7 +6,7 @@ namespace equilog_backend.Interfaces;
 
 public interface IAuthService
 {
-    string GenerateToke(User user);
+    string GenerateToken(User user);
     Task<ApiResponse<AuthResponseDto?>> Register(RegisterDto registerDto);
     Task<ApiResponse<AuthResponseDto?>> Login(LoginDto loginDto);
 }
