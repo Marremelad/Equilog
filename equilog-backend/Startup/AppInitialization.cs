@@ -23,8 +23,9 @@ public class AppInitialization
         app.UseCors("Default");
     }
 
-    public static void InitializeAuthorization(WebApplication app)
+    public static void InitializeAuth(WebApplication app)
     {
+        app.UseAuthentication();
         app.UseAuthorization();
     }
 

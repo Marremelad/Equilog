@@ -62,7 +62,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     HttpStatusCode.BadRequest,
                     "Email already exists");
             }
-
+            
             var salt = BCrypt.Net.BCrypt.GenerateSalt();
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password, salt);
 

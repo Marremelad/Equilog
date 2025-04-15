@@ -8,7 +8,7 @@ public class HorseCreateDto
     [StringLength(50)]
     public required string Name { get; set; }
 
-    public DateTime? Age { get; set; }
+    public DateOnly? Age { get; set; }
     
     [StringLength(50)]
     public string? Color { get; set; }

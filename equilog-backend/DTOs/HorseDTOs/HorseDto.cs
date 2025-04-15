@@ -6,7 +6,7 @@ public class HorseDto
 
     public required string Name { get; set; }
 
-    public DateTime? Age { get; set; }
+    public DateOnly? Age { get; set; }
         
     public string? Color { get; set; }
 

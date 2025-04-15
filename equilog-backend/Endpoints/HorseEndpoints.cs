@@ -11,7 +11,8 @@ public class HorseEndpoints
     {
         // Get all horses.
         app.MapGet("/api/horse", GetHorses)
-            .WithName("GetHorses");
+            .WithName("GetHorses")
+            .RequireAuthorization();
         
         // Get Horse.
         app.MapGet("/api/horse/{id:int}", GetHorse)

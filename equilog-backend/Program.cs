@@ -22,7 +22,7 @@ public class Program
         AppInitialization.InitializeDevEnvironment(app);
         AppInitialization.InitializeHttpRedirection(app);
         AppInitialization.InitializeCors(app);
-        AppInitialization.InitializeAuthorization(app);
+        AppInitialization.InitializeAuth(app);
         AppInitialization.InitializeEndpoints(app);
 
         app.Run();
