@@ -8,9 +8,7 @@ public interface IUserService
     public Task<ApiResponse<List<UserDto>?>> GetUsers();
 
     public Task<ApiResponse<UserDto?>> GetUser(int id);
-
-    public Task<ApiResponse<UserDto?>> CreateUser(UserCreateDto newUser);
-
+    
     public Task<ApiResponse<UserDto?>> UpdateUser(UserUpdateDto updatedUser);
 
     public Task<ApiResponse<UserDto?>> DeleteUser(int id);
