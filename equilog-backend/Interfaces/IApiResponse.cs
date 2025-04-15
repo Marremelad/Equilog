@@ -1,10 +1,9 @@
 ﻿using System.Net;
 
-namespace equilog_backend.Interfaces
+namespace equilog_backend.Interfaces;
+
+public interface IApiResponse
 {
-    public interface IApiResponse
-    {
-        public HttpStatusCode StatusCode { get; set; }
-        public string? Message { get; set; }
-    }
+    public HttpStatusCode StatusCode { get; set; }
+    public string? Message { get; set; }
 }

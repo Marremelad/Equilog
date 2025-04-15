@@ -7,23 +7,10 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        var services = builder.Services;
-
-        AppConfiguration.AddDocumentationServices(services);
-        AppConfiguration.AddLibraryServices(services);
-        AppConfiguration.AddFrameworkServices(services);
-        AppConfiguration.AddAuthServices(services, builder);
-        AppConfiguration.AddPersistenceServices(services, builder);
-        AppConfiguration.AddDomainServices(services);
-        AppConfiguration.AddCorsServices(services);
+        AppConfiguration.ConfigureServices(builder);
         
         var app = builder.Build();
-
-        AppInitialization.InitializeDevEnvironment(app);
-        AppInitialization.InitializeHttpRedirection(app);
-        AppInitialization.InitializeCors(app);
-        AppInitialization.InitializeAuth(app);
-        AppInitialization.InitializeEndpoints(app);
+        PipelineInitialization.InitializePipeline(app);
 
         app.Run();
     }

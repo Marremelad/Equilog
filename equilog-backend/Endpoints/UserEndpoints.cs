@@ -1,5 +1,4 @@
-﻿using System.Net;
-using equilog_backend.Common;
+﻿using equilog_backend.Common;
 using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.Interfaces;
 
