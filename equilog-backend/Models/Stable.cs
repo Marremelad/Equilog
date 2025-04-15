@@ -15,4 +15,6 @@ public class Stable
     public virtual List<StableHorse>? StableHorses { get; set; }
 
     public virtual List<StablePost>? StablePost { get; set; }
+
+    public virtual WallPost? WallPost { get; set; }
 }

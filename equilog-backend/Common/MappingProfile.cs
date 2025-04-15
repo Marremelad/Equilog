@@ -5,6 +5,7 @@ using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.DTOs.UserDTOs;
+using equilog_backend.DTOs.WallPostDTOs;
 using equilog_backend.Models;
 
 namespace equilog_backend.Common
@@ -33,6 +34,8 @@ namespace equilog_backend.Common
             CreateMap<CalendarEvent, CalendarEventDto>().ReverseMap();
             CreateMap<CalendarEventCreateDto, CalendarEvent>();
             CreateMap<CalendarEventUpdateDto, CalendarEvent>();
+
+            CreateMap<WallPost, WallPostDto>().ReverseMap();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using equilog_backend.Data;
+using equilog_backend.Data;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Security;
@@ -122,6 +122,7 @@ public static class AppConfiguration
         // Feature specific services.
         services.AddScoped<IStablePostService, StablePostService>();
         services.AddScoped<ICalendarEventService, CalendarEventService>();
+        services.AddScoped<IWallPostService, WallPostService>();
 
         // Validators
         services.AddScoped<IValidator<HorseCreateDto>, HorseCreateDtoValidator>();
