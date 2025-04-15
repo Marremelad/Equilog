@@ -108,15 +108,15 @@ public static class AppConfiguration
     
     private static void AddApplicationServices(IServiceCollection services)
     {
-        // Authentication services
+        // Authentication services.
         services.AddScoped<IAuthService, AuthService>();
     
-        // Core domain services
+        // Core domain services.
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IHorseService, HorseService>();
         services.AddScoped<IStableService, StableService>();
     
-        // Feature specific services
+        // Feature specific services.
         services.AddScoped<IStablePostService, StablePostService>();
         services.AddScoped<ICalendarEventService, CalendarEventService>();
     }
@@ -125,7 +125,7 @@ public static class AppConfiguration
     {
         services.AddSwaggerGen(options =>
         {
-            // Basic Swagger document configuration
+            // Basic Swagger document configuration.
             options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = "Equilog API",
@@ -133,7 +133,7 @@ public static class AppConfiguration
                 Description = "API for the Equilog application"
             });
     
-            // Add JWT authentication to Swagger UI
+            // Add JWT authentication to Swagger UI.
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",

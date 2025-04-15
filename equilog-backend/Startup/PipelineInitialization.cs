@@ -6,17 +6,17 @@ public static class PipelineInitialization
 {
     public static void InitializePipeline(WebApplication app)
     {
-        // Environment-specific setup
+        // Environment-specific setup.
         InitializeEnvironment(app);
         
-        // Security and communication
+        // Security and communication.
         InitializeHttps(app);
         InitializeCors(app);
         
-        // Authentication and authorization
+        // Authentication and authorization.
         InitializeSecurity(app);
         
-        // API endpoints
+        // API endpoints.
         RegisterEndpoints(app);
     }
     
