@@ -2,25 +2,25 @@
 
 namespace equilog_backend.Startup;
 
-public static class PipelineSetup
+public static class PipelineInitialization
 {
-    public static void SetupPipeline(WebApplication app)
+    public static void InitializePipeline(WebApplication app)
     {
         // Environment-specific setup
-        SetupEnvironment(app);
+        InitializeEnvironment(app);
         
         // Security and communication
-        SetupHttps(app);
-        SetupCors(app);
+        InitializeHttps(app);
+        InitializeCors(app);
         
         // Authentication and authorization
-        SetupSecurity(app);
+        InitializeSecurity(app);
         
         // API endpoints
         RegisterEndpoints(app);
     }
     
-    private static void SetupEnvironment(WebApplication app)
+    private static void InitializeEnvironment(WebApplication app)
     {
         if (app.Environment.IsDevelopment())
         {
@@ -29,22 +29,22 @@ public static class PipelineSetup
         }
     }
 
-    public static void SetupHttps(WebApplication app)
+    private static void InitializeHttps(WebApplication app)
     {
         app.UseHttpsRedirection();
     }
     
-    public static void SetupCors(WebApplication app)
+    private static void InitializeCors(WebApplication app)
     {
         app.UseCors("Default");
     }
 
-    public static void SetupSecurity(WebApplication app)
+    private static void InitializeSecurity(WebApplication app)
     {
         app.UseAuthorization();
     }
 
-    public static void RegisterEndpoints(WebApplication app)
+    private static void RegisterEndpoints(WebApplication app)
     {
         UserEndpoints.RegisterEndpoints(app);
         HorseEndpoints.RegisterEndpoints(app);
