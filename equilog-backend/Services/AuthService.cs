@@ -1,8 +1,7 @@
-﻿﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
-using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.AuthDTOs;
@@ -14,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace equilog_backend.Services;
 
-public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMapper mapper) : IAuthService
+public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IAuthService
 {
     public string GenerateToken(User user)
     {
@@ -30,7 +29,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             Expires = DateTime.Now.AddMinutes(jwtSettings.DurationInMinutes),
             Issuer = jwtSettings.Issuer,
             Audience = jwtSettings.Audience,
-            SigningCredentials = new SigningCredentials( // Specifies how the JWT signature should be composed.
+            SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key), 
                 SecurityAlgorithms.HmacSha512Signature)
         };
@@ -105,19 +104,19 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         try
         {
             var user = await context.Users
-                .FirstOrDefaultAsync(u => u.UserName.ToLower() == loginDto.UserName.ToLower());
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == loginDto.Email.ToLower());
 
             if (user == null)
                 return ApiResponse<AuthResponseDto?>.Failure(
                     HttpStatusCode.Unauthorized, 
-                    "Invalid username or password");
+                    "Invalid email or password");
             
             var isValidPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash);
             
             if(!isValidPassword)
                 return ApiResponse<AuthResponseDto>.Failure(
                     HttpStatusCode.Unauthorized, 
-                    "Invalid username or password");
+                    "Invalid email or password");
 
             var token = GenerateToken(user);
             
