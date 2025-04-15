@@ -13,6 +13,14 @@ namespace equilog_backend.Endpoints
 
             app.MapPatch("/api/wallpost/edit", EditWallPost)
                 .WithName("EditWallPost");
+
+            app.MapPut("/api/wallpost/clear", ClearWallPost)
+                .WithName("ClearWallPost");
+        }
+
+        private static async Task ClearWallPost(HttpContext context)
+        {
+            throw new NotImplementedException();
         }
 
         private static async Task EditWallPost(HttpContext context)
