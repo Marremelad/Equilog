@@ -1,13 +1,16 @@
-﻿using System.Text;
-using equilog_backend.Data;
+﻿using equilog_backend.Data;
+using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Security;
 using equilog_backend.Services;
+using equilog_backend.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace equilog_backend.Startup;
 
@@ -21,17 +24,17 @@ public static class AppConfiguration
         // Core services.
         AddCoreServices(services);
         ConfigureDatabase(services, configuration);
-        
+
         // Authentication and security.
         ConfigureAuthentication(services, configuration);
-        
+
         // Cross-cutting concerns.
         AddAutoMapperProfiles(services);
         ConfigureCors(services);
-        
+
         // Application-specific services.
         AddApplicationServices(services);
-        
+
         // API documentation.
         ConfigureSwagger(services);
     }
@@ -54,7 +57,7 @@ public static class AppConfiguration
         // Configure JWT settings from configuration.
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         services.AddSingleton(provider => provider.GetRequiredService<IOptions<JwtSettings>>().Value);
-    
+
         // Set up authentication schemes.
         services.AddAuthentication(options =>
             {
@@ -63,15 +66,15 @@ public static class AppConfiguration
             })
             .AddJwtBearer(options =>
             {
-                var jwtKey = configuration["JwtSettings:Key"] 
+                var jwtKey = configuration["JwtSettings:Key"]
                              ?? throw new InvalidOperationException("JWT Key is not configured");
-            
+
                 var issuer = configuration["JwtSettings:Issuer"]
                              ?? throw new InvalidOperationException("JWT Issuer is not configured");
-            
+
                 var audience = configuration["JwtSettings:Audience"]
                                ?? throw new InvalidOperationException("JWT Audience is not configured");
-        
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -86,12 +89,12 @@ public static class AppConfiguration
                 };
             });
     }
-    
+
     private static void AddAutoMapperProfiles(IServiceCollection services)
     {
         services.AddAutoMapper(typeof(Program));
     }
-    
+
     private static void ConfigureCors(IServiceCollection services)
     {
         services.AddCors(options =>
@@ -105,23 +108,26 @@ public static class AppConfiguration
                 });
         });
     }
-    
+
     private static void AddApplicationServices(IServiceCollection services)
     {
         // Authentication services.
         services.AddScoped<IAuthService, AuthService>();
-    
+
         // Core domain services.
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IHorseService, HorseService>();
         services.AddScoped<IStableService, StableService>();
-    
+
         // Feature specific services.
         services.AddScoped<IStablePostService, StablePostService>();
         services.AddScoped<ICalendarEventService, CalendarEventService>();
         services.AddScoped<IWallPostService, WallPostService>();
+
+        // Validators
+        services.AddScoped<IValidator<HorseCreateDto>, HorseCreateDtoValidator>();
     }
-    
+
     private static void ConfigureSwagger(IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
@@ -133,7 +139,7 @@ public static class AppConfiguration
                 Version = "v1",
                 Description = "API for the Equilog application"
             });
-    
+
             // Add JWT authentication to Swagger UI.
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
@@ -143,7 +149,7 @@ public static class AppConfiguration
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer"
             });
-    
+
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
