@@ -11,7 +11,12 @@ namespace equilog_backend.Services
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse<WallPostDto?>> UpdateWallPost(WallPostUpdateDto updatedWallPost)
+        public Task<ApiResponse<WallPostDto?>> UpdateEditWallPost(WallPostUpdateDto editWallPost)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<WallPostDto?>> UpdateReplaceWallPost(WallPostUpdateDto updatedWallPost)
         {
             throw new NotImplementedException();
         }
