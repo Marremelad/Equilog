@@ -49,7 +49,7 @@ public static class PipelineInitialization
         AuthEndpoints.RegisterEndpoints(app);
         UserEndpoints.RegisterEndpoints(app);
         HorseEndpoints.RegisterEndpoints(app);
-        StableEnpoints.RegisterEndpoints(app);
+        StableEndpoints.RegisterEndpoints(app);
         StablePostEndpoints.RegisterEndpoints(app);
         CalendarEventEndpoints.RegisterEndpoints(app);
     }
