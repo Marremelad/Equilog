@@ -17,13 +17,13 @@ public class User
     public required string Email { get; set; }
 
     [StringLength(30)]
-    public required string UserName { get; set; } = string.Empty;
+    public required string UserName { get; set; }
 
     [StringLength(100)]
-    public string PasswordHash { get; set; } = string.Empty;
+    public required string PasswordHash { get; set; }
 
     [StringLength(50)]
-    public string Salt { get; set; } = string.Empty;
+    public required string Salt { get; set; }
     
     [StringLength(20)]
     public string? PhoneNumber { get; set; }
