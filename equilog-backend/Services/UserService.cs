@@ -47,27 +47,7 @@ namespace equilog_backend.Services
                     ex.Message);
             }
         }
-
-        public async Task<ApiResponse<UserDto?>> CreateUser(UserCreateDto newUser)
-        {
-            try
-            {
-                var user = mapper.Map<User>(newUser);
-
-                context.Users.Add(user);
-                await context.SaveChangesAsync();
-
-                return ApiResponse<UserDto>.Success(HttpStatusCode.Created,
-                    mapper.Map<UserDto>(user),
-                    "User created successfully");
-            }
-            catch (Exception ex)
-            {
-                return ApiResponse<UserDto>.Failure(HttpStatusCode.InternalServerError,
-                    ex.Message);
-            }
-        }
-
+        
         public async Task<ApiResponse<UserDto?>> UpdateUser(UserUpdateDto updatedUser)
         {
             try

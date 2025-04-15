@@ -17,10 +17,6 @@ namespace equilog_backend.Endpoints
             app.MapGet("/api/user/{id:int}", GetUser)
                 .WithName("GetUser");
 
-            // Create user.
-            app.MapPost("/api/user/create", CreateUser)
-                .WithName("CreateUser");
-
             // Update user properties.
             app.MapPut("/api/user/update", UpdateUser)
                 .WithName("UpdateUser");
@@ -39,12 +35,7 @@ namespace equilog_backend.Endpoints
         {
             return Result.Generate(await userService.GetUser(id));
         }
-
-        private static async Task<IResult> CreateUser(IUserService userService, UserCreateDto newUser)
-        {
-            return Result.Generate(await userService.CreateUser(newUser));
-        }
-
+        
         private static async Task<IResult> UpdateUser(IUserService userService, UserUpdateDto updatedUser)
         {
             return Result.Generate(await userService.UpdateUser(updatedUser));
