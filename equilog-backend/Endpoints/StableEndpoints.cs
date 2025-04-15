@@ -4,7 +4,7 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.Endpoints;
 
-public class StableEnpoints
+public class StableEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
