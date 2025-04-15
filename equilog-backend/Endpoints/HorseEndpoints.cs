@@ -12,15 +12,16 @@ public class HorseEndpoints
         app.MapGet("/api/horse", GetHorses)
             .WithName("GetHorses")
             .RequireAuthorization();
-        
+
         // Get Horse.
         app.MapGet("/api/horse/{id:int}", GetHorse)
             .WithName("GetHorse");
-        
+
         // Create horse.
         app.MapPost("/api/horse/create", CreateHorse)
+            .AddEndpointFilter<ValidationFilter<HorseCreateDto>>()
             .WithName("CreateHorse");
-        
+
         // Update horse properties.
         app.MapPut("/api/horse/update", UpdateHorse)
             .WithName("UpdateHorse");
