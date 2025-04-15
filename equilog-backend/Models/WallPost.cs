@@ -19,7 +19,7 @@ namespace equilog_backend.Models
         public DateTime? LastEdited { get; set; }
 
         [ForeignKey("Stable")]
-        public int StableIdFk { get; set; }
+        public required int StableIdFk { get; set; }
         public virtual Stable? Stable { get; set; }
     }
 }
