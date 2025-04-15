@@ -1,4 +1,4 @@
-﻿using equilog_backend.Data;
+using equilog_backend.Data;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Security;
