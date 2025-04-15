@@ -1,5 +1,4 @@
-﻿using System.Net;
-using equilog_backend.Common;
+﻿using equilog_backend.Common;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Interfaces;
 
@@ -11,7 +10,8 @@ public class HorseEndpoints
     {
         // Get all horses.
         app.MapGet("/api/horse", GetHorses)
-            .WithName("GetHorses");
+            .WithName("GetHorses")
+            .RequireAuthorization();
         
         // Get Horse.
         app.MapGet("/api/horse/{id:int}", GetHorse)

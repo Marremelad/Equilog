@@ -1,0 +1,29 @@
+﻿using equilog_backend.Common;
+using equilog_backend.DTOs.AuthDTOs;
+using equilog_backend.Interfaces;
+
+namespace equilog_backend.Endpoints;
+
+public class AuthEndpoints
+{
+    public static void RegisterEndpoints(WebApplication app)
+    {
+        // Register endpoint.
+        app.MapPost("/api/auth/register", Register)
+            .WithName("Register");
+        
+        // Login endpoint.
+        app.MapPost("/api/auth/login", Login)
+            .WithName("Login");
+    }
+
+    private static async Task<IResult> Register(IAuthService authService, RegisterDto registerDto)
+    {
+        return Result.Generate(await authService.Register(registerDto));
+    }
+
+    private static async Task<IResult> Login(IAuthService authService, LoginDto loginDto)
+    {
+        return Result.Generate(await authService.Login(loginDto));
+    }
+}
