@@ -42,6 +42,8 @@ public class AppConfiguration
         services.AddScoped<IStablePostService, StablePostService>();
         
         services.AddScoped<ICalendarEventService, CalendarEventService>();
+
+        services.AddScoped<IWallPostService, WallPostService>();
     }
     
     public static void AddCorsServices(IServiceCollection services)
