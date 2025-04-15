@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using equilog_backend.DTOs.AuthDTOs;
 using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.DTOs.StableDTOs;
@@ -15,6 +16,7 @@ namespace equilog_backend.Common
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<UserCreateDto, User>();
             CreateMap<UserUpdateDto, User>();
+            CreateMap<RegisterDto, User>();
             
             CreateMap<Horse, HorseDto>().ReverseMap();
             CreateMap<HorseCreateDto, Horse>();
