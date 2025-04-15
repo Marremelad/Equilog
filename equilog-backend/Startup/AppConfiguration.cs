@@ -38,6 +38,7 @@ public static class AppConfiguration
         // API documentation.
         ConfigureSwagger(services);
     }
+    
     private static void AddCoreServices(IServiceCollection services)
     {
         services.AddAuthorization();
