@@ -1,4 +1,8 @@
 ﻿
+using equilog_backend.Common;
+using equilog_backend.DTOs.WallPostDTOs;
+using equilog_backend.Interfaces;
+
 namespace equilog_backend.Endpoints
 {
     public class WallPostEndpoints
@@ -18,24 +22,24 @@ namespace equilog_backend.Endpoints
                 .WithName("ClearWallPost");
         }
 
-        private static async Task ClearWallPost(HttpContext context)
+        private static async Task<IResult> GetWallPost(IWallPostService wallPostService, int stableId)
         {
-            throw new NotImplementedException();
+            return Result.Generate(await wallPostService.GetWallPost(stableId));
         }
 
-        private static async Task EditWallPost(HttpContext context)
+        private static async Task<IResult> ReplaceWallPost(IWallPostService wallPostService, WallPostDto wallPostDto)
         {
-            throw new NotImplementedException();
+            return Result.Generate(await wallPostService.ReplaceWallPost(wallPostDto));
         }
 
-        private static async Task ReplaceWallPost(HttpContext context)
+        private static async Task<IResult> EditWallPost(IWallPostService wallPostService, WallPostDto wallPostDto)
         {
-            throw new NotImplementedException();
+            return Result.Generate(await wallPostService.EditWallPost(wallPostDto));
         }
 
-        private static async Task GetWallPost(HttpContext context)
+        private static async Task<IResult> ClearWallPost(IWallPostService wallPostService, WallPostDto wallPostDto)
         {
-            throw new NotImplementedException();
+            return Result.Generate(await wallPostService.ClearWallPost(wallPostDto));
         }
     }
 }
