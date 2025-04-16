@@ -18,7 +18,8 @@ public class CalendarEventCreateDtoValidator : AbstractValidator<CalendarEventCr
             .NotEmpty().WithMessage("End is required.");
 
         RuleFor(e => e.StableIdFk)
-            .NotEmpty().WithMessage("Stable id is required.");
+            .NotEmpty().WithMessage("Stable id is required.")
+            .GreaterThan(0).WithMessage("Stable ID must be greater than 0");
     }
 }
 
