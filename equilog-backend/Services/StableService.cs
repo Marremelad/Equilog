@@ -60,14 +60,6 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             context.Stables.Add(stable);
             await context.SaveChangesAsync();
 
-            //var wallPost = new WallPost
-            //{
-            //    StableIdFk = stable.Id
-            //};
-
-            //context.WallPosts.Add(wallPost);
-            //await context.SaveChangesAsync();
-
             return ApiResponse<StableDto>.Success(HttpStatusCode.Created,
             mapper.Map<StableDto>(stable),
             "Stable created successfully");
