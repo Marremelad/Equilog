@@ -47,8 +47,7 @@ namespace equilog_backend.Services
                     return ApiResponse<WallPostDto>.Failure(HttpStatusCode.NotFound,
                     "Error: WallPost not found");
 
-                wallPost.Title = wallPostDto.Title;
-                wallPost.Body = wallPostDto.Body;
+                mapper.Map(wallPostDto, wallPost);
                 wallPost.PostDate = DateTime.UtcNow;
                 wallPost.LastEdited = null;
 
@@ -77,8 +76,7 @@ namespace equilog_backend.Services
                     return ApiResponse<WallPostDto>.Failure(HttpStatusCode.NotFound,
                     "Error: WallPost not found");
 
-                wallPost.Title = wallPostDto.Title;
-                wallPost.Body = wallPostDto.Body;
+                mapper.Map(wallPostDto, wallPost);
                 wallPost.LastEdited = DateTime.UtcNow;
 
                 await context.SaveChangesAsync();
