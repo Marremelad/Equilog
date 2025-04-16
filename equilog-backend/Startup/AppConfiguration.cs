@@ -1,6 +1,4 @@
 using equilog_backend.Data;
-using equilog_backend.DTOs.AuthDTOs;
-using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Security;
 using equilog_backend.Services;
@@ -127,9 +125,7 @@ public static class AppConfiguration
         services.AddScoped<IWallPostService, WallPostService>();
 
         // Validators
-        services.AddScoped<IValidator<HorseCreateDto>, HorseCreateDtoValidator>();
-        services.AddScoped<IValidator<RegisterDto>, RegisterDtoValidator>();
-        services.AddScoped<IValidator<LoginDto>, LoginDtoValidator>();
+        services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();
     }
 
     private static void ConfigureSwagger(IServiceCollection services)
