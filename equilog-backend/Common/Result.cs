@@ -1,21 +1,21 @@
 ﻿using System.Net;
 using equilog_backend.Interfaces;
 
-namespace equilog_backend.Common
+namespace equilog_backend.Common;
+
+public class Result
 {
-    public class Result
+    public static IResult Generate(IApiResponse apiResponse)
     {
-        public static IResult Generate(IApiResponse apiResponse)
+        return apiResponse.StatusCode switch
         {
-            return apiResponse.StatusCode switch
-            {
-                HttpStatusCode.OK => Results.Ok(apiResponse),
-                HttpStatusCode.NotFound => Results.NotFound(apiResponse),
-                HttpStatusCode.Created => Results.Json(apiResponse, statusCode: 201),
-                HttpStatusCode.NoContent => Results.NoContent(),
-                HttpStatusCode.BadRequest => Results.BadRequest(apiResponse),
-                _ => Results.Problem(apiResponse.Message)
-            };
-        }
+            HttpStatusCode.OK => Results.Ok(apiResponse),
+            HttpStatusCode.BadRequest => Results.BadRequest(apiResponse),
+            HttpStatusCode.NotFound => Results.NotFound(apiResponse),
+            HttpStatusCode.Created => Results.Json(apiResponse, statusCode: 201),
+            HttpStatusCode.Unauthorized => Results.Unauthorized(),
+            HttpStatusCode.NoContent => Results.NoContent(),
+            _ => Results.Problem(apiResponse.Message)
+        };
     }
 }
