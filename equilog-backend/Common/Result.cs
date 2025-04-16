@@ -13,6 +13,7 @@ namespace equilog_backend.Common
                 HttpStatusCode.NotFound => Results.NotFound(apiResponse),
                 HttpStatusCode.Created => Results.Json(apiResponse, statusCode: 201),
                 HttpStatusCode.NoContent => Results.NoContent(),
+                HttpStatusCode.BadRequest => Results.BadRequest(apiResponse),
                 _ => Results.Problem(apiResponse.Message)
             };
         }
