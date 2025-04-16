@@ -9,7 +9,7 @@ namespace equilog_backend.Endpoints
     {
         public static void RegisterEndpoints(WebApplication app)
         {
-            app.MapGet("/api/wallpost", GetWallPost)
+            app.MapGet("/api/wallpost/{id:int}", GetWallPost)
                 .WithName("GetWallPost");
 
             app.MapPut("/api/wallpost/replace", ReplaceWallPost)
