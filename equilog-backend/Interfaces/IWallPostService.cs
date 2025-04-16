@@ -7,10 +7,10 @@ namespace equilog_backend.Interfaces
     {
         public Task<ApiResponse<WallPostDto?>> GetWallPost(int stableId);
 
-        public Task<ApiResponse<WallPostDto?>> ReplaceWallPost(UpdateWallPostDto updateWallPostDto);
+        public Task<ApiResponse<WallPostDto?>> ReplaceWallPost(WallPostReplaceDto wallPostReplaceDto);
 
-        public Task<ApiResponse<WallPostDto?>> EditWallPost(UpdateWallPostDto updateWallPostDto);
+        public Task<ApiResponse<WallPostDto?>> EditWallPost(WallPostEditDto wallPostEditDto);
 
-        public Task<ApiResponse<WallPostDto?>> ClearWallPost(ClearWallPostDto clearWallPostDto);
+        public Task<ApiResponse<WallPostDto?>> ClearWallPost(int stableId);
     }
 }

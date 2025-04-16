@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
-using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.DTOs.WallPostDTOs;
 using equilog_backend.Interfaces;
-using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -37,12 +35,12 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<WallPostDto?>> ReplaceWallPost(UpdateWallPostDto updateWallPostDto)
+        public async Task<ApiResponse<WallPostDto?>> ReplaceWallPost(WallPostReplaceDto wallPostReplaceDto)
         {
             try
             {
                 var wallPost = await context.WallPosts
-                    .Where(wp => wp.StableIdFk == updateWallPostDto.StableIdFk)
+                    .Where(wp => wp.StableIdFk == wallPostReplaceDto.StableIdFk)
                     .FirstOrDefaultAsync();
 
                 if (wallPost == null)
@@ -51,7 +49,7 @@ namespace equilog_backend.Services
                     "Error: WallPost not found");
                 }
                     
-                mapper.Map(updateWallPostDto, wallPost);
+                mapper.Map(wallPostReplaceDto, wallPost);
                 wallPost.PostDate = DateTime.UtcNow;
                 wallPost.LastEdited = null;
                 await context.SaveChangesAsync();
@@ -67,19 +65,19 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<WallPostDto?>> EditWallPost(UpdateWallPostDto updateWallPostDto)
+        public async Task<ApiResponse<WallPostDto?>> EditWallPost(WallPostEditDto wallPostEditDto)
         {
             try
             {
                 var wallPost = await context.WallPosts
-                    .Where(wp => wp.StableIdFk == updateWallPostDto.StableIdFk)
+                    .Where(wp => wp.StableIdFk == wallPostEditDto.StableIdFk)
                     .FirstOrDefaultAsync();
 
                 if (wallPost == null)
                     return ApiResponse<WallPostDto>.Failure(HttpStatusCode.NotFound,
                     "Error: WallPost not found");
 
-                mapper.Map(updateWallPostDto, wallPost);
+                mapper.Map(wallPostEditDto, wallPost);
                 wallPost.LastEdited = DateTime.UtcNow;
                 await context.SaveChangesAsync();
 
@@ -94,12 +92,12 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<WallPostDto?>> ClearWallPost(ClearWallPostDto clearWallPostDto)
+        public async Task<ApiResponse<WallPostDto?>> ClearWallPost(int stableId)
         {
             try
             {
                 var wallPost = await context.WallPosts
-                    .Where(wp => wp.StableIdFk == clearWallPostDto.StableIdFk)
+                    .Where(wp => wp.StableIdFk == stableId)
                     .FirstOrDefaultAsync();
 
                 if (wallPost == null)
@@ -108,10 +106,8 @@ namespace equilog_backend.Services
                         "Error: Wall post not found for this stable");
                 }
 
-                wallPost.Title = null;
-                wallPost.Body = null;
-                wallPost.PostDate = null;
-                wallPost.LastEdited = null;
+                var ClearPost = new WallPostClearDto();
+                mapper.Map(ClearPost, wallPost);
                 await context.SaveChangesAsync();
 
                 return ApiResponse<WallPostDto>.Success(HttpStatusCode.OK,

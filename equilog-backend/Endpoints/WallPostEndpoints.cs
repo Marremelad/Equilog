@@ -27,19 +27,19 @@ namespace equilog_backend.Endpoints
             return Result.Generate(await wallPostService.GetWallPost(stableId));
         }
 
-        private static async Task<IResult> ReplaceWallPost(IWallPostService wallPostService, UpdateWallPostDto updateWallPostDto)
+        private static async Task<IResult> ReplaceWallPost(IWallPostService wallPostService, WallPostReplaceDto wallPostReplaceDto)
         {
-            return Result.Generate(await wallPostService.ReplaceWallPost(updateWallPostDto));
+            return Result.Generate(await wallPostService.ReplaceWallPost(wallPostReplaceDto));
         }
 
-        private static async Task<IResult> EditWallPost(IWallPostService wallPostService, UpdateWallPostDto updateWallPostDto)
+        private static async Task<IResult> EditWallPost(IWallPostService wallPostService, WallPostEditDto wallPostEditDto)
         {
-            return Result.Generate(await wallPostService.EditWallPost(updateWallPostDto));
+            return Result.Generate(await wallPostService.EditWallPost(wallPostEditDto));
         }
 
-        private static async Task<IResult> ClearWallPost(IWallPostService wallPostService, ClearWallPostDto clearWallPostDto)
+        private static async Task<IResult> ClearWallPost(IWallPostService wallPostService, int stableId)
         {
-            return Result.Generate(await wallPostService.ClearWallPost(clearWallPostDto));
+            return Result.Generate(await wallPostService.ClearWallPost(stableId));
         }
     }
 }

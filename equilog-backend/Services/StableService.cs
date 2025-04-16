@@ -63,7 +63,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             return ApiResponse<StableDto>.Success(HttpStatusCode.Created,
             mapper.Map<StableDto>(stable),
             "Stable created successfully");
-        }
+      }
       catch (Exception ex)
       {
          return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
