@@ -3,7 +3,7 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.Common;
 
-public class Result
+public static class Result
 {
     public static IResult Generate(IApiResponse apiResponse)
     {
