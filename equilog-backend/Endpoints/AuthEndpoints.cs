@@ -11,9 +11,10 @@ public class AuthEndpoints
         // Register endpoint.
         app.MapPost("/api/auth/register", Register)
             .WithName("Register");
-        
+
         // Login endpoint.
         app.MapPost("/api/auth/login", Login)
+            .AddEndpointFilter<ValidationFilter<LoginDto>>()
             .WithName("Login");
     }
 
