@@ -36,6 +36,8 @@ namespace equilog_backend.Common
             CreateMap<CalendarEventUpdateDto, CalendarEvent>();
 
             CreateMap<WallPost, WallPostDto>().ReverseMap();
+            CreateMap<UpdateWallPostDto, WallPost>();
+            CreateMap<ClearWallPostDto, WallPost>();
         }
     }
 }
