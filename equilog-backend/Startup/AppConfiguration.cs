@@ -128,6 +128,7 @@ public static class AppConfiguration
 
         // Validators
         services.AddScoped<IValidator<HorseCreateDto>, HorseCreateDtoValidator>();
+        services.AddScoped<IValidator<RegisterDto>, RegisterDtoValidator>();
         services.AddScoped<IValidator<LoginDto>, LoginDtoValidator>();
     }
 
