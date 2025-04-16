@@ -1,6 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "equilog-backend", "equilog-backend\equilog-backend.csproj", "{2C30B429-8D9F-419F-B302-0E33F21621E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "equilog-backend-test-unit", "equilog-backend-test-unit\equilog-backend-test-unit.csproj", "{87488D82-AC12-4824-A242-E9C79DB0426D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "equilog-backend-test-integration", "equilog-backend-test-integration\equilog-backend-test-integration.csproj", "{73638EC9-E211-4340-A112-60E62E95487D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +19,19 @@ Global
 		{2C30B429-8D9F-419F-B302-0E33F21621E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C30B429-8D9F-419F-B302-0E33F21621E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C30B429-8D9F-419F-B302-0E33F21621E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87488D82-AC12-4824-A242-E9C79DB0426D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87488D82-AC12-4824-A242-E9C79DB0426D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87488D82-AC12-4824-A242-E9C79DB0426D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87488D82-AC12-4824-A242-E9C79DB0426D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73638EC9-E211-4340-A112-60E62E95487D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73638EC9-E211-4340-A112-60E62E95487D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73638EC9-E211-4340-A112-60E62E95487D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73638EC9-E211-4340-A112-60E62E95487D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AEFD90FD-38AE-49D0-B427-D885EB0155DF}
 	EndGlobalSection
 EndGlobal

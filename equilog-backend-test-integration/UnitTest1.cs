@@ -1,4 +1,4 @@
-namespace equilog_backend_test_unit
+namespace equilog_backend_test_integration
 {
     public class UnitTest1
     {
