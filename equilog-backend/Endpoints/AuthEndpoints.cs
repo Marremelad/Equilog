@@ -15,6 +15,7 @@ public class AuthEndpoints
 
         // Login endpoint.
         app.MapPost("/api/auth/login", Login)
+            .AddEndpointFilter<ValidationFilter<LoginDto>>()
             .WithName("Login");
     }
 
