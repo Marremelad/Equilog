@@ -287,6 +287,39 @@ namespace equilog_backend.Migrations
                     b.ToTable("UserStables");
                 });
 
+            modelBuilder.Entity("equilog_backend.Models.WallPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Body")
+                        .HasMaxLength(280)
+                        .HasColumnType("nvarchar(280)");
+
+                    b.Property<DateTime?>("LastEdited")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("PostDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StableIdFk")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StableIdFk")
+                        .IsUnique();
+
+                    b.ToTable("WallPosts");
+                });
+
             modelBuilder.Entity("equilog_backend.Models.CalendarEvent", b =>
                 {
                     b.HasOne("equilog_backend.Models.Stable", "Stable")
@@ -391,6 +424,17 @@ namespace equilog_backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("equilog_backend.Models.WallPost", b =>
+                {
+                    b.HasOne("equilog_backend.Models.Stable", "Stable")
+                        .WithOne("WallPost")
+                        .HasForeignKey("equilog_backend.Models.WallPost", "StableIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stable");
+                });
+
             modelBuilder.Entity("equilog_backend.Models.CalendarEvent", b =>
                 {
                     b.Navigation("UserCalendarEvents");
@@ -410,6 +454,8 @@ namespace equilog_backend.Migrations
                     b.Navigation("StablePost");
 
                     b.Navigation("UserStables");
+
+                    b.Navigation("WallPost");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.User", b =>
