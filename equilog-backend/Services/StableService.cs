@@ -55,15 +55,23 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
    {
       try
       {
-         var stable = mapper.Map<Stable>(newStable);
+            var stable = mapper.Map<Stable>(newStable);
 
-         context.Stables.Add(stable);
-         await context.SaveChangesAsync();
+            context.Stables.Add(stable);
+            await context.SaveChangesAsync();
 
-         return ApiResponse<StableDto>.Success(HttpStatusCode.Created,
+            //var wallPost = new WallPost
+            //{
+            //    StableIdFk = stable.Id
+            //};
+
+            //context.WallPosts.Add(wallPost);
+            //await context.SaveChangesAsync();
+
+            return ApiResponse<StableDto>.Success(HttpStatusCode.Created,
             mapper.Map<StableDto>(stable),
             "Stable created successfully");
-      }
+        }
       catch (Exception ex)
       {
          return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
