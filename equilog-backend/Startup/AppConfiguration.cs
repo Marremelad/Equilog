@@ -1,4 +1,5 @@
 using equilog_backend.Data;
+using equilog_backend.DTOs.AuthDTOs;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Security;
@@ -38,7 +39,7 @@ public static class AppConfiguration
         // API documentation.
         ConfigureSwagger(services);
     }
-    
+
     private static void AddCoreServices(IServiceCollection services)
     {
         services.AddAuthorization();
@@ -127,6 +128,8 @@ public static class AppConfiguration
 
         // Validators
         services.AddScoped<IValidator<HorseCreateDto>, HorseCreateDtoValidator>();
+        services.AddScoped<IValidator<RegisterDto>, RegisterDtoValidator>();
+        services.AddScoped<IValidator<LoginDto>, LoginDtoValidator>();
     }
 
     private static void ConfigureSwagger(IServiceCollection services)
