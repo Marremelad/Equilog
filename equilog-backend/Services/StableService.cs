@@ -55,12 +55,12 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
    {
       try
       {
-         var stable = mapper.Map<Stable>(newStable);
+            var stable = mapper.Map<Stable>(newStable);
 
-         context.Stables.Add(stable);
-         await context.SaveChangesAsync();
+            context.Stables.Add(stable);
+            await context.SaveChangesAsync();
 
-         return ApiResponse<StableDto>.Success(HttpStatusCode.Created,
+            return ApiResponse<StableDto>.Success(HttpStatusCode.Created,
             mapper.Map<StableDto>(stable),
             "Stable created successfully");
       }
