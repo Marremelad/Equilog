@@ -4,6 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+		<InternalsVisibleTo>equilog-backend.IntegrationTests</InternalsVisibleTo>
         <RootNamespace>equilog_backend</RootNamespace>
     </PropertyGroup>
 
