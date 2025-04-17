@@ -29,7 +29,7 @@ public static class AppConfiguration
 
         // Cross-cutting concerns.
         AddAutoMapperProfiles(services);
-        ConfigureCors(services);
+        ConfigureCors(services, configuration);
 
         // Application-specific services.
         AddApplicationServices(services);
@@ -95,14 +95,17 @@ public static class AppConfiguration
         services.AddAutoMapper(typeof(Program));
     }
 
-    private static void ConfigureCors(IServiceCollection services)
+    private static void ConfigureCors(IServiceCollection services, IConfiguration configuration)
     {
+        var corsConnection = configuration["CorsConnection:Url"]
+                     ?? throw new InvalidOperationException("Cors connection is not configured");
+        
         services.AddCors(options =>
         {
             options.AddPolicy("Default",
                 policy =>
                 {
-                    policy.WithOrigins("http://localhost:63343")
+                    policy.WithOrigins(corsConnection)
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
