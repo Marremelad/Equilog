@@ -18,12 +18,13 @@ public class CalendarEventEndpoints
 
         // Create calendar event.
         app.MapPost("/api/calendar-event/create", CreateCalendarEvent)
+            .AddEndpointFilter<ValidationFilter<CalendarEventCreateDto>>()
             .WithName("CreateCalendarEvent");
 
         // Update calendar event.
         app.MapPut("/api/calendar-event/update", UpdateCalendarEvent)
             .WithName("UpdateCalendarEvent");
-        
+
         // Delete calendar event.
         app.MapDelete("/api/calendar-event/delete/{id:int}", DeleteCalendarEvent)
             .WithName("DeleteCalendarEvent");
@@ -38,7 +39,7 @@ public class CalendarEventEndpoints
     {
         return Result.Generate(await calendarEventService.GetCalendarEvent(id));
     }
-    
+
     private static async Task<IResult> CreateCalendarEvent(ICalendarEventService calendarEventService,
         CalendarEventCreateDto newCalendarEvent)
     {

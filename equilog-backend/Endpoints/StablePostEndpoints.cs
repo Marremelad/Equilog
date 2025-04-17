@@ -6,20 +6,21 @@ namespace equilog_backend.Endpoints;
 
 public class StablePostEndpoints
 {
-     public static void RegisterEndpoints(WebApplication app)
+    public static void RegisterEndpoints(WebApplication app)
     {
         // Get all stable posts.
         app.MapGet("/api/stable-post", GetStablePosts)
             .WithName("GetStablePosts");
-        
+
         // Get stable post.
         app.MapGet("/api/stable-post/{id:int}", GetStablePost)
             .WithName("GetStablePost");
-        
+
         // Create stable post.
         app.MapPost("/api/stable-post/create", CreateStablePost)
+            .AddEndpointFilter<ValidationFilter<StablePostCreateDto>>()
             .WithName("CreateStablePost");
-        
+
         // Update stable post properties.
         app.MapPut("/api/stable-post/update", UpdateStablePost)
             .WithName("UpdateStablePost");
