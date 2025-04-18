@@ -116,6 +116,9 @@ public static class AppConfiguration
     {
         // Authentication services.
         services.AddScoped<IAuthService, AuthService>();
+        
+        // Mail services.
+        services.AddScoped<MailService>();
 
         // Core domain services.
         services.AddScoped<IUserService, UserService>();
