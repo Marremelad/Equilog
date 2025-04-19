@@ -5,7 +5,7 @@ namespace equilog_backend.Services
 {
     public class TwilioService(string twilioVerifySid)
     {
-        public async Task<bool> SendVerificationCodeAsync(string userEmail)
+        public async Task<bool> SendCodeAsync(string userEmail)
         {
             try
             {

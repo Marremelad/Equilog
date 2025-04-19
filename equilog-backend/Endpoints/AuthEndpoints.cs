@@ -49,7 +49,7 @@ public class AuthEndpoints
         if (userExists)
             return Results.Conflict(new { message = "A user with this email already exists." });
 
-        bool sent = await twilio.SendVerificationCodeAsync(userEmail);
+        bool sent = await twilio.SendCodeAsync(userEmail);
         if (!sent)
             return TypedResults.Json(
                 new { message = "Failed to send verification code." },
