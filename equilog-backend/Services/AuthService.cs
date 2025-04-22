@@ -84,6 +84,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IA
             var response = new AuthResponseDto
             {
                 Token = token,
+                UserId = user.Id
             };
             
             return ApiResponse<AuthResponseDto>.Success(
@@ -123,6 +124,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IA
             var response = new AuthResponseDto
             {
                 Token = token,
+                UserId = user.Id
             };
             
             return ApiResponse<AuthResponseDto>.Success(

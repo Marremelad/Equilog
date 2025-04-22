@@ -12,8 +12,8 @@ public class MailEndpoints
             .WithName("SendEmail");
     }
 
-    private static IResult SendMail(MailService mailService)
+    private static IResult SendMail(MailService mailService, string recipient)
     {
-       return Result.Generate(mailService.SendMail(new MailWelcomeDto()));
+        return Result.Generate(mailService.SendMail(new MailTwilioDto(), recipient));
     }
 }
