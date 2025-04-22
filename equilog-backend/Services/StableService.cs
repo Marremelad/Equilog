@@ -51,7 +51,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
       }
    }
 
-   public async Task<ApiResponse<StableDto?>> CreateStable(StableCreateDto newStable)
+   public async Task<ApiResponse<StableDto?>> CreateStable(StableCreateDto newStable, IWallPostService wallPostService)
    {
       try
       {
@@ -59,6 +59,19 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
 
             context.Stables.Add(stable);
             await context.SaveChangesAsync();
+
+            var wallPostResponse = await wallPostService.CreateWallPost(stable.Id);
+
+            if (!wallPostResponse.IsSuccess)
+            {
+                context.Stables.Remove(stable);
+                await context.SaveChangesAsync();
+
+                return ApiResponse<StableDto>.Failure(
+                    wallPostResponse.StatusCode,
+                    $"Error: Wallpost-creation for stable failed: {wallPostResponse.Message}"
+                );
+            }
 
             return ApiResponse<StableDto>.Success(HttpStatusCode.Created,
             mapper.Map<StableDto>(stable),

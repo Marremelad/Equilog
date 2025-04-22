@@ -40,9 +40,9 @@ public class StableEndpoints
         return Result.Generate(await stableService.GetStable(id));
     }
 
-    private static async Task<IResult> CreateStable(IStableService stableService, StableCreateDto newStable)
+    private static async Task<IResult> CreateStable(IStableService stableService, IWallPostService wallPostService, StableCreateDto newStable)
     {
-        return Result.Generate(await stableService.CreateStable(newStable));
+        return Result.Generate(await stableService.CreateStable(newStable, wallPostService));
     }
 
     private static async Task<IResult> UpdateStable(IStableService stableService, StableUpdateDto updatedStable)

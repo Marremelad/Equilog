@@ -7,12 +7,12 @@ namespace equilog_backend.DTOs.WallPostDTOs
         [Required]
         public int StableIdFk { get; set; }
 
-        public string? Title { get; set; }
+        public string? Title { get; set; } = null;
 
-        public string? Body { get; set; }
+        public string? Body { get; set; } = null;
 
-        public DateTime? PostDate { get; set; }
+        public DateTime? PostDate { get; set; } = null;
 
-        public DateTime? LastEdited { get; set; }
+        public DateTime? LastEdited { get; set; } = null;
     }
 }

@@ -3,6 +3,7 @@ using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.WallPostDTOs;
 using equilog_backend.Interfaces;
+using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -118,6 +119,41 @@ namespace equilog_backend.Services
             {
                 return ApiResponse<WallPostDto>.Failure(HttpStatusCode.InternalServerError,
                     ex.Message);
+            }
+        }
+
+        public async Task<ApiResponse<WallPostDto?>> CreateWallPost(int stableId)
+        {
+            try
+            {
+                var stable = await context.Stables
+                    .Include(s => s.WallPost)
+                    .Where(s => s.Id == stableId)
+                    .FirstOrDefaultAsync();
+
+                if (stable == null) // blocks if stable dont exist
+                {
+                    return ApiResponse<WallPostDto>.Failure(HttpStatusCode.NotFound,
+                    $"Error: Cannot create wallpost for non-existent stable with ID {stableId}");
+                }
+                if (stable.WallPost != null) // blocks if stable has a wallpost already
+                {
+                    return ApiResponse<WallPostDto?>.Failure(HttpStatusCode.Conflict,
+                    $"Error: Wallpost for stable with ID: {stableId} already exists");
+                }
+
+                var wallPost = new WallPost{ StableIdFk = stableId };
+                context.WallPosts.Add(wallPost);
+                await context.SaveChangesAsync();
+
+                return ApiResponse<WallPostDto?>.Success(HttpStatusCode.Created,
+                    mapper.Map<WallPostDto>(wallPost),
+                    "Wallpost created successfully");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<WallPostDto>.Failure(HttpStatusCode.InternalServerError,
+                    $"Error creating wallpost: {ex.Message}");
             }
         }
     }
