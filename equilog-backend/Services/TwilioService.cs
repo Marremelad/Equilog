@@ -15,20 +15,20 @@ namespace equilog_backend.Services
         private readonly SendGridClient _client = new(apiKey);
 
         // Generall adjustable email.
-        public async Task<ApiResponse<string?>> SendEmail (string recipient, string subject, string plainTextMessage, string htmlMessage)
+        public async Task<ApiResponse<string?>> SendEmail (string recipient, IEmail email)
         {
             try
             {
                 var from = new EmailAddress(_senderEmail, _senderName);
                 var to = new EmailAddress(recipient);
-                var message = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent: plainTextMessage, htmlContent: htmlMessage);
+                var message = MailHelper.CreateSingleEmail(from, to, email.Subject, plainTextContent: email.PlainTextMessage, htmlContent: email.HtmlMessage);
                 var response = await _client.SendEmailAsync(message);
             
                 if (!response.IsSuccessStatusCode) return ApiResponse<string?>.Failure(HttpStatusCode.InternalServerError,
                     "Error sending email");
             
                 return ApiResponse<string?>.Success(HttpStatusCode.OK,
-                    plainTextMessage,
+                    email.PlainTextMessage,
                     "Email sent successfully");
             }
             catch (Exception ex)
