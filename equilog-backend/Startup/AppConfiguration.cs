@@ -178,6 +178,9 @@ public static class AppConfiguration
     // ───── Twilio & SendGrid Init ─────────────────────────────────────────────────────────────────────────────────────
     public static void ConfigureTwilio(IConfiguration config, IServiceCollection services)
     {
+        // services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+        // services.AddSingleton(provider => provider.GetRequiredService<IOptions<JwtSettings>>().Value);
+        
         // Twilio
         var accountSid = config["Twilio:AccountSid"];
         var authToken = config["Twilio:AuthToken"];
