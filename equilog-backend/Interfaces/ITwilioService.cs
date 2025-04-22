@@ -1,9 +1,10 @@
-﻿namespace equilog_backend.Interfaces
+﻿using equilog_backend.Common;
+
+namespace equilog_backend.Interfaces
 {
     public interface ITwilioService
     {
-        Task<bool> SendCustomizableEmailAsync(string toEmail, string subject, string plainTextMessage, string htmlMessage);
-        Task<bool> SendWelcomeMailAsync(string toEmail);
+        Task<ApiResponse<string?>> SendEmailAsync (string recipientEmail, IEmail email);
         Task<bool> SendVerificationCodeAsync(string userEmail);
         Task<bool> VerifyVerificationCodeAsync(string userEmail, string code);
     }

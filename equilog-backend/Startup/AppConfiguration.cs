@@ -6,7 +6,6 @@ using equilog_backend.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SendGrid;
@@ -28,6 +27,10 @@ public static class AppConfiguration
 
         // Authentication and security.
         ConfigureAuthentication(services, configuration);
+        
+        // Twilio and Sendgrid services.
+        ConfigureTwilio(services, configuration);
+        ConfigureSendgrid(services, configuration);
 
         // Cross-cutting concerns.
         AddAutoMapperProfiles(services);
@@ -38,9 +41,6 @@ public static class AppConfiguration
 
         // API documentation.
         ConfigureSwagger(services);
-
-        // Twilio configuration.
-        ConfigureTwilio(configuration, services);
     }
 
     private static void AddCoreServices(IServiceCollection services)
@@ -59,10 +59,22 @@ public static class AppConfiguration
 
     private static void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
     {
-        // Configure JWT settings from configuration.
-        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
-        services.AddSingleton(provider => provider.GetRequiredService<IOptions<JwtSettings>>().Value);
-
+        var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
+        
+        if (jwtSettings == null)
+            throw new InvalidOperationException("JwtSettings not found in configuration");
+        
+        if (string.IsNullOrWhiteSpace(jwtSettings.Key))
+            throw new InvalidOperationException("JwtSettings.Key not found in configuration");
+        
+        if (string.IsNullOrWhiteSpace(jwtSettings.Issuer))
+            throw new InvalidOperationException("JwtSettings.Issuer not found in configuration");
+        
+        if (string.IsNullOrEmpty(jwtSettings.Audience))
+           throw new InvalidOperationException("JwtSettings.Audience not found in configuration");
+       
+        services.AddSingleton(jwtSettings);
+        
         // Set up authentication schemes.
         services.AddAuthentication(options =>
             {
@@ -71,15 +83,6 @@ public static class AppConfiguration
             })
             .AddJwtBearer(options =>
             {
-                var jwtKey = configuration["JwtSettings:Key"]
-                             ?? throw new InvalidOperationException("JWT Key is not configured");
-
-                var issuer = configuration["JwtSettings:Issuer"]
-                             ?? throw new InvalidOperationException("JWT Issuer is not configured");
-
-                var audience = configuration["JwtSettings:Audience"]
-                               ?? throw new InvalidOperationException("JWT Audience is not configured");
-
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -87,12 +90,46 @@ public static class AppConfiguration
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = issuer,
-                    ValidAudience = audience,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtKey))
+                        Encoding.UTF8.GetBytes(jwtSettings.Key))
                 };
             });
+    }
+    
+    private static void ConfigureTwilio(IServiceCollection services, IConfiguration configuration)
+    {
+        var twilioSettings = configuration.GetSection("TwilioSettings").Get<TwilioSettings>();
+    
+        if (twilioSettings == null)
+            throw new InvalidOperationException("TwilioSettings not found in configuration");
+        
+        if (string.IsNullOrWhiteSpace(twilioSettings.AccountSid))
+            throw new InvalidOperationException("TwilioSettings.AccountSid not found in configuration");
+        
+        if (string.IsNullOrWhiteSpace(twilioSettings.AuthToken))
+            throw new InvalidOperationException("TwilioSettings.AuthToken not found in configuration");
+        
+        if (string.IsNullOrWhiteSpace(twilioSettings.VerifySid))
+            throw new InvalidOperationException("TwilioSettings.VerifySid not found in configuration");
+        
+        TwilioClient.Init(twilioSettings.AccountSid, twilioSettings.AuthToken);
+        
+        services.AddSingleton(twilioSettings);
+    }
+    
+    private static void ConfigureSendgrid(IServiceCollection services, IConfiguration configuration)
+    {
+        var sendGridSettings = configuration.GetSection("SendGridSettings").Get<SendGridSettings>();
+        if (sendGridSettings == null)
+            throw new InvalidOperationException("SendGridSettings not found in configuration");
+        
+        if (string.IsNullOrWhiteSpace(sendGridSettings.ApiKey))
+            throw new InvalidOperationException("SendGridSettings.ApiKey not found in configuration");
+        
+        var client = new SendGridClient(sendGridSettings.ApiKey);
+        services.AddSingleton(client);
     }
 
     private static void AddAutoMapperProfiles(IServiceCollection services)
@@ -116,7 +153,7 @@ public static class AppConfiguration
                 });
         });
     }
-
+    
     private static void AddApplicationServices(IServiceCollection services)
     {
         // Authentication services.
@@ -126,6 +163,9 @@ public static class AppConfiguration
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IHorseService, HorseService>();
         services.AddScoped<IStableService, StableService>();
+        
+        // Twilio service.
+        services.AddScoped<ITwilioService, TwilioService>();
 
         // Feature specific services.
         services.AddScoped<IStablePostService, StablePostService>();
@@ -173,26 +213,5 @@ public static class AppConfiguration
                 }
             });
         });
-    }
-
-    // ───── Twilio & SendGrid Init ─────────────────────────────────────────────────────────────────────────────────────
-    public static void ConfigureTwilio(IConfiguration config, IServiceCollection services)
-    {
-        // Twilio
-        var accountSid = config["Twilio:AccountSid"];
-        var authToken = config["Twilio:AuthToken"];
-        var verifySid = config["Twilio:VerifyServiceSid"];
-
-        // SendGrid
-        var apiKey = config["SendGrid:ApiKey"];
-
-        if (string.IsNullOrWhiteSpace(accountSid) || string.IsNullOrWhiteSpace(authToken) || string.IsNullOrWhiteSpace(verifySid))
-            throw new Exception("Twilio credentials are missing from configuration.");
-
-        if (string.IsNullOrWhiteSpace(apiKey))
-            throw new Exception("SendGrid API Key is missing from configuration.");
-
-        TwilioClient.Init(accountSid, authToken);
-        services.AddSingleton(new TwilioService(verifySid, apiKey));
     }
 }
