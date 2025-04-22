@@ -9,7 +9,7 @@ namespace equilog_backend.Services;
 
 public class TwilioService(SendGridClient client, TwilioSettings twilioSettings) : ITwilioService
 {
-    public async Task<ApiResponse<string?>> SendEmail (string recipient, IEmail email)
+    public async Task<ApiResponse<string?>> SendEmailAsync (string recipient, IEmail email)
     {
         try
         {
@@ -32,12 +32,12 @@ public class TwilioService(SendGridClient client, TwilioSettings twilioSettings)
         }
     }
 
-    public Task<bool> SendVerificationCode(string userEmail)
+    public Task<bool> SendVerificationCodeAsync(string userEmail)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> VerifyVerificationCode(string userEmail, string code)
+    public Task<bool> VerifyVerificationCodeAsync(string userEmail, string code)
     {
         throw new NotImplementedException();
     }
