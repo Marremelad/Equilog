@@ -1,4 +1,4 @@
-using equilog_backend.Data;
+﻿using equilog_backend.Data;
 using equilog_backend.Interfaces;
 using equilog_backend.Security;
 using equilog_backend.Services;
@@ -9,7 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SendGrid;
 using System.Text;
+using Twilio;
 
 namespace equilog_backend.Startup;
 
@@ -36,6 +38,9 @@ public static class AppConfiguration
 
         // API documentation.
         ConfigureSwagger(services);
+
+        // Twilio configuration.
+        ConfigureTwilio(configuration, services);
     }
 
     private static void AddCoreServices(IServiceCollection services)
@@ -168,5 +173,26 @@ public static class AppConfiguration
                 }
             });
         });
+    }
+
+    // ───── Twilio & SendGrid Init ─────────────────────────────────────────────────────────────────────────────────────
+    public static void ConfigureTwilio(IConfiguration config, IServiceCollection services)
+    {
+        // Twilio
+        var accountSid = config["Twilio:AccountSid"];
+        var authToken = config["Twilio:AuthToken"];
+        var verifySid = config["Twilio:VerifyServiceSid"];
+
+        // SendGrid
+        var apiKey = config["SendGrid:ApiKey"];
+
+        if (string.IsNullOrWhiteSpace(accountSid) || string.IsNullOrWhiteSpace(authToken) || string.IsNullOrWhiteSpace(verifySid))
+            throw new Exception("Twilio credentials are missing from configuration.");
+
+        if (string.IsNullOrWhiteSpace(apiKey))
+            throw new Exception("SendGrid API Key is missing from configuration.");
+
+        TwilioClient.Init(accountSid, authToken);
+        services.AddSingleton(new TwilioService(verifySid, apiKey));
     }
 }
