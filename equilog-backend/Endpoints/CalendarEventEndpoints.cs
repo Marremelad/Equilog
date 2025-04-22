@@ -8,8 +8,12 @@ public class CalendarEventEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
+        // Get calendar events by stable id.
+        app.MapGet("/api/calendar-events/{id:int}", GetCalendarEventsByStableId)
+            .WithName("GetCalendarEventsByStableId");
+        
         // Get all calendar events.
-        app.MapGet("/api/calendar-event", GetCalendarEvents)
+        app.MapGet("/api/calendar-events", GetCalendarEvents)
             .WithName("GetCalendarEvents");
 
         // Get calendar event by id.
@@ -28,6 +32,11 @@ public class CalendarEventEndpoints
         // Delete calendar event.
         app.MapDelete("/api/calendar-event/delete/{id:int}", DeleteCalendarEvent)
             .WithName("DeleteCalendarEvent");
+    }
+
+    private static async Task<IResult> GetCalendarEventsByStableId(ICalendarEventService calendarEventService, int id)
+    {
+        return Result.Generate(await calendarEventService.GetCalendarEventsByStableId(id));
     }
 
     private static async Task<IResult> GetCalendarEvents(ICalendarEventService calendarEventService)
