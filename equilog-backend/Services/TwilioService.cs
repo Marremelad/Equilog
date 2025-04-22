@@ -10,16 +10,13 @@ namespace equilog_backend.Services
 {
     public class TwilioService(string twilioVerifySid, string apiKey) : ITwilioService
     {
-        private readonly string _senderName = "Equilog";
-        private readonly string _senderEmail = "pontus.dorsay@gmail.com";
         private readonly SendGridClient _client = new(apiKey);
-
-        // Generall adjustable email.
+        
         public async Task<ApiResponse<string?>> SendEmail (string recipient, IEmail email)
         {
             try
             {
-                var from = new EmailAddress(_senderEmail, _senderName);
+                var from = new EmailAddress(email.SenderEmail, email.SenderName);;
                 var to = new EmailAddress(recipient);
                 var message = MailHelper.CreateSingleEmail(from, to, email.Subject, plainTextContent: email.PlainTextMessage, htmlContent: email.HtmlMessage);
                 var response = await _client.SendEmailAsync(message);
