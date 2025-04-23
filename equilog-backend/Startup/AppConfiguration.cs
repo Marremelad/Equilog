@@ -159,8 +159,10 @@ public static class AppConfiguration
     {
         // Authentication services.
         services.AddScoped<IAuthService, AuthService>();
+
+        services.AddScoped<IPasswordResetService, PasswordResetService>();
         
-        // Mail services.
+        // MailTrap services.
         services.AddScoped<MailTrapService>();
 
         // Core domain services.
