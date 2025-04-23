@@ -32,8 +32,8 @@ public class StableCompositionService(IStableService stableService, IWallPostSer
         
         var result = new StableWithWallPostDto
         {
-            Stable = stableResponse.Value,
-            WallPost = wallPostResponse.Value
+            StableDto = stableResponse.Value,
+            WallPostDto = wallPostResponse.Value
         };
 
         return ApiResponse<StableWithWallPostDto>.Success(
