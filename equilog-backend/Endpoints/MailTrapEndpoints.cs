@@ -8,11 +8,11 @@ public class MailTrapEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        app.MapPost("/api/mail/send", SendMail)
+        app.MapPost("/api/mail/send", SendEmail)
             .WithName("SendEmail");
     }
 
-    private static IResult SendMail(MailTrapService mailTrapService, string recipient)
+    private static IResult SendEmail(MailTrapService mailTrapService, string recipient)
     {
         return Result.Generate(mailTrapService.SendEmail(new MailTrapWelcomeDto(), recipient));
     }
