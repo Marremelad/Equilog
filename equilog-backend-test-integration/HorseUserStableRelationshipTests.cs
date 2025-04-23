@@ -29,7 +29,6 @@ namespace equilog_backend.Tests.Integration
                 Email = "john.doe@example.com",
                 UserName = "johndoe",
                 PasswordHash = "hashedpassword",
-                Salt = "salt123"
             };
 
             var stable = new Stable

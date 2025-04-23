@@ -69,7 +69,6 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IA
             {
                 UserName = registerDto.UserName,
                 PasswordHash = passwordHash,
-                Salt = salt,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 Email = registerDto.Email,
