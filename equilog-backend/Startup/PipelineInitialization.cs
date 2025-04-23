@@ -1,4 +1,5 @@
 ﻿using equilog_backend.Endpoints;
+using equilog_backend.Endpoints.CompositionEndpoints;
 
 namespace equilog_backend.Startup;
 
@@ -53,5 +54,6 @@ public static class PipelineInitialization
         StablePostEndpoints.RegisterEndpoints(app);
         CalendarEventEndpoints.RegisterEndpoints(app);
         WallPostEndpoints.RegisterEndpoints(app);
+        StableCompositionEndpoints.RegisterEndpoints(app);
     }
 }
