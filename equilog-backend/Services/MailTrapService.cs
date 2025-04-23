@@ -5,7 +5,7 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.Services;
 
-public class MailTrapService
+public class MailTrapService : IMailTrapService
 {
     public ApiResponse<string?> SendEmail(IMailTrap mailTrap, string recipient)
     {
