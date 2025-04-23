@@ -9,4 +9,6 @@ public class CalendarEventDto
     public required DateTime StartDateTime { get; set; }
 
     public required DateTime EndDateTime { get; set; }
+
+    public required int UserIdFk { get; set; }
 }

@@ -11,7 +11,7 @@ namespace equilog_backend.Services
 {
     public class UserService(EquilogDbContext context, IMapper mapper) : IUserService
     {
-        public async Task<ApiResponse<List<UserDto>?>> GetUsers()
+        public async Task<ApiResponse<List<UserDto>?>> GetUsersAsync()
         {
             try
             {
@@ -25,7 +25,7 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<UserDto?>> GetUser(int id)
+        public async Task<ApiResponse<UserDto?>> GetUserAsync(int id)
         {
             try
             {
@@ -48,19 +48,19 @@ namespace equilog_backend.Services
             }
         }
         
-        public async Task<ApiResponse<UserDto?>> UpdateUser(UserUpdateDto updatedUser)
+        public async Task<ApiResponse<UserDto?>> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
             try
             {
                 var user = await context.Users
-                    .Where(u => u.Id == updatedUser.Id)
+                    .Where(u => u.Id == userUpdateDto.Id)
                     .FirstOrDefaultAsync();
 
                 if (user == null)
                     return ApiResponse<UserDto>.Failure(HttpStatusCode.NotFound,
                     "Error: User not found");
 
-                mapper.Map(updatedUser, user);
+                mapper.Map(userUpdateDto, user);
                 await context.SaveChangesAsync();
 
                 return ApiResponse<UserDto>.Success(HttpStatusCode.OK,
@@ -74,7 +74,7 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<UserDto?>> DeleteUser(int id)
+        public async Task<ApiResponse<UserDto?>> DeleteUserAsync(int id)
         {
             try
             {

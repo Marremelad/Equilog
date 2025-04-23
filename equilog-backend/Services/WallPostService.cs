@@ -3,6 +3,7 @@ using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.WallPostDTOs;
 using equilog_backend.Interfaces;
+using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -10,18 +11,18 @@ namespace equilog_backend.Services
 {
     public class WallPostService(EquilogDbContext context, IMapper mapper) : IWallPostService
     {
-        public async Task<ApiResponse<WallPostDto?>> GetWallPost(int stableId)
+        public async Task<ApiResponse<WallPostDto?>> GetWallPostAsync(int id)
         {
             try
             {
                 var wallPost = await context.WallPosts
-                    .Where(wp => wp.StableIdFk == stableId)
+                    .Where(wp => wp.StableIdFk == id)
                     .FirstOrDefaultAsync();
 
                 if (wallPost == null)
                 {
                     return ApiResponse<WallPostDto>.Failure(HttpStatusCode.NotFound,
-                    "Error: WallPost not found");
+                    "Error: Wall post not found");
                 }
 
                 return ApiResponse<WallPostDto>.Success(HttpStatusCode.OK,
@@ -35,7 +36,7 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<WallPostDto?>> ReplaceWallPost(WallPostReplaceDto wallPostReplaceDto)
+        public async Task<ApiResponse<WallPostDto?>> NewWallPostAsync(WallPostReplaceDto wallPostReplaceDto)
         {
             try
             {
@@ -46,7 +47,7 @@ namespace equilog_backend.Services
                 if (wallPost == null)
                 {
                     return ApiResponse<WallPostDto>.Failure(HttpStatusCode.NotFound,
-                    "Error: WallPost not found");
+                    "Error: Wall post not found");
                 }
                     
                 mapper.Map(wallPostReplaceDto, wallPost);
@@ -56,7 +57,7 @@ namespace equilog_backend.Services
 
                 return ApiResponse<WallPostDto>.Success(HttpStatusCode.OK,
                     mapper.Map<WallPostDto>(wallPost),
-                    "Posted successfully");
+                    "New wall post created successfully");
             }
             catch (Exception ex)
             {
@@ -65,7 +66,7 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<WallPostDto?>> EditWallPost(WallPostEditDto wallPostEditDto)
+        public async Task<ApiResponse<WallPostDto?>> EditWallPostAsync(WallPostEditDto wallPostEditDto)
         {
             try
             {
@@ -75,7 +76,7 @@ namespace equilog_backend.Services
 
                 if (wallPost == null)
                     return ApiResponse<WallPostDto>.Failure(HttpStatusCode.NotFound,
-                    "Error: WallPost not found");
+                    "Error: Wall post not found");
 
                 mapper.Map(wallPostEditDto, wallPost);
                 wallPost.LastEdited = DateTime.UtcNow;
@@ -83,7 +84,7 @@ namespace equilog_backend.Services
 
                 return ApiResponse<WallPostDto>.Success(HttpStatusCode.OK,
                     mapper.Map<WallPostDto>(wallPost),
-                    "Edited successfully");
+                    "Wall post edited successfully");
             }
             catch (Exception ex)
             {
@@ -92,12 +93,12 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<WallPostDto?>> ClearWallPost(int stableId)
+        public async Task<ApiResponse<WallPostDto?>> ClearWallPostAsync(int id)
         {
             try
             {
                 var wallPost = await context.WallPosts
-                    .Where(wp => wp.StableIdFk == stableId)
+                    .Where(wp => wp.StableIdFk == id)
                     .FirstOrDefaultAsync();
 
                 if (wallPost == null)
@@ -106,18 +107,53 @@ namespace equilog_backend.Services
                         "Error: Wall post not found for this stable");
                 }
 
-                var ClearPost = new WallPostClearDto();
-                mapper.Map(ClearPost, wallPost);
+                var clearPost = new WallPostClearDto();
+                mapper.Map(clearPost, wallPost);
                 await context.SaveChangesAsync();
 
                 return ApiResponse<WallPostDto>.Success(HttpStatusCode.OK,
                     mapper.Map<WallPostDto>(wallPost),
-                    "Wallpost cleared successfully");
+                    "Wall post cleared successfully");
             }
             catch (Exception ex)
             {
                 return ApiResponse<WallPostDto>.Failure(HttpStatusCode.InternalServerError,
                     ex.Message);
+            }
+        }
+
+        public async Task<ApiResponse<WallPostDto?>> CreateWallPostAsync(int id)
+        {
+            try
+            {
+                var stable = await context.Stables
+                    .Include(s => s.WallPost)
+                    .Where(s => s.Id == id)
+                    .FirstOrDefaultAsync();
+
+                if (stable == null) // blocks if stable dont exist
+                {
+                    return ApiResponse<WallPostDto>.Failure(HttpStatusCode.NotFound,
+                    $"Error: Cannot create wall post for non-existent stable with ID {id}");
+                }
+                if (stable.WallPost != null) // blocks if stable has a wall post already
+                {
+                    return ApiResponse<WallPostDto?>.Failure(HttpStatusCode.Conflict,
+                    $"Error: Wall post for stable with ID: {id} already exists");
+                }
+
+                var wallPost = new WallPost{ StableIdFk = id };
+                context.WallPosts.Add(wallPost);
+                await context.SaveChangesAsync();
+
+                return ApiResponse<WallPostDto?>.Success(HttpStatusCode.Created,
+                    mapper.Map<WallPostDto>(wallPost),
+                    "Wall post created successfully");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<WallPostDto>.Failure(HttpStatusCode.InternalServerError,
+                    $"Error creating wall post: {ex.Message}");
             }
         }
     }

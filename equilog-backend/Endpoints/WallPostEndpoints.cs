@@ -20,26 +20,34 @@ namespace equilog_backend.Endpoints
 
             app.MapPut("/api/wallpost/clear", ClearWallPost)
                 .WithName("ClearWallPost");
+
+            app.MapPost("/api/wallpost/create", CreateWallPost)
+                .WithName("CreateWallPost");
         }
 
         private static async Task<IResult> GetWallPost(IWallPostService wallPostService, int stableId)
         {
-            return Result.Generate(await wallPostService.GetWallPost(stableId));
+            return Result.Generate(await wallPostService.GetWallPostAsync(stableId));
         }
 
         private static async Task<IResult> ReplaceWallPost(IWallPostService wallPostService, WallPostReplaceDto wallPostReplaceDto)
         {
-            return Result.Generate(await wallPostService.ReplaceWallPost(wallPostReplaceDto));
+            return Result.Generate(await wallPostService.NewWallPostAsync(wallPostReplaceDto));
         }
 
         private static async Task<IResult> EditWallPost(IWallPostService wallPostService, WallPostEditDto wallPostEditDto)
         {
-            return Result.Generate(await wallPostService.EditWallPost(wallPostEditDto));
+            return Result.Generate(await wallPostService.EditWallPostAsync(wallPostEditDto));
         }
 
         private static async Task<IResult> ClearWallPost(IWallPostService wallPostService, int stableId)
         {
-            return Result.Generate(await wallPostService.ClearWallPost(stableId));
+            return Result.Generate(await wallPostService.ClearWallPostAsync(stableId));
+        }
+
+        private static async Task<IResult> CreateWallPost(IWallPostService wallPostService, int stableId)
+        {
+            return Result.Generate(await wallPostService.CreateWallPostAsync(stableId));
         }
     }
 }
