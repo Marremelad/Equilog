@@ -8,5 +8,7 @@ public class CalendarEventCreateDto
 
     public required DateTime EndDateTime { get; set; }
 
-    public int StableIdFk { get; set; }
+    public required int UserIdFk { get; set; }
+
+    public required int StableIdFk { get; set; }
 }
