@@ -4,7 +4,7 @@ using equilog_backend.Services;
 
 namespace equilog_backend.Endpoints;
 
-public class MailEndpoints
+public class MailTrapEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {

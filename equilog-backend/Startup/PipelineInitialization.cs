@@ -48,7 +48,7 @@ public static class PipelineInitialization
     private static void RegisterEndpoints(WebApplication app)
     {
         AuthEndpoints.RegisterEndpoints(app);
-        MailEndpoints.RegisterEndpoints(app);
+        MailTrapEndpoints.RegisterEndpoints(app);
         UserEndpoints.RegisterEndpoints(app);
         HorseEndpoints.RegisterEndpoints(app);
         StableEndpoints.RegisterEndpoints(app);
