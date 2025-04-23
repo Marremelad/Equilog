@@ -12,6 +12,7 @@ public class PasswordResetRequest
     public required int UserIdFk { get; set; }
     public virtual User? User { get; set; }
 
+    [StringLength(38)]
     public required string ResetCode { get; set; }
 
     public DateTime ExpirationDate { get; set; }
