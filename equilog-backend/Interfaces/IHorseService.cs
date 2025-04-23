@@ -5,14 +5,14 @@ namespace equilog_backend.Interfaces;
 
 public interface IHorseService
 {
-    public Task<ApiResponse<List<HorseDto>?>> GetHorses();
+    public Task<ApiResponse<List<HorseDto>?>> GetHorsesAsync();
 
-    public Task<ApiResponse<HorseDto?>> GetHorse(int id);
+    public Task<ApiResponse<HorseDto?>> GetHorseAsync(int id);
 
-    public Task<ApiResponse<HorseDto?>> CreateHorse(HorseCreateDto newHorse);
+    public Task<ApiResponse<HorseDto?>> CreateHorseAsync(HorseCreateDto horseCreateDto);
 
-    public Task<ApiResponse<HorseDto?>> UpdateHorse(HorseUpdateDto updatedHorse);
+    public Task<ApiResponse<HorseDto?>> UpdateHorseAsync(HorseUpdateDto horseUpdateDto);
 
-    public Task<ApiResponse<HorseDto?>> DeleteHorse(int id);
+    public Task<ApiResponse<HorseDto?>> DeleteHorseAsync(int id);
 
 }

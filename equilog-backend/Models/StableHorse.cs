@@ -7,11 +7,11 @@ public class StableHorse
 {
     [Key]
     public int Id { get; set; }
-    
+
     [ForeignKey("Stable")]
-    public int StableIdFk { get; set; }
-    public virtual required Stable Stable { get; set; }
-    
+    public required int StableIdFk { get; set; }
+    public virtual Stable? Stable { get; set; }
+
     [ForeignKey("Horse")]
     public required int HorseIdFk { get; set; }
     public virtual Horse? Horse { get; set; }

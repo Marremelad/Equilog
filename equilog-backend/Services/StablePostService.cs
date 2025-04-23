@@ -11,7 +11,7 @@ namespace equilog_backend.Services;
 
 public class StablePostService(EquilogDbContext context, IMapper mapper) : IStablePostService
 {
-    public async Task<ApiResponse<List<StablePostDto>?>> GetStablePosts()
+    public async Task<ApiResponse<List<StablePostDto>?>> GetStablePostsAsync()
     {
         try
         {
@@ -28,7 +28,7 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
         }
     }
 
-    public async Task<ApiResponse<StablePostDto?>> GetStablePost(int id)
+    public async Task<ApiResponse<StablePostDto?>> GetStablePostAsync(int id)
     {
         try
         {  
@@ -51,11 +51,11 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
         }
     }
 
-    public async Task<ApiResponse<StablePostDto?>> CreateStablePost(StablePostCreateDto newStablePost)
+    public async Task<ApiResponse<StablePostDto?>> CreateStablePostAsync(StablePostCreateDto stablePostCreateDto)
     {
         try
         {
-            var stablePost = mapper.Map<StablePost>(newStablePost);
+            var stablePost = mapper.Map<StablePost>(stablePostCreateDto);
 
             context.StablePosts.Add(stablePost);
             await context.SaveChangesAsync();
@@ -72,19 +72,19 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
            
     }
 
-    public async Task<ApiResponse<StablePostDto?>> UpdateStablePost(StablePostUpdateDto updatedStablePost)
+    public async Task<ApiResponse<StablePostDto?>> UpdateStablePostAsync(StablePostUpdateDto stablePostUpdateDto)
     {
         try
         {
             var stablePost = await context.StablePosts
-                .Where(sp => sp.Id == updatedStablePost.Id)
+                .Where(sp => sp.Id == stablePostUpdateDto.Id)
                 .FirstOrDefaultAsync();
                 
             if ( stablePost == null) 
                 return ApiResponse<StablePostDto>.Failure(HttpStatusCode.NotFound ,
                 "Error: Stable post not found");
 
-            mapper.Map(updatedStablePost, stablePost);
+            mapper.Map(stablePostUpdateDto, stablePost);
             await context.SaveChangesAsync();
 
             return ApiResponse<StablePostDto>.Success(HttpStatusCode.OK,
@@ -98,7 +98,7 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
         }
     }
 
-    public async Task<ApiResponse<StablePostDto?>> DeleteStablePost(int id)
+    public async Task<ApiResponse<StablePostDto?>> DeleteStablePostAsync(int id)
     {
         try
         {

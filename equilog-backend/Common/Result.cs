@@ -15,6 +15,7 @@ public static class Result
             HttpStatusCode.Created => Results.Json(apiResponse, statusCode: 201),
             HttpStatusCode.Unauthorized => Results.Unauthorized(),
             HttpStatusCode.NoContent => Results.NoContent(),
+            HttpStatusCode.Conflict => Results.Conflict(apiResponse),
             _ => Results.Problem(apiResponse.Message)
         };
     }

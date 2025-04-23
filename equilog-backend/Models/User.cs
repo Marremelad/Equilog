@@ -21,9 +21,6 @@ public class User
 
     [StringLength(100)]
     public required string PasswordHash { get; set; }
-
-    [StringLength(50)]
-    public required string Salt { get; set; }
     
     [StringLength(20)]
     public string? PhoneNumber { get; set; }

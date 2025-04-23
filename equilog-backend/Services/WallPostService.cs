@@ -3,6 +3,7 @@ using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.WallPostDTOs;
 using equilog_backend.Interfaces;
+using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -10,12 +11,12 @@ namespace equilog_backend.Services
 {
     public class WallPostService(EquilogDbContext context, IMapper mapper) : IWallPostService
     {
-        public async Task<ApiResponse<WallPostDto?>> GetWallPost(int stableId)
+        public async Task<ApiResponse<WallPostDto?>> GetWallPostAsync(int id)
         {
             try
             {
                 var wallPost = await context.WallPosts
-                    .Where(wp => wp.StableIdFk == stableId)
+                    .Where(wp => wp.StableIdFk == id)
                     .FirstOrDefaultAsync();
 
                 if (wallPost == null)
@@ -35,7 +36,7 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<WallPostDto?>> ReplaceWallPost(WallPostReplaceDto wallPostReplaceDto)
+        public async Task<ApiResponse<WallPostDto?>> ReplaceWallPostAsync(WallPostReplaceDto wallPostReplaceDto)
         {
             try
             {
@@ -65,7 +66,7 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<WallPostDto?>> EditWallPost(WallPostEditDto wallPostEditDto)
+        public async Task<ApiResponse<WallPostDto?>> EditWallPostAsync(WallPostEditDto wallPostEditDto)
         {
             try
             {
@@ -92,12 +93,12 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<WallPostDto?>> ClearWallPost(int stableId)
+        public async Task<ApiResponse<WallPostDto?>> ClearWallPostAsync(int id)
         {
             try
             {
                 var wallPost = await context.WallPosts
-                    .Where(wp => wp.StableIdFk == stableId)
+                    .Where(wp => wp.StableIdFk == id)
                     .FirstOrDefaultAsync();
 
                 if (wallPost == null)
@@ -118,6 +119,41 @@ namespace equilog_backend.Services
             {
                 return ApiResponse<WallPostDto>.Failure(HttpStatusCode.InternalServerError,
                     ex.Message);
+            }
+        }
+
+        public async Task<ApiResponse<WallPostDto?>> CreateWallPostAsync(int id)
+        {
+            try
+            {
+                var stable = await context.Stables
+                    .Include(s => s.WallPost)
+                    .Where(s => s.Id == id)
+                    .FirstOrDefaultAsync();
+
+                if (stable == null) // blocks if stable dont exist
+                {
+                    return ApiResponse<WallPostDto>.Failure(HttpStatusCode.NotFound,
+                    $"Error: Cannot create wallpost for non-existent stable with ID {id}");
+                }
+                if (stable.WallPost != null) // blocks if stable has a wallpost already
+                {
+                    return ApiResponse<WallPostDto?>.Failure(HttpStatusCode.Conflict,
+                    $"Error: Wallpost for stable with ID: {id} already exists");
+                }
+
+                var wallPost = new WallPost{ StableIdFk = id };
+                context.WallPosts.Add(wallPost);
+                await context.SaveChangesAsync();
+
+                return ApiResponse<WallPostDto?>.Success(HttpStatusCode.Created,
+                    mapper.Map<WallPostDto>(wallPost),
+                    "Wallpost created successfully");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<WallPostDto>.Failure(HttpStatusCode.InternalServerError,
+                    $"Error creating wallpost: {ex.Message}");
             }
         }
     }

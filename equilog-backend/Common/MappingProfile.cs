@@ -15,30 +15,31 @@ namespace equilog_backend.Common
         public MappingProfile()
         {
             CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<UserCreateDto, User>();
-            CreateMap<UserUpdateDto, User>();
-            CreateMap<RegisterDto, User>();
-            
+            CreateMap<UserCreateDto, User>(MemberList.Source);
+            CreateMap<UserUpdateDto, User>(MemberList.Source);
+            CreateMap<RegisterDto, User>(MemberList.Source)
+            .ForSourceMember(src => src.Password, opt => opt.DoNotValidate());
+
             CreateMap<Horse, HorseDto>().ReverseMap();
-            CreateMap<HorseCreateDto, Horse>();
-            CreateMap<HorseUpdateDto, Horse>();
-            
+            CreateMap<HorseCreateDto, Horse>(MemberList.Source);
+            CreateMap<HorseUpdateDto, Horse>(MemberList.Source);
+
             CreateMap<Stable, StableDto>().ReverseMap();
-            CreateMap<StableCreateDto, Stable>();
-            CreateMap<StableUpdateDto, Stable>();
+            CreateMap<StableCreateDto, Stable>(MemberList.Source);
+            CreateMap<StableUpdateDto, Stable>(MemberList.Source);
 
             CreateMap<StablePost, StablePostDto>().ReverseMap();
-            CreateMap<StablePostCreateDto, StablePost>();
-            CreateMap<StablePostUpdateDto, StablePost>();
+            CreateMap<StablePostCreateDto, StablePost>(MemberList.Source);
+            CreateMap<StablePostUpdateDto, StablePost>(MemberList.Source);
 
             CreateMap<CalendarEvent, CalendarEventDto>().ReverseMap();
-            CreateMap<CalendarEventCreateDto, CalendarEvent>();
-            CreateMap<CalendarEventUpdateDto, CalendarEvent>();
+            CreateMap<CalendarEventCreateDto, CalendarEvent>(MemberList.Source);
+            CreateMap<CalendarEventUpdateDto, CalendarEvent>(MemberList.Source);
 
             CreateMap<WallPost, WallPostDto>().ReverseMap();
-            CreateMap<WallPostReplaceDto, WallPost>();
-            CreateMap<WallPostEditDto, WallPost>();
-            CreateMap<WallPostClearDto, WallPost>();
+            CreateMap<WallPostReplaceDto, WallPost>(MemberList.Source);
+            CreateMap<WallPostEditDto, WallPost>(MemberList.Source);
+            CreateMap<WallPostClearDto, WallPost>(MemberList.Source);
         }
     }
 }

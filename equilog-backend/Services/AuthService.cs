@@ -15,7 +15,7 @@ namespace equilog_backend.Services;
 
 public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IAuthService
 {
-    public string GenerateToken(User user)
+    public string GenerateJwt(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
@@ -38,7 +38,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IA
         return tokenHandler.WriteToken(token);
     }
     
-    public async Task<ApiResponse<AuthResponseDto?>> Register(RegisterDto registerDto)
+    public async Task<ApiResponse<AuthResponseDto?>> RegisterAsync(RegisterDto registerDto)
     {
         try
         {
@@ -69,7 +69,6 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IA
             {
                 UserName = registerDto.UserName,
                 PasswordHash = passwordHash,
-                Salt = salt,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 Email = registerDto.Email,
@@ -79,7 +78,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IA
             context.Users.Add(user);
             await context.SaveChangesAsync();
             
-            var token = GenerateToken(user);
+            var token = GenerateJwt(user);
         
             var response = new AuthResponseDto
             {
@@ -99,7 +98,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IA
         }
     }
 
-    public async Task<ApiResponse<AuthResponseDto?>> Login(LoginDto loginDto)
+    public async Task<ApiResponse<AuthResponseDto?>> LoginAsync(LoginDto loginDto)
     {
         try
         {
@@ -118,7 +117,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IA
                     HttpStatusCode.Unauthorized, 
                     "Invalid email or password");
 
-            var token = GenerateToken(user);
+            var token = GenerateJwt(user);
             
             var response = new AuthResponseDto
             {

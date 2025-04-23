@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using equilog_backend.Data;
 
@@ -11,9 +12,11 @@ using equilog_backend.Data;
 namespace equilog_backend.Migrations
 {
     [DbContext(typeof(EquilogDbContext))]
-    partial class EquilogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423095734_RemovedSaltFromUserModel")]
+    partial class RemovedSaltFromUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,14 +47,9 @@ namespace equilog_backend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("UserIdFk")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("StableIdFk");
-
-                    b.HasIndex("UserIdFk");
 
                     b.ToTable("CalendarEvents");
                 });
@@ -328,15 +326,7 @@ namespace equilog_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("equilog_backend.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserIdFk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Stable");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.StableHorse", b =>
