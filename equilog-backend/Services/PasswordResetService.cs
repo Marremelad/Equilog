@@ -10,7 +10,7 @@ namespace equilog_backend.Services;
 
 public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IPasswordResetService
 {
-    public async Task<ApiResponse<PasswordResetRequestDto?>> CreatePasswordResetRequest(int id)
+    public async Task<ApiResponse<PasswordResetDto?>> CreatePasswordResetRequest(int id)
     {
         try
         {
@@ -24,13 +24,13 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
             context.PasswordResetRequests.Add(passwordResetRequest);
             await context.SaveChangesAsync();
             
-            return ApiResponse<PasswordResetRequestDto?>.Success(HttpStatusCode.Created,
-                mapper.Map<PasswordResetRequestDto>(passwordResetRequest),
+            return ApiResponse<PasswordResetDto?>.Success(HttpStatusCode.Created,
+                mapper.Map<PasswordResetDto>(passwordResetRequest),
                 "Password reset request was created successfully");
         }
         catch (Exception ex)
         {
-            return ApiResponse<PasswordResetRequestDto?>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<PasswordResetDto?>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

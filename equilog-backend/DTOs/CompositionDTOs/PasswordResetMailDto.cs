@@ -5,6 +5,6 @@ namespace equilog_backend.DTOs.CompositionDTOs;
 
 public class PasswordResetMailDto
 {
-    public required PasswordResetRequestDto PasswordResetRequestDto { get; set; }
+    public required PasswordResetDto PasswordResetDto { get; set; }
     public required MailTrapPasswordResetDto MailTrapPasswordResetDto { get; set; }
 }

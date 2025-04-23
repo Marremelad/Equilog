@@ -1,6 +1,6 @@
 ﻿namespace equilog_backend.DTOs.PasswordResetDTOs;
 
-public class PasswordResetRequestDto
+public class PasswordResetDto
 {
     public required string ResetCode { get; set; }
 
