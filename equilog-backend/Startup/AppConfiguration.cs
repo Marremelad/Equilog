@@ -163,7 +163,7 @@ public static class AppConfiguration
         services.AddScoped<IPasswordResetService, PasswordResetService>();
         
         // MailTrap services.
-        services.AddScoped<MailTrapService>();
+        services.AddScoped<IMailTrapService, MailTrapService>();
 
         // Core domain services.
         services.AddScoped<IUserService, UserService>();
