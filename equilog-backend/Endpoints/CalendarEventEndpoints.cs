@@ -10,28 +10,34 @@ public class CalendarEventEndpoints
     {
         // Get calendar events by stable id.
         app.MapGet("/api/calendar-events/{id:int}", GetCalendarEventsByStableId)
-            .WithName("GetCalendarEventsByStableId");
+            .WithName("GetCalendarEventsByStableId")
+            .RequireAuthorization();
         
         // Get all calendar events.
         app.MapGet("/api/calendar-events", GetCalendarEvents)
-            .WithName("GetCalendarEvents");
+            .WithName("GetCalendarEvents")
+            .RequireAuthorization();
 
         // Get calendar event by id.
         app.MapGet("/api/calendar-event/{id:int}", GetCalendarEvent)
-            .WithName("GetCalendarEvent");
+            .WithName("GetCalendarEvent")
+            .RequireAuthorization();
 
         // Create calendar event.
         app.MapPost("/api/calendar-event/create", CreateCalendarEvent)
             .AddEndpointFilter<ValidationFilter<CalendarEventCreateDto>>()
-            .WithName("CreateCalendarEvent");
+            .WithName("CreateCalendarEvent")
+            .RequireAuthorization();
 
         // Update calendar event.
         app.MapPut("/api/calendar-event/update", UpdateCalendarEvent)
-            .WithName("UpdateCalendarEvent");
+            .WithName("UpdateCalendarEvent")
+            .RequireAuthorization();
 
         // Delete calendar event.
         app.MapDelete("/api/calendar-event/delete/{id:int}", DeleteCalendarEvent)
-            .WithName("DeleteCalendarEvent");
+            .WithName("DeleteCalendarEvent")
+            .RequireAuthorization();
     }
 
     private static async Task<IResult> GetCalendarEventsByStableId(ICalendarEventService calendarEventService, int id)
