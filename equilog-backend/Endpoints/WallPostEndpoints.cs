@@ -32,7 +32,7 @@ namespace equilog_backend.Endpoints
 
         private static async Task<IResult> ReplaceWallPost(IWallPostService wallPostService, WallPostReplaceDto wallPostReplaceDto)
         {
-            return Result.Generate(await wallPostService.ReplaceWallPostAsync(wallPostReplaceDto));
+            return Result.Generate(await wallPostService.NewWallPostAsync(wallPostReplaceDto));
         }
 
         private static async Task<IResult> EditWallPost(IWallPostService wallPostService, WallPostEditDto wallPostEditDto)
