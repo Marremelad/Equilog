@@ -7,7 +7,7 @@ namespace equilog_backend.Interfaces
     {
         public Task<ApiResponse<WallPostDto?>> GetWallPostAsync(int id);
 
-        public Task<ApiResponse<WallPostDto?>> ReplaceWallPostAsync(WallPostReplaceDto wallPostReplaceDto);
+        public Task<ApiResponse<WallPostDto?>> NewWallPostAsync(WallPostReplaceDto wallPostReplaceDto);
 
         public Task<ApiResponse<WallPostDto?>> EditWallPostAsync(WallPostEditDto wallPostEditDto);
 
