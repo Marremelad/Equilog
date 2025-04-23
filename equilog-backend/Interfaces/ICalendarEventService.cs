@@ -5,7 +5,7 @@ namespace equilog_backend.Interfaces;
 
 public interface ICalendarEventService
 {
-    public Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsByStableIdAsync(int stableId);
+    public Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsByStableIdAsync(int id);
     
     public Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsAsync();
 

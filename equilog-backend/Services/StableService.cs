@@ -11,7 +11,7 @@ namespace equilog_backend.Services;
 
 public class StableService(EquilogDbContext context, IMapper mapper) : IStableService
 {
-   public async Task<ApiResponse<List<StableDto>?>> GetStables()
+   public async Task<ApiResponse<List<StableDto>?>> GetStablesAsync()
    {
       try
       {
@@ -28,7 +28,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
       }
    }
 
-   public async Task<ApiResponse<StableDto?>> GetStable(int id)
+   public async Task<ApiResponse<StableDto?>> GetStableAsync(int id)
    {
       try
       {
@@ -51,7 +51,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
       }
    }
 
-   public async Task<ApiResponse<StableDto?>> CreateStable(StableCreateDto stableCreateDto)
+   public async Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto)
    {
       try
       {
@@ -71,19 +71,19 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
       }
    }
 
-   public async Task<ApiResponse<StableDto?>> UpdateStable(StableUpdateDto updatedStable)
+   public async Task<ApiResponse<StableDto?>> UpdateStableAsync(StableUpdateDto stableUpdateDto)
    {
       try
       {
          var stable = await context.Stables
-            .Where(s => s.Id == updatedStable.Id)
+            .Where(s => s.Id == stableUpdateDto.Id)
             .FirstOrDefaultAsync();
 
          if (stable == null)
             return ApiResponse<StableDto>.Failure(HttpStatusCode.NotFound,
                "Error: Stable not found");
 
-         mapper.Map(updatedStable, stable);
+         mapper.Map(stableUpdateDto, stable);
          await context.SaveChangesAsync();
 
          return ApiResponse<StableDto>.Success(HttpStatusCode.OK,
@@ -97,7 +97,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
       }
    }
 
-   public async Task<ApiResponse<StableDto?>> DeleteStable(int id)
+   public async Task<ApiResponse<StableDto?>> DeleteStableAsync(int id)
    {
       try
       {

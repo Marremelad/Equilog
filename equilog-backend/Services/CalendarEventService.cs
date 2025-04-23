@@ -11,12 +11,12 @@ namespace equilog_backend.Services;
 
 public class CalendarEventService(EquilogDbContext context, IMapper mapper) : ICalendarEventService
 {
-    public async Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsByStableIdAsync(int stableId)
+    public async Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsByStableIdAsync(int id)
     {
         try
         {
             var calendarEventDtos = mapper.Map<List<CalendarEventDto>>(await context.CalendarEvents
-                .Where(ce => ce.StableIdFk == stableId)
+                .Where(ce => ce.StableIdFk == id)
                 .ToListAsync());
 
             return ApiResponse<List<CalendarEventDto>>.Success(HttpStatusCode.OK,
