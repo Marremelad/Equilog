@@ -20,6 +20,9 @@ namespace equilog_backend.Endpoints
 
             app.MapPut("/api/wallpost/clear", ClearWallPost)
                 .WithName("ClearWallPost");
+
+            app.MapPost("/api/wallpost/create", CreateWallPost)
+                .WithName("CreateWallPost");
         }
 
         private static async Task<IResult> GetWallPost(IWallPostService wallPostService, int stableId)
@@ -40,6 +43,11 @@ namespace equilog_backend.Endpoints
         private static async Task<IResult> ClearWallPost(IWallPostService wallPostService, int stableId)
         {
             return Result.Generate(await wallPostService.ClearWallPost(stableId));
+        }
+
+        private static async Task<IResult> CreateWallPost(IWallPostService wallPostService, int stableId)
+        {
+            return Result.Generate(await wallPostService.CreateWallPost(stableId));
         }
     }
 }

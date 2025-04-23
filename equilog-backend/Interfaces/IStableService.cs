@@ -9,7 +9,7 @@ public interface IStableService
 
     public Task<ApiResponse<StableDto?>> GetStable(int id);
 
-    public Task<ApiResponse<StableDto?>> CreateStable(StableCreateDto newStable, IWallPostService wallPostService);
+    public Task<ApiResponse<StableDto?>> CreateStable(StableCreateDto stableCreateDto);
 
     public Task<ApiResponse<StableDto?>> UpdateStable(StableUpdateDto updatedStable);
 
