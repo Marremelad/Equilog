@@ -36,33 +36,33 @@ public class CalendarEventEndpoints
 
     private static async Task<IResult> GetCalendarEventsByStableId(ICalendarEventService calendarEventService, int id)
     {
-        return Result.Generate(await calendarEventService.GetCalendarEventsByStableId(id));
+        return Result.Generate(await calendarEventService.GetCalendarEventsByStableIdAsync(id));
     }
 
     private static async Task<IResult> GetCalendarEvents(ICalendarEventService calendarEventService)
     {
-        return Result.Generate(await calendarEventService.GetCalendarEvents());
+        return Result.Generate(await calendarEventService.GetCalendarEventsAsync());
     }
 
     private static async Task<IResult> GetCalendarEvent(ICalendarEventService calendarEventService, int id)
     {
-        return Result.Generate(await calendarEventService.GetCalendarEvent(id));
+        return Result.Generate(await calendarEventService.GetCalendarEventAsync(id));
     }
 
     private static async Task<IResult> CreateCalendarEvent(ICalendarEventService calendarEventService,
         CalendarEventCreateDto newCalendarEvent)
     {
-        return Result.Generate(await calendarEventService.CreateCalendarEvent(newCalendarEvent));
+        return Result.Generate(await calendarEventService.CreateCalendarEventAsync(newCalendarEvent));
     }
 
     private static async Task<IResult> UpdateCalendarEvent(ICalendarEventService calendarEventService,
         CalendarEventUpdateDto updatedEvent)
     {
-        return Result.Generate(await calendarEventService.UpdateCalendarEvent(updatedEvent));
+        return Result.Generate(await calendarEventService.UpdateCalendarEventAsync(updatedEvent));
     }
 
     private static async Task<IResult> DeleteCalendarEvent(ICalendarEventService calendarEventService, int id)
     {
-        return Result.Generate(await calendarEventService.DeleteCalendarEvent(id));
+        return Result.Generate(await calendarEventService.DeleteCalendarEventAsync(id));
     }
 }

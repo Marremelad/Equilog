@@ -33,26 +33,26 @@ public class HorseEndpoints
 
     private static async Task<IResult> GetHorses(IHorseService horseService)
     {
-        return Result.Generate(await horseService.GetHorses());
+        return Result.Generate(await horseService.GetHorsesAsync());
     }
 
     private static async Task<IResult> GetHorse(IHorseService horseService, int id)
     {
-        return Result.Generate(await horseService.GetHorse(id));
+        return Result.Generate(await horseService.GetHorseAsync(id));
     }
 
     private static async Task<IResult> CreateHorse(IHorseService horseService, HorseCreateDto newHorse)
     {
-        return Result.Generate(await horseService.CreateHorse(newHorse));
+        return Result.Generate(await horseService.CreateHorseAsync(newHorse));
     }
 
     private static async Task<IResult> UpdateHorse(IHorseService horseService, HorseUpdateDto updatedHorse)
     {
-        return Result.Generate(await horseService.UpdateHorse(updatedHorse));
+        return Result.Generate(await horseService.UpdateHorseAsync(updatedHorse));
     }
 
     private static async Task<IResult> DeleteHorse(IHorseService horseService, int id)
     {
-        return Result.Generate(await horseService.DeleteHorse(id));
+        return Result.Generate(await horseService.DeleteHorseAsync(id));
     }
 }
