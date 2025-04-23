@@ -15,7 +15,4 @@ public class CalendarEventUpdateDto
 
     [Required]
     public required DateTime EndDateTime { get; set; }
-
-    [Required]
-    public required int StableIdFk { get; set; }
 }

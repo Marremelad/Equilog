@@ -14,6 +14,10 @@ public class CalendarEvent
     public required DateTime StartDateTime { get; set; }
 
     public required DateTime EndDateTime { get; set; }
+    
+    [ForeignKey("User")]
+    public required int UserIdFk { get; set; }
+    public virtual User? User { get; set; }
 
     [ForeignKey("Stable")]
     public required int StableIdFk { get; set; }
