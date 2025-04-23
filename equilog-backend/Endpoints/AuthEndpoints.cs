@@ -21,11 +21,11 @@ public class AuthEndpoints
 
     private static async Task<IResult> Register(IAuthService authService, RegisterDto registerDto)
     {
-        return Result.Generate(await authService.Register(registerDto));
+        return Result.Generate(await authService.RegisterAsync(registerDto));
     }
 
     private static async Task<IResult> Login(IAuthService authService, LoginDto loginDto)
     {
-        return Result.Generate(await authService.Login(loginDto));
+        return Result.Generate(await authService.LoginAsync(loginDto));
     }
 }

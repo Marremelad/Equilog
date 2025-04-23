@@ -11,7 +11,7 @@ namespace equilog_backend.Services;
 
 public class CalendarEventService(EquilogDbContext context, IMapper mapper) : ICalendarEventService
 {
-    public async Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsByStableId(int stableId)
+    public async Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsByStableIdAsync(int stableId)
     {
         try
         {
@@ -30,7 +30,7 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
         }
     }
     
-    public async Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEvents()
+    public async Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsAsync()
     {
         try
         {
@@ -47,7 +47,7 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
         }
     }
     
-    public async Task<ApiResponse<CalendarEventDto?>> GetCalendarEvent(int id)
+    public async Task<ApiResponse<CalendarEventDto?>> GetCalendarEventAsync(int id)
     {
         try
         {
@@ -69,11 +69,11 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
         }
     }
 
-    public async Task<ApiResponse<CalendarEventDto?>> CreateCalendarEvent(CalendarEventCreateDto newCalendarEvent)
+    public async Task<ApiResponse<CalendarEventDto?>> CreateCalendarEventAsync(CalendarEventCreateDto calendarEventCreateDto)
     {
         try
         {
-            var calendarEvent = mapper.Map<CalendarEvent>(newCalendarEvent);
+            var calendarEvent = mapper.Map<CalendarEvent>(calendarEventCreateDto);
             
             context.CalendarEvents.Add(calendarEvent);
             await context.SaveChangesAsync();
@@ -89,19 +89,19 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
         }
     }
 
-    public async Task<ApiResponse<CalendarEventDto?>> UpdateCalendarEvent(CalendarEventUpdateDto updatedCalendarEvent)
+    public async Task<ApiResponse<CalendarEventDto?>> UpdateCalendarEventAsync(CalendarEventUpdateDto calendarEventUpdateDto)
     {
         try
         {
             var calendarEvent = await context.CalendarEvents
-                .Where(ce => ce.Id == updatedCalendarEvent.Id)
+                .Where(ce => ce.Id == calendarEventUpdateDto.Id)
                 .FirstOrDefaultAsync();
 
             if (calendarEvent == null)
                 return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.NotFound,
                     "Error: Calendar event not found");
 
-            mapper.Map(updatedCalendarEvent, calendarEvent);
+            mapper.Map(calendarEventUpdateDto, calendarEvent);
             await context.SaveChangesAsync();
 
             return ApiResponse<CalendarEventDto>.Success(HttpStatusCode.OK,
@@ -115,7 +115,7 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
         }
     } 
     
-    public async Task<ApiResponse<CalendarEventDto?>> DeleteCalendarEvent(int id)
+    public async Task<ApiResponse<CalendarEventDto?>> DeleteCalendarEventAsync(int id)
     {
         try
         {

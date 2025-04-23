@@ -11,7 +11,7 @@ namespace equilog_backend.Services;
 
 public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseService
 {
-    public async Task<ApiResponse<List<HorseDto>?>> GetHorses()
+    public async Task<ApiResponse<List<HorseDto>?>> GetHorsesAsync()
     {
         try
         {
@@ -28,7 +28,7 @@ public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseServ
         }
     }
 
-    public async Task<ApiResponse<HorseDto?>> GetHorse(int id)
+    public async Task<ApiResponse<HorseDto?>> GetHorseAsync(int id)
     {
         try
         {  
@@ -51,11 +51,11 @@ public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseServ
         }
     }
 
-    public async Task<ApiResponse<HorseDto?>> CreateHorse(HorseCreateDto newHorse)
+    public async Task<ApiResponse<HorseDto?>> CreateHorseAsync(HorseCreateDto horseCreateDto)
     {
         try
         {
-            var horse = mapper.Map<Horse>(newHorse);
+            var horse = mapper.Map<Horse>(horseCreateDto);
 
             context.Horses.Add(horse);
             await context.SaveChangesAsync();
@@ -72,19 +72,19 @@ public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseServ
            
     }
 
-    public async Task<ApiResponse<HorseDto?>> UpdateHorse(HorseUpdateDto updatedHorse)
+    public async Task<ApiResponse<HorseDto?>> UpdateHorseAsync(HorseUpdateDto horseUpdateDto)
     {
         try
         {
             var horse = await context.Horses
-                .Where(h => h.Id == updatedHorse.Id)
+                .Where(h => h.Id == horseUpdateDto.Id)
                 .FirstOrDefaultAsync();
                 
             if (horse == null) 
                 return ApiResponse<HorseDto>.Failure(HttpStatusCode.NotFound ,
                 "Error: Horse not found");
 
-            mapper.Map(updatedHorse, horse);
+            mapper.Map(horseUpdateDto, horse);
             await context.SaveChangesAsync();
 
             return ApiResponse<HorseDto>.Success(HttpStatusCode.OK,
@@ -98,7 +98,7 @@ public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseServ
         }
     }
 
-    public async Task<ApiResponse<HorseDto?>> DeleteHorse(int id)
+    public async Task<ApiResponse<HorseDto?>> DeleteHorseAsync(int id)
     {
         try
         {
