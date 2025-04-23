@@ -1,6 +1,6 @@
 ﻿namespace equilog_backend.Interfaces;
 
-public interface IMail
+public interface IMailTrap
 {
     public string Subject { get; set; }
     public string Body { get; set; }

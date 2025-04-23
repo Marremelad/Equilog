@@ -1,14 +1,13 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using equilog_backend.Common;
-using equilog_backend.DTOs.MailDTOs;
 using equilog_backend.Interfaces;
 
 namespace equilog_backend.Services;
 
-public class MailService
+public class MailTrapService
 {
-    public ApiResponse<string?> SendMail(IMail mail, string recipient)
+    public ApiResponse<string?> SendEmail(IMailTrap mailTrap, string recipient)
     {
         try
         {
@@ -17,10 +16,10 @@ public class MailService
                 Credentials = new NetworkCredential("api", "f22eb97375cb24dce3f488034c22baab"),
                 EnableSsl = true
             };
-            client.Send("hello@demomailtrap.co", recipient, mail.Subject, mail.Body);
+            client.Send("hello@demomailtrap.co", recipient, mailTrap.Subject, mailTrap.Body);
 
             return ApiResponse<string>.Success(HttpStatusCode.OK,
-                mail.Body,
+                mailTrap.Body,
                 null);
         }
         catch (Exception ex)
