@@ -15,5 +15,5 @@ public class PasswordResetRequest
     [StringLength(38)]
     public required string ResetCode { get; set; }
 
-    public DateTime ExpirationDate { get; set; }
+    public required DateTime ExpirationDate { get; set; }
 }
