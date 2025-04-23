@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SendGrid;
 using System.Text;
+using equilog_backend.Services.CompositionServices;
 using Twilio;
 
 namespace equilog_backend.Startup;
@@ -171,6 +172,9 @@ public static class AppConfiguration
         services.AddScoped<IStablePostService, StablePostService>();
         services.AddScoped<ICalendarEventService, CalendarEventService>();
         services.AddScoped<IWallPostService, WallPostService>();
+        
+        // Composition services
+        services.AddScoped<IStableCompositionService, StableCompositionService>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();
