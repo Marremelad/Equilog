@@ -20,7 +20,8 @@ namespace equilog_backend.Endpoints
 
             app.MapPut("/api/wallpost/clear", ClearWallPost)
                 .WithName("ClearWallPost");
-            app.MapPost("/api/wallpost/clear", CreateWallPost)
+
+            app.MapPost("/api/wallpost/create", CreateWallPost)
                 .WithName("CreateWallPost");
         }
 
