@@ -2,7 +2,7 @@
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
 
-namespace equilog_backend.Endpoints;
+namespace equilog_backend.Endpoints.CompositionEndpoints;
 
 public class StableCompositionEndpoints
 {
