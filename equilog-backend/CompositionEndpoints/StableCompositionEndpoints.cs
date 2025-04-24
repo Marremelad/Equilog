@@ -1,8 +1,8 @@
 ﻿using equilog_backend.Common;
+using equilog_backend.CompositionInterfaces;
 using equilog_backend.DTOs.StableDTOs;
-using equilog_backend.Interfaces;
 
-namespace equilog_backend.Endpoints.CompositionEndpoints;
+namespace equilog_backend.CompositionEndpoints;
 
 public class StableCompositionEndpoints
 {

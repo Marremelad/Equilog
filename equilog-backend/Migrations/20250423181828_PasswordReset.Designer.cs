@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using equilog_backend.Data;
 
@@ -11,9 +12,11 @@ using equilog_backend.Data;
 namespace equilog_backend.Migrations
 {
     [DbContext(typeof(EquilogDbContext))]
-    partial class EquilogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423181828_PasswordReset")]
+    partial class PasswordReset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,20 +96,19 @@ namespace equilog_backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(254)
-                        .HasColumnType("nvarchar(254)");
-
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ResetCode")
                         .IsRequired()
-                        .HasMaxLength(38)
-                        .HasColumnType("nvarchar(38)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserIdFk")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserIdFk");
 
                     b.ToTable("PasswordResetRequests");
                 });
@@ -361,6 +363,17 @@ namespace equilog_backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Stable");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("equilog_backend.Models.PasswordResetRequest", b =>
+                {
+                    b.HasOne("equilog_backend.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

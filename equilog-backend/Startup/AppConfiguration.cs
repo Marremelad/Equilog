@@ -10,7 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SendGrid;
 using System.Text;
-using equilog_backend.Services.CompositionServices;
+using equilog_backend.CompositionInterfaces;
+using equilog_backend.CompositionServices;
 using Twilio;
 
 namespace equilog_backend.Startup;
@@ -160,13 +161,18 @@ public static class AppConfiguration
         // Authentication services.
         services.AddScoped<IAuthService, AuthService>();
 
+        services.AddScoped<IPasswordResetService, PasswordResetService>();
+        
+        // MailTrap services.
+        services.AddScoped<IMailTrapService, MailTrapService>();
+
         // Core domain services.
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IHorseService, HorseService>();
         services.AddScoped<IStableService, StableService>();
         
-        // Twilio service.
-        services.AddScoped<ITwilioService, TwilioService>();
+        // Email service.
+        services.AddScoped<IEmailService, EmailService>();
 
         // Feature specific services.
         services.AddScoped<IStablePostService, StablePostService>();
@@ -175,6 +181,7 @@ public static class AppConfiguration
         
         // Composition services
         services.AddScoped<IStableCompositionService, StableCompositionService>();
+        services.AddScoped<IPasswordResetCompositionService, PasswordResetCompositionService>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();

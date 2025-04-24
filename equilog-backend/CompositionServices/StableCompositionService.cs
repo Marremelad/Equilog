@@ -1,10 +1,11 @@
 ﻿using System.Net;
 using equilog_backend.Common;
-using equilog_backend.DTOs.CompositionDTOs;
+using equilog_backend.CompositionDTOs;
+using equilog_backend.CompositionInterfaces;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
 
-namespace equilog_backend.Services.CompositionServices;
+namespace equilog_backend.CompositionServices;
 
 public class StableCompositionService(IStableService stableService, IWallPostService wallPostService) : IStableCompositionService
 {
@@ -32,8 +33,8 @@ public class StableCompositionService(IStableService stableService, IWallPostSer
         
         var result = new StableWithWallPostDto
         {
-            Stable = stableResponse.Value,
-            WallPost = wallPostResponse.Value
+            StableDto = stableResponse.Value,
+            WallPostDto = wallPostResponse.Value
         };
 
         return ApiResponse<StableWithWallPostDto>.Success(
