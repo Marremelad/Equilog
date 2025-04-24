@@ -1,7 +1,7 @@
 ﻿using equilog_backend.Common;
 using equilog_backend.Interfaces.CompositionInterfaces;
 
-namespace equilog_backend.Endpoints.CompositionEndpoints;
+namespace equilog_backend.CompositionEndpoints;
 
 public class PasswordResetCompositionEndpoints
 {

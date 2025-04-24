@@ -1,7 +1,7 @@
 ﻿using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.WallPostDTOs;
 
-namespace equilog_backend.DTOs.CompositionDTOs;
+namespace equilog_backend.CompositionDTOs;
 
 public class StableWithWallPostDto
 {

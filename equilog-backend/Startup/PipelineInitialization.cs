@@ -1,5 +1,5 @@
-﻿using equilog_backend.Endpoints;
-using equilog_backend.Endpoints.CompositionEndpoints;
+﻿using equilog_backend.CompositionEndpoints;
+using equilog_backend.Endpoints;
 
 namespace equilog_backend.Startup;
 
