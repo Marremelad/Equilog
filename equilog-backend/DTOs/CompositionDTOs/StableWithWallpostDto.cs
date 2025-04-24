@@ -5,6 +5,6 @@ namespace equilog_backend.DTOs.CompositionDTOs;
 
 public class StableWithWallPostDto
 {
-    public required StableDto? Stable { get; set; }
-    public required WallPostDto? WallPost { get; set; }
+    public required StableDto? StableDto { get; set; }
+    public required WallPostDto? WallPostDto { get; set; }
 }

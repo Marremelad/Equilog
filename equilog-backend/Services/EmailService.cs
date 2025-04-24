@@ -7,9 +7,9 @@ using SendGrid.Helpers.Mail;
 
 namespace equilog_backend.Services;
 
-public class TwilioService(SendGridClient client, TwilioSettings twilioSettings) : ITwilioService
+public class EmailService(SendGridClient client, TwilioSettings twilioSettings) : IEmailService
 {
-    public async Task<ApiResponse<string?>> SendEmailAsync (string recipient, IEmail email)
+    public async Task<ApiResponse<string?>> SendEmailAsync (IEmail email, string recipient)
     {
         try
         {
