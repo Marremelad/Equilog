@@ -5,7 +5,7 @@ namespace equilog_backend.DTOs.EmailDTOs;
 public class EmailWelcomeDto : IEmail
 {
     public string SenderName { get; set; } = "Equilog";
-    public string SenderEmail { get; set; } = "SomeEmail@example.com";
+    public string SenderEmail { get; set; } = "pontus.dorsay@outlook.com";
     public string Subject { get; set; } = "Welcome to Equilog!";
 
     public string PlainTextMessage { get; set; } =

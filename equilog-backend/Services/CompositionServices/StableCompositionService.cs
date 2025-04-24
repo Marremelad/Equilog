@@ -3,6 +3,7 @@ using equilog_backend.Common;
 using equilog_backend.DTOs.CompositionDTOs;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
+using equilog_backend.Interfaces.CompositionInterfaces;
 
 namespace equilog_backend.Services.CompositionServices;
 
