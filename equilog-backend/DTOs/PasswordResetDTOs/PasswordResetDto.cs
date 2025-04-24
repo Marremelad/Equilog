@@ -1,8 +1,15 @@
-﻿namespace equilog_backend.DTOs.PasswordResetDTOs;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace equilog_backend.DTOs.PasswordResetDTOs;
 
 public class PasswordResetDto
 {
-    public required int Id { get; set; }
-    public required string ResetCode { get; set; }
-    public required DateTime ExpirationDate { get; set; }
+    [EmailAddress]
+    public required string Email { get; set; }
+    
+    [StringLength(100, MinimumLength = 8)]
+    public required string NewPassword { get; set; }
+    
+    [StringLength(100, MinimumLength = 8)]
+    public required string NewPasswordConfirmation { get; set; }
 }

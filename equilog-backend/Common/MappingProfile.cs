@@ -42,7 +42,7 @@ namespace equilog_backend.Common
             CreateMap<WallPostEditDto, WallPost>(MemberList.Source);
             CreateMap<WallPostClearDto, WallPost>(MemberList.Source);
 
-            CreateMap<PasswordResetRequest, PasswordResetDto>().ReverseMap();
+            CreateMap<PasswordResetRequest, PasswordResetRequestDto>().ReverseMap();
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using equilog_backend.Endpoints;
-using equilog_backend.Endpoints.CompositionEndpoints;
+﻿using equilog_backend.CompositionEndpoints;
+using equilog_backend.Endpoints;
 
 namespace equilog_backend.Startup;
 
@@ -48,6 +48,8 @@ public static class PipelineInitialization
     private static void RegisterEndpoints(WebApplication app)
     {
         AuthEndpoints.RegisterEndpoints(app);
+        EmailEndpoints.RegisterEndpoints(app);
+        PasswordResetEndpoints.RegisterEndpoints(app);
         MailTrapEndpoints.RegisterEndpoints(app);
         UserEndpoints.RegisterEndpoints(app);
         HorseEndpoints.RegisterEndpoints(app);
@@ -56,9 +58,8 @@ public static class PipelineInitialization
         CalendarEventEndpoints.RegisterEndpoints(app);
         WallPostEndpoints.RegisterEndpoints(app);
         
+        // Composition endpoints.
         StableCompositionEndpoints.RegisterEndpoints(app);
         PasswordResetCompositionEndpoints.RegisterEndpoints(app);
-        
-        EmailEndpoints.RegisterEndpoints(app);
     }
 }
