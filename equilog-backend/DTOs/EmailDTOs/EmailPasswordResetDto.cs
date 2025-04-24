@@ -3,7 +3,7 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.DTOs.EmailDTOs;
 
-public class EmailPasswordResetDto(PasswordResetDto? passwordResetDto) : IEmail
+public class EmailPasswordResetDto(PasswordResetRequestDto? passwordResetDto) : IEmail
 {
     public string SenderName { get; set; } = "Equilog";
     public string SenderEmail { get; set; } = "pontus.dorsay@outlook.com";

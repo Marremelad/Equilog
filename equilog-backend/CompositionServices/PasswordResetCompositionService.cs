@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using equilog_backend.Common;
-using equilog_backend.CompositionDTOs;
 using equilog_backend.CompositionInterfaces;
 using equilog_backend.DTOs.EmailDTOs;
 using equilog_backend.DTOs.PasswordResetDTOs;
@@ -11,13 +10,13 @@ namespace equilog_backend.CompositionServices;
 public class PasswordResetCompositionService(IPasswordResetService passwordResetService, IEmailService emailService) 
     : IPasswordResetCompositionService
 {
-    public async Task<ApiResponse<PasswordResetDto?>> SendPasswordResetEmailAsync(string email)
+    public async Task<ApiResponse<PasswordResetRequestDto?>> SendPasswordResetEmailAsync(string email)
     {
         var passwordResetRequestResponse = await passwordResetService.CreatePasswordResetRequestAsync(email);
 
         if (!passwordResetRequestResponse.IsSuccess)
         {
-            return ApiResponse<PasswordResetDto>.Failure(passwordResetRequestResponse.StatusCode,
+            return ApiResponse<PasswordResetRequestDto>.Failure(passwordResetRequestResponse.StatusCode,
                 $"Failed to create password reset request: {passwordResetRequestResponse.Message}");
         }
 
@@ -27,11 +26,11 @@ public class PasswordResetCompositionService(IPasswordResetService passwordReset
         {
             await passwordResetService.DeletePasswordResetRequestAsync(passwordResetRequestResponse.Value!.Id);
             
-            return ApiResponse<PasswordResetDto?>.Failure(passwordResetRequestResponse.StatusCode,
+            return ApiResponse<PasswordResetRequestDto?>.Failure(passwordResetRequestResponse.StatusCode,
                 $"Failed to send Email: {passwordResetRequestResponse.Message}. Password reset request creation was rolled back.");
         }
 
-        return ApiResponse<PasswordResetDto?>.Success(HttpStatusCode.OK,
+        return ApiResponse<PasswordResetRequestDto?>.Success(HttpStatusCode.OK,
             passwordResetRequestResponse.Value,
             "Email sent successfully");
     }
