@@ -11,12 +11,17 @@ namespace equilog_backend.Services;
 
 public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IPasswordResetService
 {
-    public async Task<ApiResponse<PasswordResetDto?>> CreatePasswordResetRequestAsync(int id)
+    public async Task<ApiResponse<PasswordResetDto?>> CreatePasswordResetRequestAsync(string email)
     {
         try
         {
+            if (!await context.Users
+                    .AnyAsync(u => u.Email == email))
+                return ApiResponse<PasswordResetDto?>.Failure(HttpStatusCode.BadRequest,
+                    $"Account with the email {email} does not exist");
+            
             var oldPasswordResetRequest = await context.PasswordResetRequests
-                .Where(prr => prr.UserIdFk == id)
+                .Where(prr => prr.Email == email)
                 .FirstOrDefaultAsync();
 
             if (oldPasswordResetRequest != null)
@@ -27,7 +32,7 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
 
             var passwordResetRequest = new PasswordResetRequest()
             {
-                UserIdFk = id,
+                Email = email,
                 ResetCode = Generate.PasswordResetCode(),
                 ExpirationDate = DateTime.Now.AddHours(24)
             };

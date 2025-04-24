@@ -6,7 +6,7 @@ namespace equilog_backend.Interfaces;
 
 public interface IPasswordResetService
 {
-    public Task<ApiResponse<PasswordResetDto?>> CreatePasswordResetRequestAsync(int id);
+    public Task<ApiResponse<PasswordResetDto?>> CreatePasswordResetRequestAsync(string email);
 
     public Task<ApiResponse<PasswordResetDto?>> DeletePasswordResetRequestAsync(int id);
 }

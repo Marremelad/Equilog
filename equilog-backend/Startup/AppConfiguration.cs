@@ -10,8 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SendGrid;
 using System.Text;
+using equilog_backend.CompositionInterfaces;
 using equilog_backend.CompositionServices;
-using equilog_backend.Interfaces.CompositionInterfaces;
 using Twilio;
 
 namespace equilog_backend.Startup;

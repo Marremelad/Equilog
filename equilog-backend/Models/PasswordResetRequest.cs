@@ -8,9 +8,9 @@ public class PasswordResetRequest
     [Key]
     public int Id { get; set; }
 
-    [ForeignKey("User")]
-    public required int UserIdFk { get; set; }
-    public virtual User? User { get; set; }
+    [EmailAddress]
+    [StringLength(254)]
+    public required string Email { get; set; }
 
     [StringLength(38)]
     public required string ResetCode { get; set; }

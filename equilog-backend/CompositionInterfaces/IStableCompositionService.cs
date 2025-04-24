@@ -2,7 +2,7 @@
 using equilog_backend.CompositionDTOs;
 using equilog_backend.DTOs.StableDTOs;
 
-namespace equilog_backend.Interfaces.CompositionInterfaces;
+namespace equilog_backend.CompositionInterfaces;
 
 public interface IStableCompositionService
 {

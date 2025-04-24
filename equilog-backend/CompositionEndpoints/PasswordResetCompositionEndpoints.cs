@@ -1,5 +1,6 @@
 ﻿using equilog_backend.Common;
-using equilog_backend.Interfaces.CompositionInterfaces;
+using equilog_backend.CompositionDTOs;
+using equilog_backend.CompositionInterfaces;
 
 namespace equilog_backend.CompositionEndpoints;
 
@@ -11,9 +12,9 @@ public class PasswordResetCompositionEndpoints
             .WithName("SendPasswordResetEmail");
     }
 
-    private static async Task<IResult> SendPasswordResetEmail(IPasswordResetCompositionService passwordResetCompositionService, 
-        int id, string recipient)
+    private static async Task<IResult> SendPasswordResetEmail(IPasswordResetCompositionService passwordResetCompositionService,
+        PasswordResetRequestCreateDto passwordResetRequestCreateDto)
     {
-        return Result.Generate(await passwordResetCompositionService.SendPasswordResetEmailAsync(id, recipient));
+        return Result.Generate(await passwordResetCompositionService.SendPasswordResetEmailAsync(passwordResetRequestCreateDto.Email));
     }
 }
