@@ -15,6 +15,16 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
     {
         try
         {
+            var oldPasswordResetRequest = await context.PasswordResetRequests
+                .Where(prr => prr.UserIdFk == id)
+                .FirstOrDefaultAsync();
+
+            if (oldPasswordResetRequest != null)
+            {
+                context.PasswordResetRequests.Remove(oldPasswordResetRequest);
+                await context.SaveChangesAsync();
+            }
+
             var passwordResetRequest = new PasswordResetRequest()
             {
                 UserIdFk = id,
