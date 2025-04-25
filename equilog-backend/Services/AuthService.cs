@@ -2,6 +2,7 @@
 using System.Net;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.AuthDTOs;
@@ -13,7 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace equilog_backend.Services;
 
-public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IAuthService
+public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMapper mapper) : IAuthService
 {
     public string GenerateJwt(User user)
     {
@@ -65,15 +66,8 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings) : IA
             var salt = BCrypt.Net.BCrypt.GenerateSalt();
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password, salt);
 
-            var user = new User
-            {
-                UserName = registerDto.UserName,
-                PasswordHash = passwordHash,
-                FirstName = registerDto.FirstName,
-                LastName = registerDto.LastName,
-                Email = registerDto.Email,
-                PhoneNumber = registerDto.PhoneNumber
-            };
+            var user = mapper.Map<User>(registerDto);
+            user.PasswordHash = passwordHash;
 
             context.Users.Add(user);
             await context.SaveChangesAsync();
