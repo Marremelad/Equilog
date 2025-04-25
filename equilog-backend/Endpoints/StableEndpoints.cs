@@ -23,6 +23,7 @@ public class StableEndpoints
 
         // Update stable.
         app.MapPut("/api/stable/update", UpdateStable)
+            .AddEndpointFilter<ValidationFilter<StableUpdateDto>>()
             .WithName("UpdateStable");
 
         // Delete stable.
