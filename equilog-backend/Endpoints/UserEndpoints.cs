@@ -8,7 +8,7 @@ namespace equilog_backend.Endpoints
     {
         public static void RegisterEndpoints(WebApplication app)
         {
-            
+
             // Get all users.
             app.MapGet("/api/user", GetUsers)
                 .WithName("GetUsers");
@@ -19,6 +19,7 @@ namespace equilog_backend.Endpoints
 
             // Update user properties.
             app.MapPut("/api/user/update", UpdateUser)
+            .AddEndpointFilter<ValidationFilter<UserUpdateDto>>()
                 .WithName("UpdateUser");
 
             // Delete user.
@@ -35,7 +36,7 @@ namespace equilog_backend.Endpoints
         {
             return Result.Generate(await userService.GetUserAsync(id));
         }
-        
+
         private static async Task<IResult> UpdateUser(IUserService userService, UserUpdateDto updatedUser)
         {
             return Result.Generate(await userService.UpdateUserAsync(updatedUser));
