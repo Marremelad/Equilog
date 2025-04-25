@@ -2,10 +2,14 @@
 using FluentValidation;
 
 namespace equilog_backend.Validators;
-public class HorseCreateDtoValidator : AbstractValidator<HorseCreateDto>
+public class HorseUpdateDtoValidator : AbstractValidator<HorseUpdateDto>
 {
-    public HorseCreateDtoValidator()
+    public HorseUpdateDtoValidator()
     {
+        RuleFor(e => e.Id)
+            .NotEmpty()
+            .GreaterThan(0).WithMessage("Horse ID must be greater than 0.");
+
         RuleFor(h => h.Name)
             .NotEmpty().WithMessage("Name is required.")
             .MaximumLength(50).WithMessage("Name cannot exceed 50 characters.");
