@@ -1,4 +1,5 @@
-﻿using equilog_backend.DTOs.AuthDTOs;
+﻿using equilog_backend.Common;
+using equilog_backend.DTOs.AuthDTOs;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -89,30 +90,29 @@ namespace equilog_backend.Tests.Integration
             var registerContent = await registerResponse.Content.ReadAsStringAsync();
             LogResponse("Register response JSON:", registerContent, registerResponse.StatusCode);
 
-            // Assert: Registration successful
-            registerResponse.EnsureSuccessStatusCode();
-            var registerResult = JsonSerializer.Deserialize<AuthResponseDto>(
-                registerContent,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            // Assert: Registration successful.
+            var response = JsonSerializer.Deserialize<ApiResponse<AuthResponseDto>>(
+            registerContent,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            Assert.NotNull(registerResult);
-            Assert.False(string.IsNullOrWhiteSpace(registerResult.Token));
+            Assert.NotNull(response);
+            Assert.False(string.IsNullOrWhiteSpace(response?.Value?.Token));
 
-            // Act: Login with same credentials
+            // Act: Login with same credentials.
             var loginResponse = await _client.PostAsJsonAsync(_loginEndpoint, loginDto);
             var loginContent = await loginResponse.Content.ReadAsStringAsync();
             LogResponse("Login response JSON:", loginContent, loginResponse.StatusCode);
 
-            // Assert: Login successful
+            // Assert: Login successful.
             loginResponse.EnsureSuccessStatusCode();
-            var loginResult = JsonSerializer.Deserialize<AuthResponseDto>(
+            var loginResult = JsonSerializer.Deserialize<ApiResponse<AuthResponseDto>>(
                 loginContent,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             Assert.NotNull(loginResult);
-            Assert.False(string.IsNullOrWhiteSpace(loginResult.Token));
+            Assert.False(string.IsNullOrWhiteSpace(loginResult?.Value?.Token));
 
-            // Track for potential cleanup
+            // Track for potential cleanup.
             _registeredUsers.Add(registerDto.Email);
         }
 
@@ -132,12 +132,12 @@ namespace equilog_backend.Tests.Integration
             registerResponse.EnsureSuccessStatusCode();
             _registeredUsers.Add(registerDto.Email);
 
-            // Act: Login with wrong password
+            // Act: Login with wrong password.
             var loginResponse = await _client.PostAsJsonAsync(_loginEndpoint, loginDto);
             var loginContent = await loginResponse.Content.ReadAsStringAsync();
             LogResponse("Login failure response:", loginContent, loginResponse.StatusCode);
 
-            // Assert - We're flexible about the exact error code
+            // Assert - We're flexible about the exact error code.
             Assert.False(loginResponse.IsSuccessStatusCode,
                 $"Expected login with wrong password to fail, but got success status {loginResponse.StatusCode}");
         }
@@ -148,12 +148,12 @@ namespace equilog_backend.Tests.Integration
             // Arrange
             var registerDto = CreateUniqueTestUser("duplicate");
 
-            // Act: First registration
+            // Act: First registration.
             var firstResponse = await _client.PostAsJsonAsync(_registerEndpoint, registerDto);
             firstResponse.EnsureSuccessStatusCode();
             _registeredUsers.Add(registerDto.Email);
 
-            // Act: Second registration with same email
+            // Act: Second registration with same email.
             var secondResponse = await _client.PostAsJsonAsync(_registerEndpoint, registerDto);
             var errorContent = await secondResponse.Content.ReadAsStringAsync();
 
@@ -185,7 +185,7 @@ namespace equilog_backend.Tests.Integration
         [Fact]
         public async Task Register_With_Invalid_Data_Should_Return_BadRequest()
         {
-            // Arrange: User with invalid email
+            // Arrange: User with invalid email.
             var invalidRegisterDto = new RegisterDto
             {
                 UserName = "invalid_format_user",
@@ -204,42 +204,40 @@ namespace equilog_backend.Tests.Integration
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
-        //[Fact(Skip = "Update with a valid protected endpoint before enabling")]
         [Fact]
         public async Task Authenticated_Endpoint_Should_Require_Valid_Token()
         {
-            // NOTE: This test is skipped by default - enable it once you have a valid protected endpoint
 
-            // Register and get token
+            // Register and get token.
             var registerDto = CreateUniqueTestUser("auth");
 
             // Register first
             var registerResponse = await _client.PostAsJsonAsync(_registerEndpoint, registerDto);
             registerResponse.EnsureSuccessStatusCode();
             var registerContent = await registerResponse.Content.ReadAsStringAsync();
-            var authResult = JsonSerializer.Deserialize<AuthResponseDto>(
+            var authResult = JsonSerializer.Deserialize<ApiResponse<AuthResponseDto>>(
                 registerContent,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             _registeredUsers.Add(registerDto.Email);
 
-            // Act 1: Call protected endpoint without token
+            // Act 1: Call protected endpoint without token.
             var unauthResponse = await _client.GetAsync(_protectedEndpoint);
             var unauthContent = await unauthResponse.Content.ReadAsStringAsync();
             LogResponse("Unauthenticated response:", unauthContent, unauthResponse.StatusCode);
 
-            // Assert 1: Should be unauthorized
+            // Assert 1: Should be unauthorized.
             Assert.Equal(HttpStatusCode.Unauthorized, unauthResponse.StatusCode);
 
-            // Act 2: Call protected endpoint with token
+            // Act 2: Call protected endpoint with token.
             var authClient = _factory.CreateClient();
-            authClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResult?.Token);
+            authClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResult?.Value?.Token);
             var authResponse = await authClient.GetAsync(_protectedEndpoint);
             var authContent = await authResponse.Content.ReadAsStringAsync();
             LogResponse("Authenticated response:", authContent, authResponse.StatusCode);
 
-            // We don't assert the exact status code here since it depends on what the endpoint does
-            // We only care that it's not Unauthorized (401)
+            // We don't assert the exact status code here since it depends on what the endpoint does.
+            // We only care that it's not Unauthorized (401).
             Assert.NotEqual(HttpStatusCode.Unauthorized, authResponse.StatusCode);
         }
     }
