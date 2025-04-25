@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace equilog_backend.Tests.Integration
 {
-    // Custom fixture to properly configure the CustomWebAppFactory
+    // Custom fixture to be reused for all tests.
     public class AuthTestsFixture : IDisposable
     {
         public CustomWebAppFactory Factory { get; }
@@ -15,7 +15,7 @@ namespace equilog_backend.Tests.Integration
 
         public AuthTestsFixture()
         {
-            Factory = new CustomWebAppFactory(useFakeAuth: false);
+            Factory = new CustomWebAppFactory();
             Client = Factory.CreateClient();
         }
 
@@ -37,8 +37,7 @@ namespace equilog_backend.Tests.Integration
         // AUTH ENDPOINTS
         private readonly string _registerEndpoint = "/api/auth/register";
         private readonly string _loginEndpoint = "/api/auth/login";
-        private readonly string _protectedEndpoint = "/api/users/profile"; // Update this to a real protected endpoint
-
+        private readonly string _protectedEndpoint = "/api/horse";
         public AuthIntegrationTests(AuthTestsFixture fixture, ITestOutputHelper output)
         {
             _factory = fixture.Factory;
@@ -205,7 +204,8 @@ namespace equilog_backend.Tests.Integration
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
-        [Fact(Skip = "Update with a valid protected endpoint before enabling")]
+        //[Fact(Skip = "Update with a valid protected endpoint before enabling")]
+        [Fact]
         public async Task Authenticated_Endpoint_Should_Require_Valid_Token()
         {
             // NOTE: This test is skipped by default - enable it once you have a valid protected endpoint
