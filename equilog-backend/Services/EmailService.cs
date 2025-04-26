@@ -9,7 +9,7 @@ namespace equilog_backend.Services;
 
 public class EmailService(SendGridClient client, TwilioSettings twilioSettings) : IEmailService
 {
-    public async Task<ApiResponse<string?>> SendEmailAsync (IEmail email, string recipient)
+    public async Task<ApiResponse<Unit>> SendEmailAsync (IEmail email, string recipient)
     {
         try
         {
@@ -18,16 +18,16 @@ public class EmailService(SendGridClient client, TwilioSettings twilioSettings) 
             var message = MailHelper.CreateSingleEmail(from, to, email.Subject, plainTextContent: email.PlainTextMessage, htmlContent: email.HtmlMessage);
             var response = await client.SendEmailAsync(message);
             
-            if (!response.IsSuccessStatusCode) return ApiResponse<string?>.Failure(HttpStatusCode.InternalServerError,
+            if (!response.IsSuccessStatusCode) return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 "Error sending email");
             
-            return ApiResponse<string?>.Success(HttpStatusCode.OK,
-                email.PlainTextMessage,
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
                 "Email sent successfully");
         }
         catch (Exception ex)
         {
-            return ApiResponse<string?>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
