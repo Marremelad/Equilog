@@ -11,7 +11,7 @@ public interface IStablePostService
 
     public Task<ApiResponse<StablePostDto?>> CreateStablePostAsync(StablePostCreateDto stablePostCreateDto);
 
-    public Task<ApiResponse<StablePostDto?>> UpdateStablePostAsync(StablePostUpdateDto stablePostUpdateDto);
+    public Task<ApiResponse<Unit>> UpdateStablePostAsync(StablePostUpdateDto stablePostUpdateDto);
 
-    public Task<ApiResponse<StablePostDto?>> DeleteStablePostAsync(int id);
+    public Task<ApiResponse<Unit>> DeleteStablePostAsync(int id);
 }
