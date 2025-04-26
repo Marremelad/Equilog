@@ -6,5 +6,5 @@ namespace equilog_backend.CompositionInterfaces;
 
 public interface IStableCompositionService
 {
-    Task<ApiResponse<StableWithWallPostDto?>> CreateStableWithWallPostAsync(StableCreateDto stableCreateDto);
+    Task<ApiResponse<Unit>> CreateStableWithWallPostAsync(StableCreateDto stableCreateDto);
 }

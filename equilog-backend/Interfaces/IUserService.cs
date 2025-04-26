@@ -9,7 +9,7 @@ public interface IUserService
 
     public Task<ApiResponse<UserDto?>> GetUserAsync(int id);
     
-    public Task<ApiResponse<UserDto?>> UpdateUserAsync(UserUpdateDto userUpdateDto);
+    public Task<ApiResponse<Unit>> UpdateUserAsync(UserUpdateDto userUpdateDto);
 
-    public Task<ApiResponse<UserDto?>> DeleteUserAsync(int id);
+    public Task<ApiResponse<Unit>> DeleteUserAsync(int id);
 }

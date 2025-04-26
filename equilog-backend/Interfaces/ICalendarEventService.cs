@@ -13,7 +13,7 @@ public interface ICalendarEventService
     
     public Task<ApiResponse<CalendarEventDto?>> CreateCalendarEventAsync(CalendarEventCreateDto calendarEventCreateDto);
 
-    public Task<ApiResponse<CalendarEventDto?>> UpdateCalendarEventAsync(CalendarEventUpdateDto calendarEventUpdateDto);
+    public Task<ApiResponse<Unit>> UpdateCalendarEventAsync(CalendarEventUpdateDto calendarEventUpdateDto);
 
-    public Task<ApiResponse<CalendarEventDto?>> DeleteCalendarEventAsync(int id);
+    public Task<ApiResponse<Unit>> DeleteCalendarEventAsync(int id);
 }

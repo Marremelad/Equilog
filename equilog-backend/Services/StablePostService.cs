@@ -72,7 +72,7 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
            
     }
 
-    public async Task<ApiResponse<StablePostDto?>> UpdateStablePostAsync(StablePostUpdateDto stablePostUpdateDto)
+    public async Task<ApiResponse<Unit>> UpdateStablePostAsync(StablePostUpdateDto stablePostUpdateDto)
     {
         try
         {
@@ -81,24 +81,24 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
                 .FirstOrDefaultAsync();
                 
             if ( stablePost == null) 
-                return ApiResponse<StablePostDto>.Failure(HttpStatusCode.NotFound ,
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound ,
                 "Error: Stable post not found");
 
             mapper.Map(stablePostUpdateDto, stablePost);
             await context.SaveChangesAsync();
 
-            return ApiResponse<StablePostDto>.Success(HttpStatusCode.OK,
-                mapper.Map<StablePostDto>(stablePost),
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
                 "Stable post information updated successfully");
         }
         catch (Exception ex)
         {
-            return ApiResponse<StablePostDto>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
 
-    public async Task<ApiResponse<StablePostDto?>> DeleteStablePostAsync(int id)
+    public async Task<ApiResponse<Unit>> DeleteStablePostAsync(int id)
     {
         try
         {
@@ -107,19 +107,19 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
                 .FirstOrDefaultAsync();
 
             if (stablePost == null)
-                return ApiResponse<StablePostDto>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                 "Error: Stable post not found");
 
             context.StablePosts.Remove(stablePost);
             await context.SaveChangesAsync();
 
-            return ApiResponse<StablePostDto>.Success(HttpStatusCode.NoContent,
-                null,
+            return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
+                Unit.Value,
                 $"Stable post with id '{id}' was deleted successfully");
         }
         catch (Exception ex)
         {
-            return ApiResponse<StablePostDto>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

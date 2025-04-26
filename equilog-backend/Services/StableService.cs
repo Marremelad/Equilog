@@ -71,7 +71,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
       }
    }
 
-   public async Task<ApiResponse<StableDto?>> UpdateStableAsync(StableUpdateDto stableUpdateDto)
+   public async Task<ApiResponse<Unit>> UpdateStableAsync(StableUpdateDto stableUpdateDto)
    {
       try
       {
@@ -80,24 +80,24 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             .FirstOrDefaultAsync();
 
          if (stable == null)
-            return ApiResponse<StableDto>.Failure(HttpStatusCode.NotFound,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                "Error: Stable not found");
 
          mapper.Map(stableUpdateDto, stable);
          await context.SaveChangesAsync();
 
-         return ApiResponse<StableDto>.Success(HttpStatusCode.OK,
-            mapper.Map<StableDto>(stable),
+         return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            Unit.Value,
             "Stable information updated successfully");
       }
       catch (Exception ex)
       {
-         return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
+         return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
             ex.Message);
       }
    }
 
-   public async Task<ApiResponse<StableDto?>> DeleteStableAsync(int id)
+   public async Task<ApiResponse<Unit>> DeleteStableAsync(int id)
    {
       try
       {
@@ -106,19 +106,19 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             .FirstOrDefaultAsync();
 
          if (stable == null)
-            return ApiResponse<StableDto>.Failure(HttpStatusCode.NotFound,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                "Error: stable not found");
 
          context.Stables.Remove(stable);
          await context.SaveChangesAsync();
 
-         return ApiResponse<StableDto>.Success(HttpStatusCode.NoContent,
-            null,
+         return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
+            Unit.Value, 
             $"Stable with id '{id}' was deleted successfully");
       }
       catch (Exception ex)
       {
-         return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
+         return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
             ex.Message);
       }
    }

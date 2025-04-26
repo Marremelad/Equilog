@@ -89,7 +89,7 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
         }
     }
 
-    public async Task<ApiResponse<CalendarEventDto?>> UpdateCalendarEventAsync(CalendarEventUpdateDto calendarEventUpdateDto)
+    public async Task<ApiResponse<Unit>> UpdateCalendarEventAsync(CalendarEventUpdateDto calendarEventUpdateDto)
     {
         try
         {
@@ -98,24 +98,24 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
                 .FirstOrDefaultAsync();
 
             if (calendarEvent == null)
-                return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                     "Error: Calendar event not found");
 
             mapper.Map(calendarEventUpdateDto, calendarEvent);
             await context.SaveChangesAsync();
 
-            return ApiResponse<CalendarEventDto>.Success(HttpStatusCode.OK,
-                mapper.Map<CalendarEventDto>(calendarEvent),
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     } 
     
-    public async Task<ApiResponse<CalendarEventDto?>> DeleteCalendarEventAsync(int id)
+    public async Task<ApiResponse<Unit>> DeleteCalendarEventAsync(int id)
     {
         try
         {
@@ -124,19 +124,19 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
                 .FirstOrDefaultAsync();
 
             if (calendarEvent == null)
-                return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                     "Error: Calendar event not found");
 
             context.CalendarEvents.Remove(calendarEvent);
             await context.SaveChangesAsync();
 
-            return ApiResponse<CalendarEventDto>.Success(HttpStatusCode.NoContent,
-                null,
+            return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
+                Unit.Value,
                 $"Calendar event with id '{id}' was deleted successfully");
         }
         catch (Exception ex)
         {
-            return ApiResponse<CalendarEventDto>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
