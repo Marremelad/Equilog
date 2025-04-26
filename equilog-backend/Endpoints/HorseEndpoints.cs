@@ -24,6 +24,7 @@ public class HorseEndpoints
 
         // Update horse properties.
         app.MapPut("/api/horse/update", UpdateHorse)
+            .AddEndpointFilter<ValidationFilter<HorseUpdateDto>>()
             .WithName("UpdateHorse");
 
         // Delete horse.

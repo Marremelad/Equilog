@@ -12,7 +12,7 @@ public class CalendarEventEndpoints
         app.MapGet("/api/calendar-events/{id:int}", GetCalendarEventsByStableId)
             .WithName("GetCalendarEventsByStableId")
             .RequireAuthorization();
-        
+
         // Get all calendar events.
         app.MapGet("/api/calendar-events", GetCalendarEvents)
             .WithName("GetCalendarEvents")
@@ -31,6 +31,7 @@ public class CalendarEventEndpoints
 
         // Update calendar event.
         app.MapPut("/api/calendar-event/update", UpdateCalendarEvent)
+            .AddEndpointFilter<ValidationFilter<CalendarEventUpdateDto>>()
             .WithName("UpdateCalendarEvent")
             .RequireAuthorization();
 
