@@ -4,7 +4,6 @@ using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.Interfaces;
-using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services
@@ -48,7 +47,7 @@ namespace equilog_backend.Services
             }
         }
         
-        public async Task<ApiResponse<UserDto?>> UpdateUserAsync(UserUpdateDto userUpdateDto)
+        public async Task<ApiResponse<Unit>> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
             try
             {
@@ -57,24 +56,24 @@ namespace equilog_backend.Services
                     .FirstOrDefaultAsync();
 
                 if (user == null)
-                    return ApiResponse<UserDto>.Failure(HttpStatusCode.NotFound,
+                    return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                     "Error: User not found");
 
                 mapper.Map(userUpdateDto, user);
                 await context.SaveChangesAsync();
 
-                return ApiResponse<UserDto>.Success(HttpStatusCode.OK,
-                    mapper.Map<UserDto>(user),
+                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                    Unit.Value,
                     "User information updated successfully");
             }
             catch (Exception ex)
             {
-                return ApiResponse<UserDto>.Failure(HttpStatusCode.InternalServerError,
+                return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                     ex.Message);
             }
         }
 
-        public async Task<ApiResponse<UserDto?>> DeleteUserAsync(int id)
+        public async Task<ApiResponse<Unit>> DeleteUserAsync(int id)
         {
             try
             {
@@ -83,19 +82,19 @@ namespace equilog_backend.Services
                     .FirstOrDefaultAsync();
 
                 if (user == null)
-                    return ApiResponse<UserDto>.Failure(HttpStatusCode.NotFound,
+                    return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                     "Error: User not found");
 
                 context.Users.Remove(user);
                 await context.SaveChangesAsync();
 
-                return ApiResponse<UserDto>.Success(HttpStatusCode.NoContent,
-                    null,
+                return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
+                    Unit.Value,
                     $"User with id '{id}' was deleted successfully");
             }
             catch (Exception ex)
             {
-                return ApiResponse<UserDto>.Failure(HttpStatusCode.InternalServerError,
+                return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                     ex.Message);
             }
         }
