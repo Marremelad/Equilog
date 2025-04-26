@@ -11,7 +11,7 @@ public interface IStableService
 
     public Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto);
 
-    public Task<ApiResponse<StableDto?>> UpdateStableAsync(StableUpdateDto stableUpdateDto);
+    public Task<ApiResponse<Unit>> UpdateStableAsync(StableUpdateDto stableUpdateDto);
 
-    public Task<ApiResponse<StableDto?>> DeleteStableAsync(int id);
+    public Task<ApiResponse<Unit>> DeleteStableAsync(int id);
 }
