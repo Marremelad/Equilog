@@ -4,5 +4,5 @@ namespace equilog_backend.Interfaces;
 
 public interface IPasswordResetComposition
 {
-    public Task<ApiResponse<Unit>> SendPasswordResetEmailAsync(string email);
+    Task<ApiResponse<Unit>> SendPasswordResetEmailAsync(string email);
 }

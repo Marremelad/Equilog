@@ -5,11 +5,11 @@ namespace equilog_backend.Interfaces;
 
 public interface IUserService
 {
-    public Task<ApiResponse<List<UserDto>?>> GetUsersAsync();
+    Task<ApiResponse<List<UserDto>?>> GetUsersAsync();
 
-    public Task<ApiResponse<UserDto?>> GetUserAsync(int id);
+    Task<ApiResponse<UserDto?>> GetUserAsync(int id);
     
-    public Task<ApiResponse<Unit>> UpdateUserAsync(UserUpdateDto userUpdateDto);
+    Task<ApiResponse<Unit>> UpdateUserAsync(UserUpdateDto userUpdateDto);
 
-    public Task<ApiResponse<Unit>> DeleteUserAsync(int id);
+    Task<ApiResponse<Unit>> DeleteUserAsync(int id);
 }

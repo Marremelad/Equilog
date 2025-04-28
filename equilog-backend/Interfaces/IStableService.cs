@@ -5,13 +5,13 @@ namespace equilog_backend.Interfaces;
 
 public interface IStableService
 {
-    public Task<ApiResponse<List<StableDto>?>> GetStablesAsync();
+    Task<ApiResponse<List<StableDto>?>> GetStablesAsync();
 
-    public Task<ApiResponse<StableDto?>> GetStableAsync(int id);
+    Task<ApiResponse<StableDto?>> GetStableAsync(int id);
 
-    public Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto);
+    Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto);
 
-    public Task<ApiResponse<Unit>> UpdateStableAsync(StableUpdateDto stableUpdateDto);
+    Task<ApiResponse<Unit>> UpdateStableAsync(StableUpdateDto stableUpdateDto);
 
-    public Task<ApiResponse<Unit>> DeleteStableAsync(int id);
+    Task<ApiResponse<Unit>> DeleteStableAsync(int id);
 }
