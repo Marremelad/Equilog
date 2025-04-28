@@ -1,9 +1,9 @@
 ﻿using equilog_backend.DTOs.PasswordResetDTOs;
 using equilog_backend.Interfaces;
 
-namespace equilog_backend.DTOs.EmailDTOs;
+namespace equilog_backend.DTOs.EmailSendDTOs;
 
-public class EmailPasswordResetDto(PasswordResetRequestDto? passwordResetDto) : IEmail
+public class EmailSendPasswordResetDto(PasswordResetRequestDto? passwordResetDto) : IEmail
 {
     public string SenderName { get; set; } = "Equilog";
     public string SenderEmail { get; set; } = "pontus.dorsay@outlook.com";

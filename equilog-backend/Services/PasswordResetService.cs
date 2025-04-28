@@ -64,7 +64,7 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
                     "A password reset request for this account does not exist. Try creating a new one.");
 
             if (passwordResetRequest.ResetCode != validateResetCodeDto.ResetCode)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.Unauthorized,
+                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
                     "Invalid reset code.");
             
             context.PasswordResetRequests.Remove(passwordResetRequest);
@@ -85,7 +85,7 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
     {
         try
         {
-            if (passwordResetDto.NewPassword != passwordResetDto.NewPasswordConfirmation)
+            if (passwordResetDto.NewPassword != passwordResetDto.ConfirmPassword)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
                     "Passwords have to match.");
         

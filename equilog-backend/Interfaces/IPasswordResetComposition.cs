@@ -1,8 +1,6 @@
 ﻿using equilog_backend.Common;
-using equilog_backend.CompositionDTOs;
-using equilog_backend.DTOs.PasswordResetDTOs;
 
-namespace equilog_backend.CompositionInterfaces;
+namespace equilog_backend.Interfaces;
 
 public interface IPasswordResetComposition
 {
