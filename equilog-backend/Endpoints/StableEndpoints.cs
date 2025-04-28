@@ -63,7 +63,7 @@ public class StableEndpoints
         return Result.Generate(await stableService.DeleteStableAsync(id));
     }
     
-    // -- Result generator for compositions --
+    // -- Result generators for compositions --
     private static async Task<IResult> CreateStableWithWallPost(
         IStableComposition stableComposition, 
         StableCreateDto stableCreateDto)
