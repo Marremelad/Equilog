@@ -31,7 +31,7 @@ public class StableEndpoints
         app.MapDelete("/api/stable/delete/{id:int}", DeleteStable)
             .WithName("DeleteStable");
         
-        // -- Endpoints for composed services --
+        // -- Endpoints for compositions --
         
         // Create stable with wall post.
         app.MapPost("/api/stable/create-with-wall-post", CreateStableWithWallPost)
@@ -64,7 +64,7 @@ public class StableEndpoints
         return Result.Generate(await stableService.DeleteStableAsync(id));
     }
     
-    // -- Result generator for composed services --
+    // -- Result generator for compositions --
     private static async Task<IResult> CreateStableWithWallPost(
         IStableComposition stableComposition, 
         StableCreateDto stableCreateDto)

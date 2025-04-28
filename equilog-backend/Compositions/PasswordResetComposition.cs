@@ -4,7 +4,7 @@ using equilog_backend.CompositionInterfaces;
 using equilog_backend.DTOs.EmailDTOs;
 using equilog_backend.Interfaces;
 
-namespace equilog_backend.CompositionServices;
+namespace equilog_backend.Compositions;
 
 public class PasswordResetComposition(IPasswordResetService passwordResetService, IEmailService emailService) 
     : IPasswordResetComposition
