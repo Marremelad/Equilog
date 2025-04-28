@@ -25,8 +25,8 @@ public class PasswordResetComposition(IPasswordResetService passwordResetService
         {
             await passwordResetService.DeletePasswordResetRequestAsync(passwordResetResponse.Value!.Id);
             
-            return ApiResponse<Unit>.Failure(passwordResetResponse.StatusCode,
-                $"Failed to send Email: {passwordResetResponse.Message}. Password reset request creation was rolled back.");
+            return ApiResponse<Unit>.Failure(emailResponse.StatusCode,
+                $"Failed to send Email: {emailResponse.Message}. Password reset request creation was rolled back.");
         }
 
         return ApiResponse<Unit>.Success(HttpStatusCode.OK,
