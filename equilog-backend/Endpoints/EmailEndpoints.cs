@@ -8,6 +8,7 @@ public class EmailEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
+        // Send Twilio email.
         app.MapPost("/api/twilio-mail/send", SendEmail)
             .WithName("SendTwilioMail");
     }

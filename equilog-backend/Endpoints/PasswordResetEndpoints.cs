@@ -10,13 +10,17 @@ public class PasswordResetEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
+        // Validate reset code.
         app.MapPost("/api/validate-reset-code", ValidateResetCode)
             .WithName("ValidateResetCode");
-
+        
+        // Reset password
         app.MapPost("/api/reset-password", ResetPassword)
             .WithName("RestPassword");
         
-        // Composed endpoints.
+        // -- Endpoints for composed services --
+        
+        // Send password reset email.
         app.MapPost("/api/password-reset-email/send", SendPasswordResetEmail)
             .WithName("SendPasswordResetEmail");
     }
@@ -33,7 +37,7 @@ public class PasswordResetEndpoints
         return Result.Generate(await passwordResetService.ResetPasswordAsync(passwordResetDto));
     }
     
-    // Composed result generators.
+    // -- Result generators for composed endpoints --
     private static async Task<IResult> SendPasswordResetEmail(IPasswordResetComposition passwordResetComposition,
         PasswordResetRequestCreateDto passwordResetRequestCreateDto)
     {

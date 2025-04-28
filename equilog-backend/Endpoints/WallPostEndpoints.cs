@@ -1,5 +1,4 @@
-﻿
-using equilog_backend.Common;
+﻿using equilog_backend.Common;
 using equilog_backend.DTOs.WallPostDTOs;
 using equilog_backend.Interfaces;
 
@@ -9,18 +8,23 @@ namespace equilog_backend.Endpoints
     {
         public static void RegisterEndpoints(WebApplication app)
         {
+            // Get wall post.
             app.MapGet("/api/wallpost/{stableId:int}", GetWallPost)
                 .WithName("GetWallPost");
 
+            // Replace wall post.
             app.MapPut("/api/wallpost/replace", ReplaceWallPost)
                 .WithName("ReplaceWallPost");
 
+            // Edit wall post.
             app.MapPatch("/api/wallpost/edit", EditWallPost)
                 .WithName("EditWallPost");
 
+            // Clear wall post.
             app.MapPut("/api/wallpost/clear", ClearWallPost)
                 .WithName("ClearWallPost");
 
+            // Create wall post.
             app.MapPost("/api/wallpost/create", CreateWallPost)
                 .WithName("CreateWallPost");
         }
