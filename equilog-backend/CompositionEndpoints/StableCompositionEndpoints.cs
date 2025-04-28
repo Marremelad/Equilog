@@ -15,10 +15,10 @@ public class StableCompositionEndpoints
     }
 
     private static async Task<IResult> CreateStableWithWallPost(
-        IStableCompositionService stableCompositionService, 
+        IStableComposition stableComposition, 
         StableCreateDto stableCreateDto)
     {
-        var result = await stableCompositionService.CreateStableWithWallPostAsync(stableCreateDto);
+        var result = await stableComposition.CreateStableWithWallPostAsync(stableCreateDto);
         return Result.Generate(result);
     }
 }

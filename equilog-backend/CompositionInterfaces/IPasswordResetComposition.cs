@@ -4,7 +4,7 @@ using equilog_backend.DTOs.PasswordResetDTOs;
 
 namespace equilog_backend.CompositionInterfaces;
 
-public interface IPasswordResetCompositionService
+public interface IPasswordResetComposition
 {
     public Task<ApiResponse<Unit>> SendPasswordResetEmailAsync(string email);
 }

@@ -6,8 +6,8 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.CompositionServices;
 
-public class PasswordResetCompositionService(IPasswordResetService passwordResetService, IEmailService emailService) 
-    : IPasswordResetCompositionService
+public class PasswordResetComposition(IPasswordResetService passwordResetService, IEmailService emailService) 
+    : IPasswordResetComposition
 {
     public async Task<ApiResponse<Unit>> SendPasswordResetEmailAsync(string email)
     {

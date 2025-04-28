@@ -180,8 +180,8 @@ public static class AppConfiguration
         services.AddScoped<IWallPostService, WallPostService>();
         
         // Composition services
-        services.AddScoped<IStableCompositionService, StableCompositionService>();
-        services.AddScoped<IPasswordResetCompositionService, PasswordResetCompositionService>();
+        services.AddScoped<IStableComposition, StableComposition>();
+        services.AddScoped<IPasswordResetComposition, PasswordResetComposition>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();

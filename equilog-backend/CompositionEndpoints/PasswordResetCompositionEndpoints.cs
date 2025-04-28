@@ -12,9 +12,9 @@ public class PasswordResetCompositionEndpoints
             .WithName("SendPasswordResetEmail");
     }
 
-    private static async Task<IResult> SendPasswordResetEmail(IPasswordResetCompositionService passwordResetCompositionService,
+    private static async Task<IResult> SendPasswordResetEmail(IPasswordResetComposition passwordResetComposition,
         PasswordResetRequestCreateDto passwordResetRequestCreateDto)
     {
-        return Result.Generate(await passwordResetCompositionService.SendPasswordResetEmailAsync(passwordResetRequestCreateDto.Email));
+        return Result.Generate(await passwordResetComposition.SendPasswordResetEmailAsync(passwordResetRequestCreateDto.Email));
     }
 }
