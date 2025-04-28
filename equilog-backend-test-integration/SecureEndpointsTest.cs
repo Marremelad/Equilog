@@ -1,7 +1,4 @@
-﻿using equilog_backend.DTOs.HorseDTOs;
-using System.Net.Http.Json;
-
-namespace equilog_backend_test_integration;
+﻿namespace equilog_backend_test_integration;
 
 public class SecuredEndpointsTests
 {
@@ -16,14 +13,7 @@ public class SecuredEndpointsTests
     [Fact]
     public async Task Can_Access_Secured_Endpoint()
     {
-        var horseDto = new HorseCreateDto
-        {
-            Name = "Comet",
-            Color = "Brown",
-            Breed = "Arabian",
-            Age = new DateOnly(2018, 1, 1)
-        };
-        var response = await _client.PostAsJsonAsync("api/horse/create", horseDto);
+        var response = await _client.GetAsync("api/horse");
         response.EnsureSuccessStatusCode();
     }
 }

@@ -23,6 +23,7 @@ public class StablePostEndpoints
 
         // Update stable post properties.
         app.MapPut("/api/stable-post/update", UpdateStablePost)
+            .AddEndpointFilter<ValidationFilter<StablePostUpdateDto>>()
             .WithName("UpdateStablePost");
 
         // Delete stable post.

@@ -11,8 +11,8 @@ public interface IHorseService
 
     public Task<ApiResponse<HorseDto?>> CreateHorseAsync(HorseCreateDto horseCreateDto);
 
-    public Task<ApiResponse<HorseDto?>> UpdateHorseAsync(HorseUpdateDto horseUpdateDto);
+    public Task<ApiResponse<Unit>> UpdateHorseAsync(HorseUpdateDto horseUpdateDto);
 
-    public Task<ApiResponse<HorseDto?>> DeleteHorseAsync(int id);
+    public Task<ApiResponse<Unit>> DeleteHorseAsync(int id);
 
 }

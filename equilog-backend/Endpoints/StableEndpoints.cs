@@ -1,4 +1,5 @@
 ﻿using equilog_backend.Common;
+using equilog_backend.CompositionInterfaces;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
 
@@ -23,11 +24,19 @@ public class StableEndpoints
 
         // Update stable.
         app.MapPut("/api/stable/update", UpdateStable)
+            .AddEndpointFilter<ValidationFilter<StableUpdateDto>>()
             .WithName("UpdateStable");
 
         // Delete stable.
         app.MapDelete("/api/stable/delete/{id:int}", DeleteStable)
             .WithName("DeleteStable");
+        
+        // -- Endpoints for composed services --
+        
+        // Create stable with wall post.
+        app.MapPost("/api/stable/create-with-wall-post", CreateStableWithWallPost)
+            .AddEndpointFilter<ValidationFilter<StableCreateDto>>()
+            .WithName("CreateStableWithWallPost");
     }
 
     private static async Task<IResult> GetStables(IStableService stableService)
@@ -53,5 +62,14 @@ public class StableEndpoints
     private static async Task<IResult> DeleteStable(IStableService stableService, int id)
     {
         return Result.Generate(await stableService.DeleteStableAsync(id));
+    }
+    
+    // -- Result generator for composed services --
+    private static async Task<IResult> CreateStableWithWallPost(
+        IStableComposition stableComposition, 
+        StableCreateDto stableCreateDto)
+    {
+        var result = await stableComposition.CreateStableWithWallPostAsync(stableCreateDto);
+        return Result.Generate(result);
     }
 }

@@ -4,5 +4,5 @@ namespace equilog_backend.Interfaces;
 
 public interface IMailTrapService
 {
-    public ApiResponse<string?> SendEmail(IMailTrap mailTrap, string recipient);
+    public ApiResponse<Unit> SendEmail(IMailTrap mailTrap, string recipient);
 }

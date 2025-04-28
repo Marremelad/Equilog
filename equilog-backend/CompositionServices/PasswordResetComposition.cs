@@ -2,21 +2,20 @@
 using equilog_backend.Common;
 using equilog_backend.CompositionInterfaces;
 using equilog_backend.DTOs.EmailDTOs;
-using equilog_backend.DTOs.PasswordResetDTOs;
 using equilog_backend.Interfaces;
 
 namespace equilog_backend.CompositionServices;
 
-public class PasswordResetCompositionService(IPasswordResetService passwordResetService, IEmailService emailService) 
-    : IPasswordResetCompositionService
+public class PasswordResetComposition(IPasswordResetService passwordResetService, IEmailService emailService) 
+    : IPasswordResetComposition
 {
-    public async Task<ApiResponse<PasswordResetRequestDto?>> SendPasswordResetEmailAsync(string email)
+    public async Task<ApiResponse<Unit>> SendPasswordResetEmailAsync(string email)
     {
         var passwordResetRequestResponse = await passwordResetService.CreatePasswordResetRequestAsync(email);
 
         if (!passwordResetRequestResponse.IsSuccess)
         {
-            return ApiResponse<PasswordResetRequestDto>.Failure(passwordResetRequestResponse.StatusCode,
+            return ApiResponse<Unit>.Failure(passwordResetRequestResponse.StatusCode,
                 $"Failed to create password reset request: {passwordResetRequestResponse.Message}");
         }
 
@@ -26,12 +25,12 @@ public class PasswordResetCompositionService(IPasswordResetService passwordReset
         {
             await passwordResetService.DeletePasswordResetRequestAsync(passwordResetRequestResponse.Value!.Id);
             
-            return ApiResponse<PasswordResetRequestDto?>.Failure(passwordResetRequestResponse.StatusCode,
+            return ApiResponse<Unit>.Failure(passwordResetRequestResponse.StatusCode,
                 $"Failed to send Email: {passwordResetRequestResponse.Message}. Password reset request creation was rolled back.");
         }
 
-        return ApiResponse<PasswordResetRequestDto?>.Success(HttpStatusCode.OK,
-            passwordResetRequestResponse.Value,
+        return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            Unit.Value,
             "Email sent successfully");
     }
 }

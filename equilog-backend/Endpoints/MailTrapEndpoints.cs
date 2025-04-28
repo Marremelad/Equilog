@@ -8,6 +8,7 @@ public class MailTrapEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
+        // Send MailTrap email.
         app.MapPost("/api/mail/send", SendEmail)
             .WithName("SendEmail");
     }

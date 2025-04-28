@@ -1,21 +1,20 @@
 ﻿using System.Net;
 using equilog_backend.Common;
-using equilog_backend.CompositionDTOs;
 using equilog_backend.CompositionInterfaces;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
 
 namespace equilog_backend.CompositionServices;
 
-public class StableCompositionService(IStableService stableService, IWallPostService wallPostService) : IStableCompositionService
+public class StableComposition(IStableService stableService, IWallPostService wallPostService) : IStableComposition
 {
-    public async Task<ApiResponse<StableWithWallPostDto?>> CreateStableWithWallPostAsync(StableCreateDto stableCreateDto)
+    public async Task<ApiResponse<Unit>> CreateStableWithWallPostAsync(StableCreateDto stableCreateDto)
     {
         var stableResponse = await stableService.CreateStableAsync(stableCreateDto);
         
         if (!stableResponse.IsSuccess)
         {
-            return ApiResponse<StableWithWallPostDto>.Failure(
+            return ApiResponse<Unit>.Failure(
                 stableResponse.StatusCode,
                 $"Failed to create stable: {stableResponse.Message}");
         }
@@ -26,20 +25,14 @@ public class StableCompositionService(IStableService stableService, IWallPostSer
         {
             await stableService.DeleteStableAsync(stableResponse.Value.Id);
             
-            return ApiResponse<StableWithWallPostDto>.Failure(
+            return ApiResponse<Unit>.Failure(
                 wallPostResponse.StatusCode,
                 $"Failed to create wall post: {wallPostResponse.Message}. Stable creation was rolled back.");
         }
         
-        var result = new StableWithWallPostDto
-        {
-            StableDto = stableResponse.Value,
-            WallPostDto = wallPostResponse.Value
-        };
-
-        return ApiResponse<StableWithWallPostDto>.Success(
+        return ApiResponse<Unit>.Success(
             HttpStatusCode.Created,
-            result,
+            Unit.Value,
             "Stable and wall post created successfully.");
     }
 }

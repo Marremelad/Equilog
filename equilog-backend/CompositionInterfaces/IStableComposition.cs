@@ -4,7 +4,7 @@ using equilog_backend.DTOs.StableDTOs;
 
 namespace equilog_backend.CompositionInterfaces;
 
-public interface IStableCompositionService
+public interface IStableComposition
 {
-    Task<ApiResponse<StableWithWallPostDto?>> CreateStableWithWallPostAsync(StableCreateDto stableCreateDto);
+    Task<ApiResponse<Unit>> CreateStableWithWallPostAsync(StableCreateDto stableCreateDto);
 }

@@ -7,7 +7,7 @@ namespace equilog_backend.Services;
 
 public class MailTrapService : IMailTrapService
 {
-    public ApiResponse<string?> SendEmail(IMailTrap mailTrap, string recipient)
+    public ApiResponse<Unit> SendEmail(IMailTrap mailTrap, string recipient)
     {
         try
         {
@@ -18,13 +18,13 @@ public class MailTrapService : IMailTrapService
             };
             client.Send("hello@demomailtrap.co", recipient, mailTrap.Subject, mailTrap.Body);
 
-            return ApiResponse<string>.Success(HttpStatusCode.OK,
-                mailTrap.Body,
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<string>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
