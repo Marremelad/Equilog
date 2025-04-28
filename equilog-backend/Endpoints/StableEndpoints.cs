@@ -1,5 +1,4 @@
 ﻿using equilog_backend.Common;
-using equilog_backend.CompositionInterfaces;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
 
