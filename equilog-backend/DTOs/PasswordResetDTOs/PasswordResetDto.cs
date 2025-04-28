@@ -11,5 +11,5 @@ public class PasswordResetDto
     public required string NewPassword { get; set; }
     
     [StringLength(100, MinimumLength = 8)]
-    public required string NewPasswordConfirmation { get; set; }
+    public required string ConfirmPassword { get; set; }
 }

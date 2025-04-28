@@ -1,8 +1,8 @@
 ﻿using equilog_backend.Interfaces;
 
-namespace equilog_backend.DTOs.EmailDTOs;
+namespace equilog_backend.DTOs.EmailSendDTOs;
 
-public class EmailWelcomeDto : IEmail
+public class EmailSendWelcomeDto : IEmail
 {
     public string SenderName { get; set; } = "Equilog";
     public string SenderEmail { get; set; } = "pontus.dorsay@outlook.com";

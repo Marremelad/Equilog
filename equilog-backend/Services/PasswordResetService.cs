@@ -85,7 +85,7 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
     {
         try
         {
-            if (passwordResetDto.NewPassword != passwordResetDto.NewPasswordConfirmation)
+            if (passwordResetDto.NewPassword != passwordResetDto.ConfirmPassword)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
                     "Passwords have to match.");
         
