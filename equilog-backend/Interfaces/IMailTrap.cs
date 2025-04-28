@@ -2,6 +2,6 @@
 
 public interface IMailTrap
 {
-    public string Subject { get; set; }
-    public string Body { get; set; }
+    string Subject { get; set; }
+    string Body { get; set; }
 }

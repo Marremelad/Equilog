@@ -2,13 +2,13 @@
 
 public interface IEmail
 {
-    public string SenderName { get; set; }
+    string SenderName { get; set; }
 
-    public string SenderEmail { get; set; }
+    string SenderEmail { get; set; }
     
-    public string Subject { get; set; }
+    string Subject { get; set; }
 
-    public string PlainTextMessage { get; set; }
+    string PlainTextMessage { get; set; }
 
-    public string HtmlMessage { get; set; }
+    string HtmlMessage { get; set; }
 }
