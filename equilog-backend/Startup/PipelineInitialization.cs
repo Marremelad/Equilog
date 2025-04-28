@@ -60,6 +60,5 @@ public static class PipelineInitialization
         
         // Composition endpoints.
         StableCompositionEndpoints.RegisterEndpoints(app);
-        PasswordResetCompositionEndpoints.RegisterEndpoints(app);
     }
 }

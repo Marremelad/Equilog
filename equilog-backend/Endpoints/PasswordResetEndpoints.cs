@@ -1,4 +1,6 @@
 ﻿using equilog_backend.Common;
+using equilog_backend.CompositionDTOs;
+using equilog_backend.CompositionInterfaces;
 using equilog_backend.DTOs.PasswordResetDTOs;
 using equilog_backend.Interfaces;
 
@@ -13,6 +15,10 @@ public class PasswordResetEndpoints
 
         app.MapPost("/api/reset-password", ResetPassword)
             .WithName("RestPassword");
+        
+        // Composed endpoints.
+        app.MapPost("/api/password-reset-email/send", SendPasswordResetEmail)
+            .WithName("SendPasswordResetEmail");
     }
 
     private static async Task<IResult> ValidateResetCode(IPasswordResetService passwordResetService,
@@ -25,5 +31,12 @@ public class PasswordResetEndpoints
         PasswordResetDto passwordResetDto)
     {
         return Result.Generate(await passwordResetService.ResetPasswordAsync(passwordResetDto));
+    }
+    
+    // Composed result generators.
+    private static async Task<IResult> SendPasswordResetEmail(IPasswordResetComposition passwordResetComposition,
+        PasswordResetRequestCreateDto passwordResetRequestCreateDto)
+    {
+        return Result.Generate(await passwordResetComposition.SendPasswordResetEmailAsync(passwordResetRequestCreateDto.Email));
     }
 }
