@@ -9,7 +9,7 @@ public class ApiResponse<T> : IApiResponse
     public T? Value { get; set; }
     public string? Message { get; set; }
 
-    public ApiResponse(bool isSuccess, HttpStatusCode statusCode, T value, string? message)
+    private ApiResponse(bool isSuccess, HttpStatusCode statusCode, T value, string? message)
     {
         IsSuccess = isSuccess;
         StatusCode = statusCode;
