@@ -16,7 +16,7 @@ namespace equilog_backend.Services;
 
 public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMapper mapper) : IAuthService
 {
-    public string GenerateJwt(User user)
+    public string CreateJwt(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
@@ -72,7 +72,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             context.Users.Add(user);
             await context.SaveChangesAsync();
             
-            var accessToken = GenerateJwt(user);
+            var accessToken = CreateJwt(user);
             var refreshToken = await CreateRefreshTokenAsync(user.Id);
             
             var response = new AuthResponseDto
@@ -114,7 +114,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     HttpStatusCode.Unauthorized, 
                     "Invalid email or password");
 
-            var accessToken = GenerateJwt(user);
+            var accessToken = CreateJwt(user);
             var refreshToken = await CreateRefreshTokenAsync(user.Id);
             
             var response = new AuthResponseDto
@@ -178,33 +178,33 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
     {
         try
         {
-            var storedToken = await context.RefreshTokens
+            var storedRefreshToken = await context.RefreshTokens
                 .Include(rt => rt.User)
                 .Where(rt => rt.Token == refreshToken)
                 .FirstOrDefaultAsync();
 
-            if (storedToken == null)
+            if (storedRefreshToken == null)
             {
                 return ApiResponse<AuthResponseDto?>.Failure(
                     HttpStatusCode.BadRequest, 
                     "Invalid refresh token.");
             }
 
-            if (!ValidateRefreshToken(storedToken))
+            if (!ValidateRefreshToken(storedRefreshToken))
             {
                 return ApiResponse<AuthResponseDto?>.Failure(
                     HttpStatusCode.BadRequest, 
                     "Token is no longer valid.");
             }
 
-            storedToken.IsUsed = true;
-            context.RefreshTokens.Update(storedToken);
+            storedRefreshToken.IsUsed = true;
+            context.RefreshTokens.Update(storedRefreshToken);
         
-            var user = storedToken.User!;
+            var user = storedRefreshToken.User!;
         
             var newRefreshToken = await CreateRefreshTokenAsync(user.Id);
         
-            var newAccessToken = GenerateJwt(user);
+            var newAccessToken = CreateJwt(user);
         
             await context.SaveChangesAsync();
         
@@ -223,6 +223,37 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         catch (Exception ex)
         {
             return ApiResponse<AuthResponseDto?>.Failure(
+                HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+    
+    public async Task<ApiResponse<Unit>> RevokeRefreshTokenAsync(string refreshToken)
+    {
+        try
+        {
+            var storedRefreshToken = await context.RefreshTokens
+                .Where(rt => rt.Token == refreshToken)
+                .FirstOrDefaultAsync();
+
+            if (storedRefreshToken == null)
+            {
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
+                    "Invalid token.");
+            }
+
+            storedRefreshToken.IsRevoked = true;
+            await context.SaveChangesAsync();
+
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
+                Unit.Value,
+                "Token successfully revoked.");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(
                 HttpStatusCode.InternalServerError,
                 ex.Message);
         }
