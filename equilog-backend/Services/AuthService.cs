@@ -174,7 +174,8 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         {
             var storedToken = await context.RefreshTokens
                 .Include(rt => rt.User)
-                .FirstOrDefaultAsync(rt => rt.Token == refreshToken);
+                .Where(rt => rt.Token == refreshToken)
+                .FirstOrDefaultAsync();
 
             if (storedToken == null)
             {
