@@ -139,11 +139,11 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
     
     public async Task<RefreshToken> CreateRefreshTokenAsync(int userId)
     {
-        var refreshToken = Guid.NewGuid().ToString();
+        var token = Guid.NewGuid().ToString();
     
-        var refreshTokenEntity = new RefreshToken
+        var refreshToken = new RefreshToken
         {
-            Token = refreshToken,
+            Token = token,
             UserIdFk = userId,
             ExpirationDate = DateTime.UtcNow.AddDays(7),
             CreatedDate = DateTime.UtcNow,
@@ -151,10 +151,10 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             IsUsed = false
         };
     
-        await context.RefreshTokens.AddAsync(refreshTokenEntity);
+        await context.RefreshTokens.AddAsync(refreshToken);
         await context.SaveChangesAsync();
     
-        return refreshTokenEntity;
+        return refreshToken;
     }
     
     public bool ValidateRefreshToken(RefreshToken? token)
