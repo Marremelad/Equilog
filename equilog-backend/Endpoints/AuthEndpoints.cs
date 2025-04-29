@@ -18,15 +18,13 @@ public class AuthEndpoints
             .AddEndpointFilter<ValidationFilter<LoginDto>>()
             .WithName("Login");
         
-        // Log out.
-        app.MapPost("/api/auth/revoke-token", LogOut)
-            .WithName("RevokeToken");
-        
         // Refresh token.
         app.MapPost("/api/auth/refresh-token", RefreshToken)
             .WithName("RefreshToken");
         
-       
+        // Log out.
+        app.MapPost("/api/auth/revoke-token", LogOut)
+            .WithName("RevokeToken");
     }
 
     private static async Task<IResult> Register(IAuthService authService, RegisterDto registerDto)
