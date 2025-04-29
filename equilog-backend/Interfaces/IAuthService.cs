@@ -13,5 +13,5 @@ public interface IAuthService
     Task<ApiResponse<AuthResponseDto?>> RefreshTokenAsync(string refreshToken);
     Task<ApiResponse<Unit>> RevokeTokenAsync(string refreshToken);
     Task<RefreshToken> CreateRefreshTokenAsync(int userId);
-    bool ValidateRefreshToken(RefreshToken refreshToken); 
+    bool ValidateRefreshToken(RefreshToken? refreshToken); 
 }
