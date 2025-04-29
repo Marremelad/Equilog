@@ -76,7 +76,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         
             var response = new AuthResponseDto
             {
-                Token = token,
+                AccessToken = token,
             };
             
             return ApiResponse<AuthResponseDto>.Success(
@@ -115,7 +115,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             
             var response = new AuthResponseDto
             {
-                Token = token,
+                AccessToken = token,
             };
             
             return ApiResponse<AuthResponseDto>.Success(
