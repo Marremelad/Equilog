@@ -28,12 +28,12 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
         }
     }
 
-    public async Task<ApiResponse<StablePostDto?>> GetStablePostAsync(int id)
+    public async Task<ApiResponse<StablePostDto?>> GetStablePostAsync(int stablePostId)
     {
         try
         {  
             var stablePost = await context.StablePosts
-                .Where(sp => sp.Id == id)
+                .Where(sp => sp.Id == stablePostId)
                 .FirstOrDefaultAsync();
 
             if (stablePost == null)
@@ -98,12 +98,12 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
         }
     }
 
-    public async Task<ApiResponse<Unit>> DeleteStablePostAsync(int id)
+    public async Task<ApiResponse<Unit>> DeleteStablePostAsync(int stablePostId)
     {
         try
         {
             var stablePost = await context.StablePosts
-                .Where(sp => sp.Id == id)
+                .Where(sp => sp.Id == stablePostId)
                 .FirstOrDefaultAsync();
 
             if (stablePost == null)
@@ -115,7 +115,7 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
 
             return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
                 Unit.Value,
-                $"Stable post with id '{id}' was deleted successfully");
+                $"Stable post with id '{stablePostId}' was deleted successfully");
         }
         catch (Exception ex)
         {

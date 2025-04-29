@@ -12,5 +12,5 @@ public interface IPasswordResetService
 
     Task<ApiResponse<Unit>> ResetPasswordAsync(PasswordResetDto passwordResetDto);
     
-    Task<ApiResponse<Unit>> DeletePasswordResetRequestAsync(int id);
+    Task<ApiResponse<Unit>> DeletePasswordResetRequestAsync(int passwordResetRequestId);
 }
