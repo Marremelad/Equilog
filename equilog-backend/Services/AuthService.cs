@@ -183,18 +183,11 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                 .Where(rt => rt.Token == refreshToken)
                 .FirstOrDefaultAsync();
 
-            if (storedRefreshToken == null)
+            if (storedRefreshToken == null || !ValidateRefreshToken(storedRefreshToken))
             {
                 return ApiResponse<AuthResponseDto?>.Failure(
                     HttpStatusCode.BadRequest, 
                     "Invalid refresh token.");
-            }
-
-            if (!ValidateRefreshToken(storedRefreshToken))
-            {
-                return ApiResponse<AuthResponseDto?>.Failure(
-                    HttpStatusCode.BadRequest, 
-                    "Token is no longer valid.");
             }
 
             storedRefreshToken.IsUsed = true;
@@ -240,7 +233,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             {
                 return ApiResponse<Unit>.Failure(
                     HttpStatusCode.NotFound,
-                    "Invalid token.");
+                    "Invalid refresh token.");
             }
 
             storedRefreshToken.IsRevoked = true;
