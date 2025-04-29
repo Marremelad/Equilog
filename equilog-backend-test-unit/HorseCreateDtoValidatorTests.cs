@@ -2,7 +2,7 @@ using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Validators;
 using FluentValidation.TestHelper;
 
-namespace equilog_backend.Tests.Validators
+namespace equilog_backend_test_unit
 {
     public class HorseCreateDtoValidatorTests
     {
