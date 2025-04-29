@@ -1,6 +1,6 @@
 ﻿namespace equilog_backend.DTOs.AuthDTOs;
 
-public class RevokeRefreshTokenRequestDto
+public class RevokeTokenRequestDto
 {
     public required string RefreshToken { get; set; }
 }
