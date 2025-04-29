@@ -72,11 +72,14 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             context.Users.Add(user);
             await context.SaveChangesAsync();
             
-            var token = GenerateJwt(user);
-        
+            var accessToken = GenerateJwt(user);
+            var refreshToken = await CreateRefreshTokenAsync(user.Id);
+            
             var response = new AuthResponseDto
             {
-                AccessToken = token,
+                AccessToken = accessToken,
+                RefreshToken = refreshToken.Token,
+                AccessTokenExpiration = DateTime.UtcNow.AddDays(jwtSettings.DurationInMinutes)
             };
             
             return ApiResponse<AuthResponseDto>.Success(
@@ -111,11 +114,14 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     HttpStatusCode.Unauthorized, 
                     "Invalid email or password");
 
-            var token = GenerateJwt(user);
+            var accessToken = GenerateJwt(user);
+            var refreshToken = await CreateRefreshTokenAsync(user.Id);
             
             var response = new AuthResponseDto
             {
-                AccessToken = token,
+                AccessToken = accessToken,
+                RefreshToken = refreshToken.Token,
+                AccessTokenExpiration = DateTime.UtcNow.AddDays(jwtSettings.DurationInMinutes),
             };
             
             return ApiResponse<AuthResponseDto>.Success(
