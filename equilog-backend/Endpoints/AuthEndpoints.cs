@@ -13,18 +13,20 @@ public class AuthEndpoints
             .AddEndpointFilter<ValidationFilter<RegisterDto>>()
             .WithName("Register");
 
-        // Login.
+        // Log in.
         app.MapPost("/api/auth/login", Login)
             .AddEndpointFilter<ValidationFilter<LoginDto>>()
             .WithName("Login");
+        
+        // Log out.
+        app.MapPost("/api/auth/revoke-token", LogOut)
+            .WithName("RevokeToken");
         
         // Refresh token.
         app.MapPost("/api/auth/refresh-token", RefreshToken)
             .WithName("RefreshToken");
         
-        // Revoke token.
-        app.MapPost("/api/auth/revoke-token", RevokeToken)
-            .WithName("RevokeToken");
+       
     }
 
     private static async Task<IResult> Register(IAuthService authService, RegisterDto registerDto)
@@ -41,8 +43,8 @@ public class AuthEndpoints
     {
         return Result.Generate(await authService.RefreshTokenAsync(refreshTokenRequest.RefreshToken));
     }
-
-    private static async Task<IResult> RevokeToken(IAuthService authService, RevokeTokenRequestDto revokeTokenRequest)
+    
+    private static async Task<IResult> LogOut(IAuthService authService, RevokeTokenRequestDto revokeTokenRequest)
     {
         return Result.Generate(await authService.RevokeRefreshTokenAsync(revokeTokenRequest.RefreshToken));
     }
