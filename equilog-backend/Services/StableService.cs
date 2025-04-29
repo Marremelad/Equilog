@@ -50,6 +50,10 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             ex.Message);
       }
    }
+   public async Task<ApiResponse<List<StableDto>?>> SearchStablesAsync(string searchTerm, int page = 0, int pageSize = 10)
+   {
+        throw new NotImplementedException();
+   }
 
    public async Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto)
    {
