@@ -8,7 +8,15 @@ public class Stable
     public int Id { get; set; }
 
     [StringLength(50)]
+
     public required string Name { get; set; }
+
+    [StringLength(50)]
+    public string Location { get; set; } // Should this be required?
+
+    public string StableType { get; set; } // required Enum here?
+
+    public int StallCount { get; set; }
 
     public virtual List<UserStable>? UserStables { get; set; }
 
