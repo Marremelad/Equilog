@@ -96,7 +96,7 @@ namespace equilog_backend.Tests.Integration
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             Assert.NotNull(response);
-            Assert.False(string.IsNullOrWhiteSpace(response?.Value?.Token));
+            Assert.False(string.IsNullOrWhiteSpace(response?.Value?.AccessToken));
 
             // Act: Login with same credentials.
             var loginResponse = await _client.PostAsJsonAsync(_loginEndpoint, loginDto);
@@ -110,7 +110,7 @@ namespace equilog_backend.Tests.Integration
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             Assert.NotNull(loginResult);
-            Assert.False(string.IsNullOrWhiteSpace(loginResult?.Value?.Token));
+            Assert.False(string.IsNullOrWhiteSpace(loginResult?.Value?.AccessToken));
 
             // Track for potential cleanup.
             _registeredUsers.Add(registerDto.Email);
@@ -231,7 +231,7 @@ namespace equilog_backend.Tests.Integration
 
             // Act 2: Call protected endpoint with token.
             var authClient = _factory.CreateClient();
-            authClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResult?.Value?.Token);
+            authClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResult?.Value?.AccessToken);
             var authResponse = await authClient.GetAsync(_protectedEndpoint);
             var authContent = await authResponse.Content.ReadAsStringAsync();
             LogResponse("Authenticated response:", authContent, authResponse.StatusCode);

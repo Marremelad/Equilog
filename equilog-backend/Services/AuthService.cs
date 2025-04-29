@@ -72,11 +72,14 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             context.Users.Add(user);
             await context.SaveChangesAsync();
             
-            var token = GenerateJwt(user);
-        
+            var accessToken = GenerateJwt(user);
+            var refreshToken = await CreateRefreshTokenAsync(user.Id);
+            
             var response = new AuthResponseDto
             {
-                Token = token,
+                AccessToken = accessToken,
+                RefreshToken = refreshToken.Token,
+                AccessTokenExpiration = DateTime.UtcNow.AddDays(jwtSettings.DurationInMinutes)
             };
             
             return ApiResponse<AuthResponseDto>.Success(
@@ -111,11 +114,14 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     HttpStatusCode.Unauthorized, 
                     "Invalid email or password");
 
-            var token = GenerateJwt(user);
+            var accessToken = GenerateJwt(user);
+            var refreshToken = await CreateRefreshTokenAsync(user.Id);
             
             var response = new AuthResponseDto
             {
-                Token = token,
+                AccessToken = accessToken,
+                RefreshToken = refreshToken.Token,
+                AccessTokenExpiration = DateTime.UtcNow.AddDays(jwtSettings.DurationInMinutes),
             };
             
             return ApiResponse<AuthResponseDto>.Success(
@@ -126,6 +132,97 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         catch (Exception ex)
         {
             return ApiResponse<AuthResponseDto>.Failure(
+                HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+    
+    public async Task<RefreshToken> CreateRefreshTokenAsync(int userId)
+    {
+        var refreshToken = Guid.NewGuid().ToString();
+    
+        var refreshTokenEntity = new RefreshToken
+        {
+            Token = refreshToken,
+            UserIdFk = userId,
+            ExpirationDate = DateTime.UtcNow.AddDays(7),
+            CreatedDate = DateTime.UtcNow,
+            IsRevoked = false,
+            IsUsed = false
+        };
+    
+        await context.RefreshTokens.AddAsync(refreshTokenEntity);
+        await context.SaveChangesAsync();
+    
+        return refreshTokenEntity;
+    }
+    
+    public bool ValidateRefreshToken(RefreshToken? token)
+    {
+        if (token == null)
+            return false;
+        
+        if (token.ExpirationDate <= DateTime.UtcNow)
+            return false;
+        
+        if (token.IsUsed)
+            return false;
+        
+        if (token.IsRevoked)
+            return false;
+        
+        return true;
+    }
+    
+    public async Task<ApiResponse<AuthResponseDto?>> RefreshTokenAsync(string refreshToken)
+    {
+        try
+        {
+            var storedToken = await context.RefreshTokens
+                .Include(rt => rt.User)
+                .Where(rt => rt.Token == refreshToken)
+                .FirstOrDefaultAsync();
+
+            if (storedToken == null)
+            {
+                return ApiResponse<AuthResponseDto?>.Failure(
+                    HttpStatusCode.BadRequest, 
+                    "Invalid refresh token.");
+            }
+
+            if (!ValidateRefreshToken(storedToken))
+            {
+                return ApiResponse<AuthResponseDto?>.Failure(
+                    HttpStatusCode.BadRequest, 
+                    "Token is no longer valid.");
+            }
+
+            storedToken.IsUsed = true;
+            context.RefreshTokens.Update(storedToken);
+        
+            var user = storedToken.User!;
+        
+            var newRefreshToken = await CreateRefreshTokenAsync(user.Id);
+        
+            var newAccessToken = GenerateJwt(user);
+        
+            await context.SaveChangesAsync();
+        
+            var response = new AuthResponseDto
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken.Token,
+                AccessTokenExpiration = DateTime.UtcNow.AddMinutes(jwtSettings.DurationInMinutes)
+            };
+        
+            return ApiResponse<AuthResponseDto?>.Success(
+                HttpStatusCode.OK,
+                response,
+                "Token refreshed successfully.");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<AuthResponseDto?>.Failure(
                 HttpStatusCode.InternalServerError,
                 ex.Message);
         }
