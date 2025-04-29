@@ -28,12 +28,12 @@ public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseServ
         }
     }
 
-    public async Task<ApiResponse<HorseDto?>> GetHorseAsync(int id)
+    public async Task<ApiResponse<HorseDto?>> GetHorseAsync(int horseId)
     {
         try
         {  
             var horse = await context.Horses
-                .Where(h => h.Id == id)
+                .Where(h => h.Id == horseId)
                 .FirstOrDefaultAsync();
 
             if (horse == null)
@@ -98,12 +98,12 @@ public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseServ
         }
     }
 
-    public async Task<ApiResponse<Unit>> DeleteHorseAsync(int id)
+    public async Task<ApiResponse<Unit>> DeleteHorseAsync(int horseId)
     {
         try
         {
             var horse = await context.Horses
-                .Where(h => h.Id == id)
+                .Where(h => h.Id == horseId)
                 .FirstOrDefaultAsync();
 
             if (horse == null)
@@ -115,7 +115,7 @@ public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseServ
 
             return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
                 Unit.Value,
-                $"Horse with id '{id}' was deleted successfully");
+                $"Horse with id '{horseId}' was deleted successfully");
         }
         catch (Exception ex)
         {

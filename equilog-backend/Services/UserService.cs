@@ -24,12 +24,12 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<UserDto?>> GetUserAsync(int id)
+        public async Task<ApiResponse<UserDto?>> GetUserAsync(int userId)
         {
             try
             {
                 var user = await context.Users
-                    .Where(u => u.Id == id)
+                    .Where(u => u.Id == userId)
                     .FirstOrDefaultAsync();
 
                 if (user == null)
@@ -73,12 +73,12 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<Unit>> DeleteUserAsync(int id)
+        public async Task<ApiResponse<Unit>> DeleteUserAsync(int userId)
         {
             try
             {
                 var user = await context.Users
-                    .Where(u => u.Id == id)
+                    .Where(u => u.Id == userId)
                     .FirstOrDefaultAsync();
 
                 if (user == null)
@@ -90,7 +90,7 @@ namespace equilog_backend.Services
 
                 return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
                     Unit.Value,
-                    $"User with id '{id}' was deleted successfully");
+                    $"User with id '{userId}' was deleted successfully");
             }
             catch (Exception ex)
             {

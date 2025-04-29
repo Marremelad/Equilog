@@ -7,11 +7,11 @@ public interface IStableService
 {
     Task<ApiResponse<List<StableDto>?>> GetStablesAsync();
 
-    Task<ApiResponse<StableDto?>> GetStableAsync(int id);
+    Task<ApiResponse<StableDto?>> GetStableAsync(int stableId);
 
     Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto);
 
     Task<ApiResponse<Unit>> UpdateStableAsync(StableUpdateDto stableUpdateDto);
 
-    Task<ApiResponse<Unit>> DeleteStableAsync(int id);
+    Task<ApiResponse<Unit>> DeleteStableAsync(int stableId);
 }

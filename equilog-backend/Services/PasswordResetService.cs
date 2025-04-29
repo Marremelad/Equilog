@@ -114,12 +114,12 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
         }
     }
     
-    public async Task<ApiResponse<Unit>> DeletePasswordResetRequestAsync(int id)
+    public async Task<ApiResponse<Unit>> DeletePasswordResetRequestAsync(int passwordResetRequestId)
     {
         try
         {
             var passwordResetRequest = await context.PasswordResetRequests
-                .Where(prr => prr.Id == id)
+                .Where(prr => prr.Id == passwordResetRequestId)
                 .FirstOrDefaultAsync();
             
             if (passwordResetRequest == null)
