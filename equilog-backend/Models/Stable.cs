@@ -12,11 +12,17 @@ public class Stable
     public required string Name { get; set; }
 
     [StringLength(50)]
-    public string Location { get; set; } // Should this be required?
+    public string Address { get; set; }
 
-    public string StableType { get; set; } // required Enum here?
+    [StringLength(50)]
+    public required string County { get; set; }
 
-    public int StallCount { get; set; }
+    [StringLength(50)]
+    public int PostCode { get; set; }
+
+    public required string Type { get; set; } 
+
+    public int BoxCount { get; set; }
 
     public virtual List<UserStable>? UserStables { get; set; }
 
