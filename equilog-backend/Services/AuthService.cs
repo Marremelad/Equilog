@@ -130,4 +130,41 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                 ex.Message);
         }
     }
+    
+    public async Task<RefreshToken> CreateRefreshTokenAsync(int userId)
+    {
+        var refreshToken = Guid.NewGuid().ToString();
+    
+        var refreshTokenEntity = new RefreshToken
+        {
+            Token = refreshToken,
+            UserIdFk = userId,
+            ExpirationDate = DateTime.UtcNow.AddDays(7),
+            CreatedDate = DateTime.UtcNow,
+            IsRevoked = false,
+            IsUsed = false
+        };
+    
+        await context.RefreshTokens.AddAsync(refreshTokenEntity);
+        await context.SaveChangesAsync();
+    
+        return refreshTokenEntity;
+    }
+    
+    public bool ValidateRefreshToken(RefreshToken? token)
+    {
+        if (token == null)
+            return false;
+        
+        if (token.ExpirationDate <= DateTime.UtcNow)
+            return false;
+        
+        if (token.IsUsed)
+            return false;
+        
+        if (token.IsRevoked)
+            return false;
+        
+        return true;
+    }
 }
