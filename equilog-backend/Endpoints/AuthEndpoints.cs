@@ -37,13 +37,13 @@ public class AuthEndpoints
         return Result.Generate(await authService.LoginAsync(loginDto));
     }
     
-    private static async Task<IResult> RefreshToken(IAuthService authService, RefreshTokenRequestDto refreshTokenRequest)
+    private static async Task<IResult> RefreshToken(IAuthService authService, RefreshTokenDto refreshTokenDto)
     {
-        return Result.Generate(await authService.RefreshTokenAsync(refreshTokenRequest.RefreshToken));
+        return Result.Generate(await authService.RefreshTokenAsync(refreshTokenDto.RefreshToken));
     }
     
-    private static async Task<IResult> LogOut(IAuthService authService, RevokeTokenRequestDto revokeTokenRequest)
+    private static async Task<IResult> LogOut(IAuthService authService, RefreshTokenDto refreshTokenDto)
     {
-        return Result.Generate(await authService.RevokeRefreshTokenAsync(revokeTokenRequest.RefreshToken));
+        return Result.Generate(await authService.RevokeRefreshTokenAsync(refreshTokenDto.RefreshToken));
     }
 }
