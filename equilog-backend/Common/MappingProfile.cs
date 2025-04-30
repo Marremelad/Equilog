@@ -26,9 +26,9 @@ namespace equilog_backend.Common
             CreateMap<HorseUpdateDto, Horse>(MemberList.Source);
 
             CreateMap<Stable, StableDto>().ReverseMap();
+            CreateMap<Stable, StableSearchDto>(MemberList.Source);
             CreateMap<StableCreateDto, Stable>(MemberList.Source);
             CreateMap<StableUpdateDto, Stable>(MemberList.Source);
-            CreateMap<StableSearchDto, Stable>(MemberList.Source);
 
             CreateMap<StablePost, StablePostDto>().ReverseMap();
             CreateMap<StablePostCreateDto, StablePost>(MemberList.Source);
