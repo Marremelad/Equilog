@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using equilog_backend.Data;
 
@@ -11,9 +12,11 @@ using equilog_backend.Data;
 namespace equilog_backend.Migrations
 {
     [DbContext(typeof(EquilogDbContext))]
-    partial class EquilogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250414152143_JWT")]
+    partial class JWT
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,14 +47,9 @@ namespace equilog_backend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("UserIdFk")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("StableIdFk");
-
-                    b.HasIndex("UserIdFk");
 
                     b.ToTable("CalendarEvents");
                 });
@@ -83,67 +81,6 @@ namespace equilog_backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Horses");
-                });
-
-            modelBuilder.Entity("equilog_backend.Models.PasswordResetRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(254)
-                        .HasColumnType("nvarchar(254)");
-
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ResetCode")
-                        .IsRequired()
-                        .HasMaxLength(38)
-                        .HasColumnType("nvarchar(38)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PasswordResetRequests");
-                });
-
-            modelBuilder.Entity("equilog_backend.Models.RefreshToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<int>("UserIdFk")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserIdFk");
-
-                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.Stable", b =>
@@ -258,6 +195,11 @@ namespace equilog_backend.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -348,39 +290,6 @@ namespace equilog_backend.Migrations
                     b.ToTable("UserStables");
                 });
 
-            modelBuilder.Entity("equilog_backend.Models.WallPost", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Body")
-                        .HasMaxLength(280)
-                        .HasColumnType("nvarchar(280)");
-
-                    b.Property<DateTime?>("LastEdited")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("PostDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StableIdFk")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StableIdFk")
-                        .IsUnique();
-
-                    b.ToTable("WallPosts");
-                });
-
             modelBuilder.Entity("equilog_backend.Models.CalendarEvent", b =>
                 {
                     b.HasOne("equilog_backend.Models.Stable", "Stable")
@@ -389,26 +298,7 @@ namespace equilog_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("equilog_backend.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserIdFk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Stable");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("equilog_backend.Models.RefreshToken", b =>
-                {
-                    b.HasOne("equilog_backend.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserIdFk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.StableHorse", b =>
@@ -504,17 +394,6 @@ namespace equilog_backend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("equilog_backend.Models.WallPost", b =>
-                {
-                    b.HasOne("equilog_backend.Models.Stable", "Stable")
-                        .WithOne("WallPost")
-                        .HasForeignKey("equilog_backend.Models.WallPost", "StableIdFk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Stable");
-                });
-
             modelBuilder.Entity("equilog_backend.Models.CalendarEvent", b =>
                 {
                     b.Navigation("UserCalendarEvents");
@@ -534,8 +413,6 @@ namespace equilog_backend.Migrations
                     b.Navigation("StablePost");
 
                     b.Navigation("UserStables");
-
-                    b.Navigation("WallPost");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.User", b =>
