@@ -8,23 +8,21 @@ public class Stable
     public int Id { get; set; }
 
     [StringLength(50)]
-
     public required string Name { get; set; }
 
-    public required string Type { get; set; } 
-
-    public int? BoxCount { get; set; }
-
-    // Location
-
     [StringLength(50)]
-    public string? Address { get; set; }
+    public required string Type { get; set; }
 
     [StringLength(50)]
     public required string County { get; set; }
 
     [StringLength(50)]
+    public string? Address { get; set; }
+
+    [StringLength(50)]
     public int? PostCode { get; set; }
+
+    public int? BoxCount { get; set; }
 
     public virtual List<UserStable>? UserStables { get; set; }
 
