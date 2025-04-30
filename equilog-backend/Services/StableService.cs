@@ -50,10 +50,33 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             ex.Message);
       }
    }
-   public async Task<ApiResponse<List<StableDto>?>> SearchStablesAsync(string searchTerm, int page = 0, int pageSize = 10)
+   public async Task<ApiResponse<List<StableSearchDto>?>> SearchStablesAsync(string searchTerm, int page = 0, int pageSize = 10)
    {
-        throw new NotImplementedException();
-   }
+        try
+        {
+            // Convert search term to lowercase for case-insensitive search
+            var lowercaseSearchTerm = searchTerm.ToLower();
+
+            // Query stables that match the search term in their name
+            var stables = await context.Stables
+                .Where(s => s.Name.ToLower().Contains(lowercaseSearchTerm))
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // Map to DTOs
+            var stableDtos = mapper.Map<List<StableSearchDto>>(stables);
+
+            return ApiResponse<List<StableSearchDto>>.Success(HttpStatusCode.OK,
+                stableDtos,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<List<StableSearchDto>>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
 
    public async Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto)
    {
