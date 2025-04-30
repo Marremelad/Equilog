@@ -2,16 +2,14 @@
 
 namespace equilog_backend.DTOs.PasswordResetDTOs;
 
-public class PasswordResetWithTokenDto
+public class PasswordChangeDto
 {
-    [Required]
-    public required string Token { get; set; }
+    [EmailAddress]
+    public required string Email { get; set; }
     
-    [Required]
     [StringLength(100, MinimumLength = 8)]
     public required string NewPassword { get; set; }
     
-    [Required]
     [StringLength(100, MinimumLength = 8)]
     public required string ConfirmPassword { get; set; }
 }

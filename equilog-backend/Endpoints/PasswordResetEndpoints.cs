@@ -13,13 +13,13 @@ public class PasswordResetEndpoints
         app.MapPost("/api/validate-reset-code", ValidateResetToken)
             .WithName("ValidateResetCode");
         
-        // Reset password with token.
-        app.MapPost("/api/reset-password-with-token", ResetPasswordWithToken)
-            .WithName("RestPasswordWithToken");
-        
-        // Reset password
+        // Reset password.
         app.MapPost("/api/reset-password", ResetPassword)
             .WithName("RestPassword");
+        
+        // Change password.
+        app.MapPost("/api/change-password", ChangePassword)
+            .WithName("ChangePassword");
         
         // -- Endpoints for compositions --
         
@@ -35,16 +35,16 @@ public class PasswordResetEndpoints
         return Result.Generate(await passwordResetService.ValidateResetTokenAsync(validateResetTokenDto));
     }
 
-    private static async Task<IResult> ResetPasswordWithToken(IPasswordResetService passwordResetService,
-        PasswordResetWithTokenDto passwordResetWithTokenDto)
-    {
-        return Result.Generate(await passwordResetService.ResetPasswordWithTokenAsync(passwordResetWithTokenDto));
-    }
-
     private static async Task<IResult> ResetPassword(IPasswordResetService passwordResetService,
         PasswordResetDto passwordResetDto)
     {
         return Result.Generate(await passwordResetService.ResetPasswordAsync(passwordResetDto));
+    }
+
+    private static async Task<IResult> ChangePassword(IPasswordResetService passwordResetService,
+        PasswordChangeDto passwordChangeDto)
+    {
+        return Result.Generate(await passwordResetService.ChangePasswordAsync(passwordChangeDto));
     }
     
     // -- Result generators for compositions --

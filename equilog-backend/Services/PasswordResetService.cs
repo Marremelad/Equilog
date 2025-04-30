@@ -51,12 +51,12 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
         }
     }
     
-    public async Task<ApiResponse<Unit>> ResetPasswordWithTokenAsync(PasswordResetWithTokenDto passwordResetWithTokenDto)
+    public async Task<ApiResponse<Unit>> ResetPasswordAsync(PasswordResetDto passwordResetDto)
     {
         try
         {
             var passwordResetRequest = await context.PasswordResetRequests
-                .Where(prr => prr.Token == passwordResetWithTokenDto.Token)
+                .Where(prr => prr.Token == passwordResetDto.Token)
                 .FirstOrDefaultAsync();
             
             if (passwordResetRequest == null)
@@ -72,7 +72,7 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
                     "Reset token has expired. Please request a new password reset.");
             }
             
-            if (passwordResetWithTokenDto.NewPassword != passwordResetWithTokenDto.ConfirmPassword)
+            if (passwordResetDto.NewPassword != passwordResetDto.ConfirmPassword)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
                     "Passwords do not match.");
 
@@ -85,7 +85,7 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
                     "User account not found.");
             
             var salt = BCrypt.Net.BCrypt.GenerateSalt();
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(passwordResetWithTokenDto.NewPassword, salt);
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(passwordResetDto.NewPassword, salt);
 
             user.PasswordHash = passwordHash;
             
@@ -134,24 +134,24 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
         }
     }
 
-    public async Task<ApiResponse<Unit>> ResetPasswordAsync(PasswordResetDto passwordResetDto)
+    public async Task<ApiResponse<Unit>> ChangePasswordAsync(PasswordChangeDto passwordChangeDto)
     {
         try
         {
-            if (passwordResetDto.NewPassword != passwordResetDto.ConfirmPassword)
+            if (passwordChangeDto.NewPassword != passwordChangeDto.ConfirmPassword)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
                     "Passwords have to match.");
         
             var user = await context.Users
-                .Where(u => u.Email == passwordResetDto.Email)
+                .Where(u => u.Email == passwordChangeDto.Email) // Change this to Id.
                 .FirstOrDefaultAsync();
         
             if (user == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    $"Account tied to email {passwordResetDto.Email} does not exist.");
+                    $"Account tied to email {passwordChangeDto.Email} does not exist.");
         
             var salt = BCrypt.Net.BCrypt.GenerateSalt();
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword(passwordResetDto.NewPassword, salt);
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(passwordChangeDto.NewPassword, salt);
 
             user.PasswordHash = passwordHash;
             await context.SaveChangesAsync();

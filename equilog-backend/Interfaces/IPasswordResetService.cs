@@ -10,9 +10,9 @@ public interface IPasswordResetService
     
     Task<ApiResponse<Unit>> ValidateResetTokenAsync(ValidateResetTokenDto validateResetTokenDto);
 
-    Task<ApiResponse<Unit>> ResetPasswordAsync(PasswordResetDto passwordResetDto);
+    Task<ApiResponse<Unit>> ChangePasswordAsync(PasswordChangeDto passwordChangeDto);
 
-    Task<ApiResponse<Unit>> ResetPasswordWithTokenAsync(PasswordResetWithTokenDto passwordResetWithTokenDto);
+    Task<ApiResponse<Unit>> ResetPasswordAsync(PasswordResetDto passwordResetDto);
     
     Task<ApiResponse<Unit>> DeletePasswordResetRequestAsync(int passwordResetRequestId);
 }
