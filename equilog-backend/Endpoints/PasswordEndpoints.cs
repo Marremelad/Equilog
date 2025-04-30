@@ -5,7 +5,7 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.Endpoints;
 
-public class PasswordResetEndpoints
+public class PasswordEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
