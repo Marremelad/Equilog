@@ -17,8 +17,8 @@ public class StableEndpoints
             .WithName("GetStable");
 
         // Get stable(s) by name.
-        app.MapGet("/api/stable/{term:string}", SearchStable)
-            .WithName("SearchStable");
+        app.MapGet("/api/stable/{term:string}", SearchStables)
+            .WithName("SearchStables");
 
         // Create stable.
         app.MapPost("/api/stable/create", CreateStable)
@@ -52,9 +52,9 @@ public class StableEndpoints
         return Result.Generate(await stableService.GetStableAsync(id));
     }
 
-    public async Task<ApiResponse<List<StableSearchDto>?>> SearchStables(IStableService stableService, string searchTerm, int page = 0, int pageSize = 10)
+    public static async Task<IResult> SearchStables(IStableService stableService, string searchTerm, int page = 0, int pageSize = 10)
     {
-        return Result.Generate(await stableService.SearchStableAsync(searchTerm, page, pageSize));
+        return Result.Generate(await stableService.SearchStablesAsync(searchTerm, page, pageSize));
     }
 
     private static async Task<IResult> CreateStable(IStableService stableService, StableCreateDto stableCreateDto)
