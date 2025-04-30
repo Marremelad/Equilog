@@ -2,13 +2,13 @@
 
 public class StablePostDto
 {
-    public required int Id { get; set; }
+    public required int Id { get; init; }
     
-    public required string Title { get; set; }
+    public required string Title { get; init; }
 
-    public required string Content { get; set; }
+    public required string Content { get; init; }
 
-    public required DateTime Date { get; set; }
+    public required DateTime Date { get; init; }
 
-    public required bool IsPinned { get; set; }
+    public required bool IsPinned { get; init; }
 }

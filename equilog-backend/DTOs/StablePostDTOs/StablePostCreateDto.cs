@@ -2,15 +2,15 @@
 
 public class StablePostCreateDto
 {
-    public required int UserIdFk { get; set; }
+    public required int UserIdFk { get; init; }
 
-    public required int StableIdFk { get; set; }
+    public required int StableIdFk { get; init; }
 
-    public required string Title { get; set; }
+    public required string Title { get; init; }
 
-    public required string Content { get; set; }
+    public required string Content { get; init; }
 
-    public required DateTime Date { get; set; }
+    public required DateTime Date { get; init; }
 
-    public required bool IsPinned { get; set; }
+    public required bool IsPinned { get; init; }
 }

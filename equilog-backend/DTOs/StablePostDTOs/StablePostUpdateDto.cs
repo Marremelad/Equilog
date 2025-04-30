@@ -2,9 +2,9 @@
 
 public class StablePostUpdateDto
 {
-    public required int Id { get; set; }
+    public required int Id { get; init; }
 
-    public required string Title { get; set; }
+    public required string Title { get; init; }
 
-    public required string Content { get; set; }
+    public required string Content { get; init; }
 }
