@@ -17,7 +17,7 @@ public class StableEndpoints
             .WithName("GetStable");
 
         // Get stable(s) by name.
-        app.MapGet("/api/stable/{term:string}", SearchStables)
+        app.MapGet("/api/stable/search/{searchTerm}", SearchStables)
             .WithName("SearchStables");
 
         // Create stable.
