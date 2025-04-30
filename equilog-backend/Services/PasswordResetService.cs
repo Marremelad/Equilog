@@ -33,7 +33,7 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
             var passwordResetRequest = new PasswordResetRequest()
             {
                 Email = email,
-                ResetCode = Generate.PasswordResetCode(),
+                Token = Generate.PasswordResetCode(),
                 ExpirationDate = DateTime.Now.AddHours(24)
             };
 
@@ -51,19 +51,19 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
         }
     }
     
-    public async Task<ApiResponse<Unit>> ValidateResetCodeAsync(ValidateResetCodeDto validateResetCodeDto)
+    public async Task<ApiResponse<Unit>> ValidateResetTokenAsync(ValidateResetTokenDto validateResetTokenDto)
     {
         try
         {
             var passwordResetRequest = await context.PasswordResetRequests
-                .Where(prr => prr.Email == validateResetCodeDto.Email)
+                .Where(prr => prr.Email == validateResetTokenDto.Email)
                 .FirstOrDefaultAsync();
         
             if (passwordResetRequest == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                     "A password reset request for this account does not exist. Try creating a new one.");
 
-            if (passwordResetRequest.ResetCode != validateResetCodeDto.ResetCode)
+            if (passwordResetRequest.Token != validateResetTokenDto.Token)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
                     "Invalid reset code.");
             

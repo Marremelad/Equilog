@@ -9,7 +9,7 @@ public class EmailSendPasswordResetDto(PasswordResetRequestDto? passwordResetReq
     public string SenderEmail { get; set; } = "pontus.dorsay@outlook.com";
     public string Subject { get; set; } = "Equilog password reset";
 
-    private string GetResetUrl() => $"{resetBaseUrl}?token={passwordResetRequestDto?.ResetCode}";
+    private string GetResetUrl() => $"{resetBaseUrl}?token={passwordResetRequestDto?.Token}";
     
     public string PlainTextMessage => $"Hi! You have requested a password reset for your Equilog account.\n\n" + 
                                     $"Click the following link to reset your password:\n{GetResetUrl()}\n\n" + 

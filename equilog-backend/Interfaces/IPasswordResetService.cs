@@ -8,7 +8,7 @@ public interface IPasswordResetService
 {
     Task<ApiResponse<PasswordResetRequestDto?>> CreatePasswordResetRequestAsync(string email);
     
-    Task<ApiResponse<Unit>> ValidateResetCodeAsync(ValidateResetCodeDto validateResetCodeDto);
+    Task<ApiResponse<Unit>> ValidateResetTokenAsync(ValidateResetTokenDto validateResetTokenDto);
 
     Task<ApiResponse<Unit>> ResetPasswordAsync(PasswordResetDto passwordResetDto);
     

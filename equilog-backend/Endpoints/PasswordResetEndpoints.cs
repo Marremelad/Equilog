@@ -9,8 +9,8 @@ public class PasswordResetEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        // Validate reset code.
-        app.MapPost("/api/validate-reset-code", ValidateResetCode)
+        // Validate reset token.
+        app.MapPost("/api/validate-reset-code", ValidateResetToken)
             .WithName("ValidateResetCode");
         
         // Reset password
@@ -25,10 +25,10 @@ public class PasswordResetEndpoints
             .WithName("SendPasswordResetEmail");
     }
 
-    private static async Task<IResult> ValidateResetCode(IPasswordResetService passwordResetService,
-        ValidateResetCodeDto validateResetCodeDto)
+    private static async Task<IResult> ValidateResetToken(IPasswordResetService passwordResetService,
+        ValidateResetTokenDto validateResetTokenDto)
     {
-        return Result.Generate(await passwordResetService.ValidateResetCodeAsync(validateResetCodeDto));
+        return Result.Generate(await passwordResetService.ValidateResetTokenAsync(validateResetTokenDto));
     }
 
     private static async Task<IResult> ResetPassword(IPasswordResetService passwordResetService,
