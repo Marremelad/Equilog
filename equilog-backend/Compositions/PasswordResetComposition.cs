@@ -1,12 +1,15 @@
 ﻿using System.Net;
 using equilog_backend.Common;
-using equilog_backend.DTOs.EmailDTOs;
 using equilog_backend.DTOs.EmailSendDTOs;
 using equilog_backend.Interfaces;
+using equilog_backend.Security;
 
 namespace equilog_backend.Compositions;
 
-public class PasswordResetComposition(IPasswordResetService passwordResetService, IEmailService emailService) 
+public class PasswordResetComposition(
+    IPasswordResetService passwordResetService,
+    IEmailService emailService,
+    PasswordResetSettings passwordResetSettings) 
     : IPasswordResetComposition
 {
     public async Task<ApiResponse<Unit>> SendPasswordResetEmailAsync(string email)
@@ -19,7 +22,9 @@ public class PasswordResetComposition(IPasswordResetService passwordResetService
                 $"Failed to create password reset request: {passwordResetResponse.Message}");
         }
 
-        var emailResponse = await emailService.SendEmailAsync(new EmailSendPasswordResetDto(passwordResetResponse.Value), email);
+        var emailResponse = await emailService.SendEmailAsync(
+            new EmailSendPasswordResetDto(passwordResetResponse.Value, passwordResetSettings.BaseUrl),
+            email);
 
         if (!emailResponse.IsSuccess)
         {
