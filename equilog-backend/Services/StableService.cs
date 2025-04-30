@@ -54,21 +54,16 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
    {
         try
         {
-            // Convert search term to lowercase for case-insensitive search
             var lowercaseSearchTerm = searchTerm.ToLower();
 
-            // Query stables that match the search term in their name
             var stables = await context.Stables
                 .Where(s => s.Name.ToLower().Contains(lowercaseSearchTerm))
                 .Skip(page * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            // Map to DTOs
-            var stableDtos = mapper.Map<List<StableSearchDto>>(stables);
-
             return ApiResponse<List<StableSearchDto>>.Success(HttpStatusCode.OK,
-                stableDtos,
+                mapper.Map<List<StableSearchDto>>(stables),
                 null);
         }
         catch (Exception ex)
