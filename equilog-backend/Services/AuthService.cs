@@ -79,7 +79,6 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken.Token,
-                AccessTokenExpiration = DateTime.UtcNow.AddDays(jwtSettings.DurationInMinutes)
             };
             
             return ApiResponse<AuthResponseDto>.Success(
@@ -121,7 +120,6 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken.Token,
-                AccessTokenExpiration = DateTime.UtcNow.AddDays(jwtSettings.DurationInMinutes),
             };
             
             return ApiResponse<AuthResponseDto>.Success(
@@ -205,7 +203,6 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             {
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken.Token,
-                AccessTokenExpiration = DateTime.UtcNow.AddMinutes(jwtSettings.DurationInMinutes)
             };
         
             return ApiResponse<AuthResponseDto?>.Success(
