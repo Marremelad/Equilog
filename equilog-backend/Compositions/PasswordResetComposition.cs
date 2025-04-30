@@ -7,14 +7,14 @@ using equilog_backend.Security;
 namespace equilog_backend.Compositions;
 
 public class PasswordResetComposition(
-    IPasswordResetService passwordResetService,
+    IPasswordService passwordService,
     IEmailService emailService,
     PasswordResetSettings passwordResetSettings) 
     : IPasswordResetComposition
 {
     public async Task<ApiResponse<Unit>> SendPasswordResetEmailAsync(string email)
     {
-        var passwordResetResponse = await passwordResetService.CreatePasswordResetRequestAsync(email);
+        var passwordResetResponse = await passwordService.CreatePasswordResetRequestAsync(email);
 
         if (!passwordResetResponse.IsSuccess)
         {
@@ -28,7 +28,7 @@ public class PasswordResetComposition(
 
         if (!emailResponse.IsSuccess)
         {
-            await passwordResetService.DeletePasswordResetRequestAsync(passwordResetResponse.Value!.Id);
+            await passwordService.DeletePasswordResetRequestAsync(passwordResetResponse.Value!.Id);
             
             return ApiResponse<Unit>.Failure(emailResponse.StatusCode,
                 $"Failed to send Email: {emailResponse.Message}. Password reset request creation was rolled back.");

@@ -29,22 +29,22 @@ public class PasswordResetEndpoints
             .WithName("SendPasswordResetEmail");
     }
 
-    private static async Task<IResult> ValidateResetToken(IPasswordResetService passwordResetService,
+    private static async Task<IResult> ValidateResetToken(IPasswordService passwordService,
         ValidateResetTokenDto validateResetTokenDto)
     {
-        return Result.Generate(await passwordResetService.ValidateResetTokenAsync(validateResetTokenDto));
+        return Result.Generate(await passwordService.ValidateResetTokenAsync(validateResetTokenDto));
     }
 
-    private static async Task<IResult> ResetPassword(IPasswordResetService passwordResetService,
+    private static async Task<IResult> ResetPassword(IPasswordService passwordService,
         PasswordResetDto passwordResetDto)
     {
-        return Result.Generate(await passwordResetService.ResetPasswordAsync(passwordResetDto));
+        return Result.Generate(await passwordService.ResetPasswordAsync(passwordResetDto));
     }
 
-    private static async Task<IResult> ChangePassword(IPasswordResetService passwordResetService,
+    private static async Task<IResult> ChangePassword(IPasswordService passwordService,
         PasswordChangeDto passwordChangeDto)
     {
-        return Result.Generate(await passwordResetService.ChangePasswordAsync(passwordChangeDto));
+        return Result.Generate(await passwordService.ChangePasswordAsync(passwordChangeDto));
     }
     
     // -- Result generators for compositions --

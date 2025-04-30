@@ -4,7 +4,7 @@ using equilog_backend.Models;
 
 namespace equilog_backend.Interfaces;
 
-public interface IPasswordResetService
+public interface IPasswordService
 {
     Task<ApiResponse<PasswordResetRequestDto?>> CreatePasswordResetRequestAsync(string email);
     

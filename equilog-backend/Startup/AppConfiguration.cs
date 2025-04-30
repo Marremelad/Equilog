@@ -173,7 +173,7 @@ public static class AppConfiguration
     {
         // Authentication services.
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IPasswordResetService, PasswordResetService>();
+        services.AddScoped<IPasswordService, PasswordService>();
         
         // MailTrap services.
         services.AddScoped<IMailTrapService, MailTrapService>();

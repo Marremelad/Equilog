@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
 
-public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IPasswordResetService
+public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswordService
 {
     public async Task<ApiResponse<PasswordResetRequestDto?>> CreatePasswordResetRequestAsync(string email)
     {
