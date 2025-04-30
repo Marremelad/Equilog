@@ -13,6 +13,10 @@ public class PasswordResetEndpoints
         app.MapPost("/api/validate-reset-code", ValidateResetToken)
             .WithName("ValidateResetCode");
         
+        // Reset password with token.
+        app.MapPost("/api/reset-password-with-token", ResetPasswordWithToken)
+            .WithName("RestPasswordWithToken");
+        
         // Reset password
         app.MapPost("/api/reset-password", ResetPassword)
             .WithName("RestPassword");
@@ -29,6 +33,12 @@ public class PasswordResetEndpoints
         ValidateResetTokenDto validateResetTokenDto)
     {
         return Result.Generate(await passwordResetService.ValidateResetTokenAsync(validateResetTokenDto));
+    }
+
+    private static async Task<IResult> ResetPasswordWithToken(IPasswordResetService passwordResetService,
+        PasswordResetWithTokenDto passwordResetWithTokenDto)
+    {
+        return Result.Generate(await passwordResetService.ResetPasswordWithTokenAsync(passwordResetWithTokenDto));
     }
 
     private static async Task<IResult> ResetPassword(IPasswordResetService passwordResetService,
