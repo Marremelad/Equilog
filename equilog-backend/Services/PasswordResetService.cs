@@ -51,6 +51,59 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
         }
     }
     
+    public async Task<ApiResponse<Unit>> ResetPasswordWithTokenAsync(PasswordResetWithTokenDto passwordResetWithTokenDto)
+    {
+        try
+        {
+            var passwordResetRequest = await context.PasswordResetRequests
+                .Where(prr => prr.Token == passwordResetWithTokenDto.Token)
+                .FirstOrDefaultAsync();
+            
+            if (passwordResetRequest == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Invalid reset token.");
+            
+            if (passwordResetRequest.ExpirationDate < DateTime.Now)
+            {
+                context.PasswordResetRequests.Remove(passwordResetRequest);
+                await context.SaveChangesAsync();
+                
+                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                    "Reset token has expired. Please request a new password reset.");
+            }
+            
+            if (passwordResetWithTokenDto.NewPassword != passwordResetWithTokenDto.ConfirmPassword)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                    "Passwords do not match.");
+
+            var user = await context.Users
+                .Where(u => u.Email == passwordResetRequest.Email)
+                .FirstOrDefaultAsync();
+                
+            if (user == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "User account not found.");
+            
+            var salt = BCrypt.Net.BCrypt.GenerateSalt();
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(passwordResetWithTokenDto.NewPassword, salt);
+
+            user.PasswordHash = passwordHash;
+            
+            context.PasswordResetRequests.Remove(passwordResetRequest);
+            
+            await context.SaveChangesAsync();
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                "Password reset successful.");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+    
     public async Task<ApiResponse<Unit>> ValidateResetTokenAsync(ValidateResetTokenDto validateResetTokenDto)
     {
         try
