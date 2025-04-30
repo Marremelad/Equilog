@@ -20,13 +20,13 @@ public class PasswordResetService(EquilogDbContext context, IMapper mapper) : IP
                 return ApiResponse<PasswordResetRequestDto>.Failure(HttpStatusCode.BadRequest,
                     $"Account with the email {email} does not exist");
             
-            var oldPasswordResetRequest = await context.PasswordResetRequests
+            var storedPasswordResetRequest = await context.PasswordResetRequests
                 .Where(prr => prr.Email == email)
                 .FirstOrDefaultAsync();
 
-            if (oldPasswordResetRequest != null)
+            if (storedPasswordResetRequest != null)
             {
-                context.PasswordResetRequests.Remove(oldPasswordResetRequest);
+                context.PasswordResetRequests.Remove(storedPasswordResetRequest);
                 await context.SaveChangesAsync();
             }
 
