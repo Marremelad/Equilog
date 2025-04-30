@@ -2,7 +2,7 @@
 using equilog_backend.DTOs.AuthDTOs;
 using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.DTOs.HorseDTOs;
-using equilog_backend.DTOs.PasswordResetDTOs;
+using equilog_backend.DTOs.PasswordDTOs;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.DTOs.UserDTOs;

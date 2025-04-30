@@ -1,4 +1,4 @@
-﻿namespace equilog_backend.DTOs.PasswordResetDTOs;
+﻿namespace equilog_backend.DTOs.PasswordDTOs;
 
 public class PasswordResetRequestDto
 {

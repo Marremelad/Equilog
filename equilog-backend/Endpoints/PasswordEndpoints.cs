@@ -1,6 +1,6 @@
 ﻿using equilog_backend.Common;
 using equilog_backend.DTOs.EmailDTOs;
-using equilog_backend.DTOs.PasswordResetDTOs;
+using equilog_backend.DTOs.PasswordDTOs;
 using equilog_backend.Interfaces;
 
 namespace equilog_backend.Endpoints;
@@ -9,10 +9,6 @@ public class PasswordEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        // Validate reset token.
-        app.MapPost("/api/validate-reset-code", ValidateResetToken)
-            .WithName("ValidateResetCode");
-        
         // Reset password.
         app.MapPost("/api/reset-password", ResetPassword)
             .WithName("RestPassword");
@@ -28,13 +24,7 @@ public class PasswordEndpoints
             .AddEndpointFilter<ValidationFilter<EmailDto>>()
             .WithName("SendPasswordResetEmail");
     }
-
-    private static async Task<IResult> ValidateResetToken(IPasswordService passwordService,
-        ValidateResetTokenDto validateResetTokenDto)
-    {
-        return Result.Generate(await passwordService.ValidateResetTokenAsync(validateResetTokenDto));
-    }
-
+    
     private static async Task<IResult> ResetPassword(IPasswordService passwordService,
         PasswordResetDto passwordResetDto)
     {

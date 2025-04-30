@@ -2,7 +2,7 @@
 using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
-using equilog_backend.DTOs.PasswordResetDTOs;
+using equilog_backend.DTOs.PasswordDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -104,36 +104,6 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
         }
     }
     
-    public async Task<ApiResponse<Unit>> ValidateResetTokenAsync(ValidateResetTokenDto validateResetTokenDto)
-    {
-        try
-        {
-            var passwordResetRequest = await context.PasswordResetRequests
-                .Where(prr => prr.Email == validateResetTokenDto.Email)
-                .FirstOrDefaultAsync();
-        
-            if (passwordResetRequest == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    "A password reset request for this account does not exist. Try creating a new one.");
-
-            if (passwordResetRequest.Token != validateResetTokenDto.Token)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
-                    "Invalid reset code.");
-            
-            context.PasswordResetRequests.Remove(passwordResetRequest);
-            await context.SaveChangesAsync();
-                
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
-                Unit.Value, 
-                "Reset code validated successfully.");
-        }
-        catch (Exception ex)
-        {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
-                ex.Message);
-        }
-    }
-
     public async Task<ApiResponse<Unit>> ChangePasswordAsync(PasswordChangeDto passwordChangeDto)
     {
         try
