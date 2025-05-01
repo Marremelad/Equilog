@@ -1,6 +1,7 @@
 ﻿using equilog_backend.Common;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace equilog_backend.Endpoints;
 
@@ -17,7 +18,7 @@ public class StableEndpoints
             .WithName("GetStable");
 
         // Get stable(s) by name.
-        app.MapGet("/api/stable/search/{searchTerm}", SearchStables)
+        app.MapGet("/api/stable/search", SearchStables)
             .WithName("SearchStables");
 
         // Create stable.
@@ -52,7 +53,7 @@ public class StableEndpoints
         return Result.Generate(await stableService.GetStableAsync(id));
     }
 
-    public static async Task<IResult> SearchStables(IStableService stableService, string searchTerm, int page = 0, int pageSize = 10)
+    public static async Task<IResult> SearchStables(IStableService stableService, [FromQuery] string searchTerm = "", [FromQuery] int page = 0, [FromQuery] int pageSize = 10)
     {
         return Result.Generate(await stableService.SearchStablesAsync(searchTerm, page, pageSize));
     }
