@@ -322,6 +322,90 @@ namespace equilog_backend_test_unit
         }
 
         [Fact]
+        public void Should_Fail_When_Password_HasNoUppercase()
+        {
+            // Arrange
+            var dto = new RegisterDto
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john.doe@example.com",
+                UserName = "johndoe123",
+                Password = "password123!",
+                PhoneNumber = "+1234567890"
+            };
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.Password);
+        }
+
+        [Fact]
+        public void Should_Fail_When_Password_HasNoLowercase()
+        {
+            // Arrange
+            var dto = new RegisterDto
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john.doe@example.com",
+                UserName = "johndoe123",
+                Password = "PASSWORD123!",
+                PhoneNumber = "+1234567890"
+            };
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.Password);
+        }
+
+        [Fact]
+        public void Should_Fail_When_Password_HasNoDigit()
+        {
+            // Arrange
+            var dto = new RegisterDto
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john.doe@example.com",
+                UserName = "johndoe123",
+                Password = "Password!",
+                PhoneNumber = "+1234567890"
+            };
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.Password);
+        }
+
+        [Fact]
+        public void Should_Fail_When_Password_HasNoSpecialChar()
+        {
+            // Arrange
+            var dto = new RegisterDto
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john.doe@example.com",
+                UserName = "johndoe123",
+                Password = "Password123",
+                PhoneNumber = "+1234567890"
+            };
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.Password);
+        }
+
+        [Fact]
         public void Should_Fail_When_PhoneNumber_ExceedsMaxLength()
         {
             // Arrange
