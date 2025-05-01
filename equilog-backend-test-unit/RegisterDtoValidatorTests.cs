@@ -23,7 +23,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 UserName = "johndoe",
-                Password = "password123",
+                Password = "Password123!",
                 PhoneNumber = "1234567890"
             };
 
@@ -44,7 +44,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 UserName = "johndoe",
-                Password = "password123",
+                Password = "Password123!",
                 PhoneNumber = null
             };
 
@@ -67,7 +67,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 UserName = "johndoe",
-                Password = "password123"
+                Password = "Password123!"
             };
 
             // Act
@@ -88,7 +88,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 UserName = "johndoe",
-                Password = "password123"
+                Password = "Password123!"
             };
 
             // Act
@@ -111,7 +111,7 @@ namespace equilog_backend_test_unit
                 LastName = lastName,
                 Email = "john.doe@example.com",
                 UserName = "johndoe",
-                Password = "password123"
+                Password = "Password123!"
             };
 
             // Act
@@ -132,7 +132,7 @@ namespace equilog_backend_test_unit
                 LastName = new string('A', 51),
                 Email = "john.doe@example.com",
                 UserName = "johndoe",
-                Password = "password123"
+                Password = "Password123!"
             };
 
             // Act
@@ -155,7 +155,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = email,
                 UserName = "johndoe",
-                Password = "password123"
+                Password = "Password123!"
             };
 
             // Act
@@ -177,7 +177,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = longEmail,
                 UserName = "johndoe",
-                Password = "password123"
+                Password = "Password123!"
             };
 
             // Act
@@ -201,7 +201,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = email,
                 UserName = "johndoe",
-                Password = "password123"
+                Password = "Password123!"
             };
 
             // Act
@@ -224,7 +224,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 UserName = userName,
-                Password = "password123"
+                Password = "Password123!"
             };
 
             // Act
@@ -245,7 +245,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 UserName = new string('a', 31),
-                Password = "password123"
+                Password = "Password123!"
             };
 
             // Act
@@ -289,7 +289,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 UserName = "johndoe",
-                Password = "short"  // 5 chars, minimum is 8
+                Password = "Pass1!"  // 6 chars, minimum is 8
             };
 
             // Act
@@ -310,7 +310,7 @@ namespace equilog_backend_test_unit
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 UserName = "johndoe",
-                Password = new string('a', 101)
+                Password = "Password123!" + new string('a', 101)
             };
 
             // Act
