@@ -7,12 +7,12 @@ namespace equilog_backend.Endpoints
     {
         public static void RegisterEndpoints(WebApplication app)
         {
-            app.MapGet("/api/userstables/{id:int}", GetUserStable)
-                .WithName("GetUserStable");
+            app.MapGet("/api/userstables/user/{userId:int}", GetUserStables)
+                .WithName("GetUserStables");
         }
-        private static async Task<IResult> GetUserStable(IUserService userService)
+        private static async Task<IResult> GetUserStables(IUserStableService userStableService, int userId)
         {
-            return Result.Generate(await userService.GetUserStableAsync());
+            return Result.Generate(await userStableService.GetUserStablesAsync(userId));
         }
     }
 }
