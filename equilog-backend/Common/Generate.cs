@@ -7,7 +7,6 @@ public static class Generate
         return Convert.ToBase64String(Guid.NewGuid().ToByteArray())
             .Replace("/", "_")
             .Replace("+", "-")
-            .Replace("=", "")
-            .Substring(0, 24);
+            .Replace("=", "");
     }
 }
