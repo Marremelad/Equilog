@@ -6,6 +6,7 @@ using equilog_backend.DTOs.PasswordDTOs;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.DTOs.UserDTOs;
+using equilog_backend.DTOs.UserStableDTOs;
 using equilog_backend.DTOs.WallPostDTOs;
 using equilog_backend.Models;
 
@@ -44,6 +45,8 @@ namespace equilog_backend.Common
             CreateMap<WallPostClearDto, WallPost>(MemberList.Source);
 
             CreateMap<PasswordResetRequest, PasswordResetRequestDto>().ReverseMap();
+
+            CreateMap<UserStable, UserStableDto>();
         }
     }
 }
