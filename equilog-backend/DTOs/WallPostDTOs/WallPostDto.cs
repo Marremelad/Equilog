@@ -5,14 +5,14 @@ namespace equilog_backend.DTOs.WallPostDTOs
     public class WallPostDto
     {
         [Required]
-        public int StableIdFk { get; set; }
+        public int StableIdFk { get; init; }
 
-        public string? Title { get; set; } = null;
+        public string? Title { get; init; }
 
-        public string? Body { get; set; } = null;
+        public string? Body { get; init; }
 
-        public DateTime? PostDate { get; set; } = null;
+        public DateTime? PostDate { get; init; }
 
-        public DateTime? LastEdited { get; set; } = null;
+        public DateTime? LastEdited { get; init; }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace equilog_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Init32 : Migration
+    public partial class Init33 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,21 @@ namespace equilog_backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Horses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PasswordResetRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(38)", maxLength: 38, nullable: false),
+                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PasswordResetRequests", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,34 +66,11 @@ namespace equilog_backend.Migrations
                     Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Salt = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CalendarEvents",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StableIdFk = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CalendarEvents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CalendarEvents_Stables_StableIdFk",
-                        column: x => x.StableIdFk,
-                        principalTable: "Stables",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,6 +95,82 @@ namespace equilog_backend.Migrations
                         name: "FK_StableHorses_Stables_StableIdFk",
                         column: x => x.StableIdFk,
                         principalTable: "Stables",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WallPosts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Body = table.Column<string>(type: "nvarchar(280)", maxLength: 280, nullable: true),
+                    PostDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastEdited = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    StableIdFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WallPosts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WallPosts_Stables_StableIdFk",
+                        column: x => x.StableIdFk,
+                        principalTable: "Stables",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CalendarEvents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserIdFk = table.Column<int>(type: "int", nullable: false),
+                    StableIdFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CalendarEvents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CalendarEvents_Stables_StableIdFk",
+                        column: x => x.StableIdFk,
+                        principalTable: "Stables",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CalendarEvents_Users_UserIdFk",
+                        column: x => x.UserIdFk,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    UserIdFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_Users_UserIdFk",
+                        column: x => x.UserIdFk,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -223,6 +291,16 @@ namespace equilog_backend.Migrations
                 column: "StableIdFk");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CalendarEvents_UserIdFk",
+                table: "CalendarEvents",
+                column: "UserIdFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserIdFk",
+                table: "RefreshTokens",
+                column: "UserIdFk");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StableHorses_HorseIdFk",
                 table: "StableHorses",
                 column: "HorseIdFk");
@@ -271,11 +349,23 @@ namespace equilog_backend.Migrations
                 name: "IX_UserStables_UserIdFk",
                 table: "UserStables",
                 column: "UserIdFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WallPosts_StableIdFk",
+                table: "WallPosts",
+                column: "StableIdFk",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "PasswordResetRequests");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
+
             migrationBuilder.DropTable(
                 name: "StableHorses");
 
@@ -292,16 +382,19 @@ namespace equilog_backend.Migrations
                 name: "UserStables");
 
             migrationBuilder.DropTable(
+                name: "WallPosts");
+
+            migrationBuilder.DropTable(
                 name: "CalendarEvents");
 
             migrationBuilder.DropTable(
                 name: "Horses");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Stables");
 
             migrationBuilder.DropTable(
-                name: "Stables");
+                name: "Users");
         }
     }
 }

@@ -1,21 +1,21 @@
 ﻿using equilog_backend.Common;
 using equilog_backend.DTOs.EmailDTOs;
-using equilog_backend.DTOs.PasswordResetDTOs;
+using equilog_backend.DTOs.PasswordDTOs;
 using equilog_backend.Interfaces;
 
 namespace equilog_backend.Endpoints;
 
-public class PasswordResetEndpoints
+public class PasswordEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        // Validate reset code.
-        app.MapPost("/api/validate-reset-code", ValidateResetCode)
-            .WithName("ValidateResetCode");
-        
-        // Reset password
+        // Reset password.
         app.MapPost("/api/reset-password", ResetPassword)
             .WithName("RestPassword");
+        
+        // Change password.
+        app.MapPost("/api/change-password", ChangePassword)
+            .WithName("ChangePassword");
         
         // -- Endpoints for compositions --
         
@@ -24,17 +24,17 @@ public class PasswordResetEndpoints
             .AddEndpointFilter<ValidationFilter<EmailDto>>()
             .WithName("SendPasswordResetEmail");
     }
-
-    private static async Task<IResult> ValidateResetCode(IPasswordResetService passwordResetService,
-        ValidateResetCodeDto validateResetCodeDto)
-    {
-        return Result.Generate(await passwordResetService.ValidateResetCodeAsync(validateResetCodeDto));
-    }
-
-    private static async Task<IResult> ResetPassword(IPasswordResetService passwordResetService,
+    
+    private static async Task<IResult> ResetPassword(IPasswordService passwordService,
         PasswordResetDto passwordResetDto)
     {
-        return Result.Generate(await passwordResetService.ResetPasswordAsync(passwordResetDto));
+        return Result.Generate(await passwordService.ResetPasswordAsync(passwordResetDto));
+    }
+
+    private static async Task<IResult> ChangePassword(IPasswordService passwordService,
+        PasswordChangeDto passwordChangeDto)
+    {
+        return Result.Generate(await passwordService.ChangePasswordAsync(passwordChangeDto));
     }
     
     // -- Result generators for compositions --

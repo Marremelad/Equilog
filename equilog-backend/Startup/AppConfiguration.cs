@@ -28,10 +28,11 @@ public static class AppConfiguration
 
         // Authentication and security.
         ConfigureAuthentication(services, configuration);
+        ConfigurePasswordResetSettings(services, configuration);
         
         // Twilio and Sendgrid services.
-        ConfigureTwilio(services, configuration);
-        ConfigureSendgrid(services, configuration);
+        ConfigureTwilioSettings(services, configuration);
+        ConfigureSendgridSettings(services, configuration);
 
         // Cross-cutting concerns.
         AddAutoMapperProfiles(services);
@@ -98,8 +99,21 @@ public static class AppConfiguration
                 };
             });
     }
+
+    private static void ConfigurePasswordResetSettings(IServiceCollection services, IConfiguration configuration)
+    {
+        var passwordResetSettings = configuration.GetSection("PasswordResetSettings").Get<PasswordResetSettings>();
+
+        if (passwordResetSettings == null)
+            throw new InvalidOperationException("PasswordResetSettings not found in configuration");
+
+        if (string.IsNullOrEmpty(passwordResetSettings.BaseUrl))
+            throw new InvalidOperationException("PasswordResetSettings.BaseUrl not found in configuration");
+
+        services.AddSingleton(passwordResetSettings);
+    }
     
-    private static void ConfigureTwilio(IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureTwilioSettings(IServiceCollection services, IConfiguration configuration)
     {
         var twilioSettings = configuration.GetSection("TwilioSettings").Get<TwilioSettings>();
     
@@ -120,7 +134,7 @@ public static class AppConfiguration
         services.AddSingleton(twilioSettings);
     }
     
-    private static void ConfigureSendgrid(IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureSendgridSettings(IServiceCollection services, IConfiguration configuration)
     {
         var sendGridSettings = configuration.GetSection("SendGridSettings").Get<SendGridSettings>();
         if (sendGridSettings == null)
@@ -159,8 +173,7 @@ public static class AppConfiguration
     {
         // Authentication services.
         services.AddScoped<IAuthService, AuthService>();
-
-        services.AddScoped<IPasswordResetService, PasswordResetService>();
+        services.AddScoped<IPasswordService, PasswordService>();
         
         // MailTrap services.
         services.AddScoped<IMailTrapService, MailTrapService>();

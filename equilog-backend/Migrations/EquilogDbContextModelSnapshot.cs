@@ -101,7 +101,7 @@ namespace equilog_backend.Migrations
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ResetCode")
+                    b.Property<string>("Token")
                         .IsRequired()
                         .HasMaxLength(38)
                         .HasColumnType("nvarchar(38)");

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace equilog_backend.DTOs.PasswordResetDTOs;
+namespace equilog_backend.DTOs.PasswordDTOs;
 
-public class PasswordResetDto
+public class PasswordChangeDto
 {
     [EmailAddress]
     public required string Email { get; set; }
