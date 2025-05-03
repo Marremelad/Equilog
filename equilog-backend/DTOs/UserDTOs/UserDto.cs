@@ -3,14 +3,14 @@
 {
     public class UserDto
     {
-        public required int Id { get; set; }
+        public required int Id { get; init; }
 
-        public required string FirstName { get; set; }
+        public required string FirstName { get; init; }
 
-        public required string LastName { get; set; }
+        public required string LastName { get; init; }
         
-        public required string Email { get; set; }
+        public required string Email { get; init; }
         
-        public string? PhoneNumber { get; set; }
+        public string? PhoneNumber { get; init; }
     }
 }

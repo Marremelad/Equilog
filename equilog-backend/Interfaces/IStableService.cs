@@ -7,7 +7,7 @@ public interface IStableService
 {
     Task<ApiResponse<List<StableDto>?>> GetStablesAsync();
 
-    Task<ApiResponse<StableDto?>> GetStableAsync(int id);
+    Task<ApiResponse<StableDto?>> GetStableAsync(int stableId);
 
     Task<ApiResponse<List<StableSearchDto>?>> SearchStablesAsync(string searchTerm, int page = 0, int pageSize = 10);
 
@@ -15,5 +15,5 @@ public interface IStableService
 
     Task<ApiResponse<Unit>> UpdateStableAsync(StableUpdateDto stableUpdateDto);
 
-    Task<ApiResponse<Unit>> DeleteStableAsync(int id);
+    Task<ApiResponse<Unit>> DeleteStableAsync(int stableId);
 }

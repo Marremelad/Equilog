@@ -101,7 +101,7 @@ namespace equilog_backend.Migrations
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ResetCode")
+                    b.Property<string>("Token")
                         .IsRequired()
                         .HasMaxLength(38)
                         .HasColumnType("nvarchar(38)");
@@ -109,6 +109,41 @@ namespace equilog_backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PasswordResetRequests");
+                });
+
+            modelBuilder.Entity("equilog_backend.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<int>("UserIdFk")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserIdFk");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.Stable", b =>
@@ -381,6 +416,17 @@ namespace equilog_backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Stable");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("equilog_backend.Models.RefreshToken", b =>
+                {
+                    b.HasOne("equilog_backend.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

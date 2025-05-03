@@ -8,7 +8,7 @@ public interface IEmail
     
     string Subject { get; set; }
 
-    string PlainTextMessage { get; set; }
+    string PlainTextMessage { get; }
 
-    string HtmlMessage { get; set; }
+    string HtmlMessage { get; }
 }
