@@ -6,17 +6,26 @@ using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace equilog_backend.Services;
 
 public class StablePostService(EquilogDbContext context, IMapper mapper) : IStablePostService
 {
-    public async Task<ApiResponse<List<StablePostDto>?>> GetStablePostsAsync()
+    public async Task<ApiResponse<List<StablePostDto>?>> GetStablePostsAsync(int stableId)
     {
         try
         {
-            var stablePostDtos = mapper.Map<List<StablePostDto>>(await context.StablePosts.ToListAsync());
-    
+            var stableWithPosts = await context.Stables
+                .Include(stable => stable.StablePosts)
+                .FirstOrDefaultAsync(stable => stable.Id == stableId);
+
+            if (stableWithPosts == null)
+                return ApiResponse<List<StablePostDto>>.Failure(HttpStatusCode.NotFound,
+                    "Error: Stable not found");
+
+            var stablePostDtos = mapper.Map<List<StablePostDto>>(stableWithPosts.StablePosts);
+
             return ApiResponse<List<StablePostDto>>.Success(HttpStatusCode.OK,
                 stablePostDtos,
                 null);
