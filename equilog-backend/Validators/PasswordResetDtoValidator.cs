@@ -1,4 +1,4 @@
-﻿using equilog_backend.DTOs.PasswordResetDTOs;
+﻿using equilog_backend.DTOs.PasswordDTOs;
 using FluentValidation;
 
 namespace equilog_backend.Validators
@@ -7,10 +7,6 @@ namespace equilog_backend.Validators
     {
         public PasswordResetDtoValidator()
         {
-            RuleFor(x => x.Email)
-                .NotEmpty().WithMessage("Email is required.")
-                .EmailAddress().WithMessage("A valid email address is required.");
-
             RuleFor(x => x.NewPassword)
                 .NotEmpty().WithMessage("New password is required.")
                 .MinimumLength(8).WithMessage("Password must be at least 8 characters.")

@@ -1,4 +1,5 @@
-﻿using equilog_backend.DTOs.PasswordResetDTOs;
+﻿using equilog_backend.DTOs.PasswordDTOs;
+using equilog_backend.DTOs.PasswordResetDTOs;
 using equilog_backend.Validators;
 using FluentValidation.TestHelper;
 
