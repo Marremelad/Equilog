@@ -2,10 +2,10 @@
 {
     public class UserUpdateDto
     {
-        public required int Id { get; set; }
+        public required int Id { get; init; }
 
-        public required string FirstName { get; set; }
+        public required string FirstName { get; init; }
 
-        public required string LastName { get; set; }
+        public required string LastName { get; init; }
     }
 }

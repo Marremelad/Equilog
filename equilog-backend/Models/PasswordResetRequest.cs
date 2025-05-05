@@ -13,7 +13,7 @@ public class PasswordResetRequest
     public required string Email { get; set; }
 
     [StringLength(38)]
-    public required string ResetCode { get; set; }
+    public required string Token { get; set; }
 
     public required DateTime ExpirationDate { get; set; }
 }

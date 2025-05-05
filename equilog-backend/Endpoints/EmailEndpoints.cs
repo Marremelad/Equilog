@@ -9,8 +9,8 @@ public class EmailEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        // Send Twilio email.
-        app.MapPost("/api/twilio-mail/send/", SendEmail)
+        // Send Email.
+        app.MapPost("/api/email-send/welcome/", SendEmail)
             .AddEndpointFilter<ValidationFilter<EmailDto>>()
             .WithName("SendTwilioMail");
     }

@@ -4,6 +4,9 @@ public static class Generate
 {
     public static string PasswordResetCode()
     {
-        return Guid.NewGuid().ToString();
+        return Convert.ToBase64String(Guid.NewGuid().ToByteArray())
+            .Replace("/", "_")
+            .Replace("+", "-")
+            .Replace("=", "");
     }
 }

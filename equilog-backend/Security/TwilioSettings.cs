@@ -2,9 +2,9 @@
 
 public class TwilioSettings
 {
-    public string AccountSid { get; set; } = string.Empty;
+    public string AccountSid { get; init; } = string.Empty;
 
-    public string AuthToken { get; set; } = string.Empty;
+    public string AuthToken { get; init; } = string.Empty;
 
-    public string VerifySid { get; set; } = string.Empty;
+    public string VerifySid { get; init; } = string.Empty;
 }

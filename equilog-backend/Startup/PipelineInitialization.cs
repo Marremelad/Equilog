@@ -48,9 +48,10 @@ public static class PipelineInitialization
     {
         AuthEndpoints.RegisterEndpoints(app);
         EmailEndpoints.RegisterEndpoints(app);
-        PasswordResetEndpoints.RegisterEndpoints(app);
+        PasswordEndpoints.RegisterEndpoints(app);
         MailTrapEndpoints.RegisterEndpoints(app);
         UserEndpoints.RegisterEndpoints(app);
+        UserStableEndpoints.RegisterEndpoints(app);
         HorseEndpoints.RegisterEndpoints(app);
         StableEndpoints.RegisterEndpoints(app);
         StablePostEndpoints.RegisterEndpoints(app);

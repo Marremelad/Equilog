@@ -51,7 +51,74 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
       }
    }
 
-   public async Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto)
+    public async Task<ApiResponse<List<StableSearchDto>?>> SearchStablesAsync(
+    string searchTerm,
+    int page = 0,
+    int pageSize = 10)
+    {
+        try
+        {
+
+            // maybe put this in validator?
+            page = Math.Max(0, page);
+            pageSize = Math.Clamp(pageSize, 1, 50);
+            if (searchTerm?.Length > 100)
+            {
+                searchTerm = searchTerm.Substring(0, 50);
+            }
+
+
+            var query = context.Stables.AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var term = searchTerm.Trim()
+                    .Replace("[", "[[]")
+                    .Replace("%", "[%]")
+                    .Replace("_", "[_]")
+                    .Replace(".", "[.]")
+                    .ToLower();
+
+                var starts = $"{term}%";
+                var contains = $"%{term}%";
+
+                query = query
+                    .Where(s =>
+                        EF.Functions.Like(s.Name, starts) ||
+                        EF.Functions.Like(s.Name, contains) ||
+                        EF.Functions.Like(s.County, contains) ||
+                        EF.Functions.Like(s.Address, contains)
+                    );
+
+                query = query
+                    .OrderBy(s =>
+                         EF.Functions.Like(s.Name, starts) ? 0 :
+                         EF.Functions.Like(s.Name, contains) ? 1 :
+                         EF.Functions.Like(s.County, contains) ? 2 :
+                         EF.Functions.Like(s.Address, contains) ? 3 : 4)
+                    .ThenBy(s => s.Name);
+            }
+            else
+            {
+                query = query.OrderBy(s => s.Name);
+            }
+
+            var pagedResults = await query
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return ApiResponse<List<StableSearchDto>>.Success(
+                HttpStatusCode.OK, mapper.Map<List<StableSearchDto>>(pagedResults), null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<List<StableSearchDto>>.Failure(
+                HttpStatusCode.InternalServerError, ex.Message);
+        }
+    }
+    public async Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto)
    {
       try
       {

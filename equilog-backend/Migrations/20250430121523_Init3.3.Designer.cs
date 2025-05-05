@@ -12,8 +12,8 @@ using equilog_backend.Data;
 namespace equilog_backend.Migrations
 {
     [DbContext(typeof(EquilogDbContext))]
-    [Migration("20250423181828_PasswordReset")]
-    partial class PasswordReset
+    [Migration("20250430121523_Init3.3")]
+    partial class Init33
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,12 +96,48 @@ namespace equilog_backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
+
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ResetCode")
+                    b.Property<string>("Token")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(38)
+                        .HasColumnType("nvarchar(38)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PasswordResetRequests");
+                });
+
+            modelBuilder.Entity("equilog_backend.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<int>("UserIdFk")
                         .HasColumnType("int");
@@ -110,7 +146,7 @@ namespace equilog_backend.Migrations
 
                     b.HasIndex("UserIdFk");
 
-                    b.ToTable("PasswordResetRequests");
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.Stable", b =>
@@ -367,7 +403,7 @@ namespace equilog_backend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("equilog_backend.Models.PasswordResetRequest", b =>
+            modelBuilder.Entity("equilog_backend.Models.RefreshToken", b =>
                 {
                     b.HasOne("equilog_backend.Models.User", "User")
                         .WithMany()

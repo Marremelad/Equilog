@@ -1,6 +1,8 @@
-﻿namespace equilog_backend.DTOs.PasswordResetDTOs;
+using System.ComponentModel.DataAnnotations;
 
-public class PasswordResetDto
+namespace equilog_backend.DTOs.PasswordResetDTOs;
+
+public class PasswordChangeDto
 {
     public required string Email { get; set; }
 

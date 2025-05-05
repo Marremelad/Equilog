@@ -2,13 +2,13 @@
 
 public class HorseUpdateDto
 {
-    public required int Id { get; set; }
+    public required int Id { get; init; }
 
-    public required string Name { get; set; }
+    public required string Name { get; init; }
 
-    public DateOnly? Age { get; set; }
+    public DateOnly? Age { get; init; }
 
-    public string? Color { get; set; }
+    public string? Color { get; init; }
 
-    public string? Breed { get; set; }
+    public string? Breed { get; init; }
 }

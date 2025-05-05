@@ -16,7 +16,7 @@ namespace equilog_backend.Services;
 
 public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMapper mapper) : IAuthService
 {
-    public string GenerateJwt(User user)
+    public string CreateJwt(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
@@ -72,11 +72,13 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             context.Users.Add(user);
             await context.SaveChangesAsync();
             
-            var token = GenerateJwt(user);
-        
+            var accessToken = CreateJwt(user);
+            var refreshToken = await CreateRefreshTokenAsync(user.Id);
+            
             var response = new AuthResponseDto
             {
-                Token = token,
+                AccessToken = accessToken,
+                RefreshToken = refreshToken.Token,
             };
             
             return ApiResponse<AuthResponseDto>.Success(
@@ -111,11 +113,13 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     HttpStatusCode.Unauthorized, 
                     "Invalid email or password");
 
-            var token = GenerateJwt(user);
+            var accessToken = CreateJwt(user);
+            var refreshToken = await CreateRefreshTokenAsync(user.Id);
             
             var response = new AuthResponseDto
             {
-                Token = token,
+                AccessToken = accessToken,
+                RefreshToken = refreshToken.Token,
             };
             
             return ApiResponse<AuthResponseDto>.Success(
@@ -126,6 +130,120 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         catch (Exception ex)
         {
             return ApiResponse<AuthResponseDto>.Failure(
+                HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+    
+    public async Task<RefreshToken> CreateRefreshTokenAsync(int userId)
+    {
+        var token = Guid.NewGuid().ToString();
+    
+        var refreshToken = new RefreshToken
+        {
+            Token = token,
+            UserIdFk = userId,
+            ExpirationDate = DateTime.UtcNow.AddDays(7),
+            CreatedDate = DateTime.UtcNow,
+            IsRevoked = false,
+            IsUsed = false
+        };
+    
+        await context.RefreshTokens.AddAsync(refreshToken);
+        await context.SaveChangesAsync();
+    
+        return refreshToken;
+    }
+    
+    public bool ValidateRefreshToken(RefreshToken? token)
+    {
+        if (token == null)
+            return false;
+        
+        if (token.ExpirationDate <= DateTime.UtcNow)
+            return false;
+        
+        if (token.IsUsed)
+            return false;
+        
+        if (token.IsRevoked)
+            return false;
+        
+        return true;
+    }
+    
+    public async Task<ApiResponse<AuthResponseDto?>> RefreshTokenAsync(string refreshToken)
+    {
+        try
+        {
+            var storedRefreshToken = await context.RefreshTokens
+                .Include(rt => rt.User)
+                .Where(rt => rt.Token == refreshToken)
+                .FirstOrDefaultAsync();
+
+            if (storedRefreshToken == null || !ValidateRefreshToken(storedRefreshToken))
+            {
+                return ApiResponse<AuthResponseDto?>.Failure(
+                    HttpStatusCode.BadRequest, 
+                    "Invalid refresh token.");
+            }
+
+            storedRefreshToken.IsUsed = true;
+            context.RefreshTokens.Update(storedRefreshToken);
+        
+            var user = storedRefreshToken.User!;
+        
+            var newRefreshToken = await CreateRefreshTokenAsync(user.Id);
+        
+            var newAccessToken = CreateJwt(user);
+        
+            await context.SaveChangesAsync();
+        
+            var response = new AuthResponseDto
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken.Token,
+            };
+        
+            return ApiResponse<AuthResponseDto?>.Success(
+                HttpStatusCode.OK,
+                response,
+                "Token refreshed successfully.");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<AuthResponseDto?>.Failure(
+                HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+    
+    public async Task<ApiResponse<Unit>> RevokeRefreshTokenAsync(string refreshToken)
+    {
+        try
+        {
+            var storedRefreshToken = await context.RefreshTokens
+                .Where(rt => rt.Token == refreshToken)
+                .FirstOrDefaultAsync();
+
+            if (storedRefreshToken == null)
+            {
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
+                    "Invalid refresh token.");
+            }
+
+            storedRefreshToken.IsRevoked = true;
+            await context.SaveChangesAsync();
+
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
+                Unit.Value,
+                "Token successfully revoked.");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(
                 HttpStatusCode.InternalServerError,
                 ex.Message);
         }

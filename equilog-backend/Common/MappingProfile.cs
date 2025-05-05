@@ -2,10 +2,11 @@
 using equilog_backend.DTOs.AuthDTOs;
 using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.DTOs.HorseDTOs;
-using equilog_backend.DTOs.PasswordResetDTOs;
+using equilog_backend.DTOs.PasswordDTOs;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.DTOs.UserDTOs;
+using equilog_backend.DTOs.UserStableDTOs;
 using equilog_backend.DTOs.WallPostDTOs;
 using equilog_backend.Models;
 
@@ -26,6 +27,7 @@ namespace equilog_backend.Common
             CreateMap<HorseUpdateDto, Horse>(MemberList.Source);
 
             CreateMap<Stable, StableDto>().ReverseMap();
+            CreateMap<Stable, StableSearchDto>(MemberList.Source);
             CreateMap<StableCreateDto, Stable>(MemberList.Source);
             CreateMap<StableUpdateDto, Stable>(MemberList.Source);
 
@@ -43,6 +45,8 @@ namespace equilog_backend.Common
             CreateMap<WallPostClearDto, WallPost>(MemberList.Source);
 
             CreateMap<PasswordResetRequest, PasswordResetRequestDto>().ReverseMap();
+
+            CreateMap<UserStable, UserStableDto>();
         }
     }
 }
