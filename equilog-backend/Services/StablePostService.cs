@@ -16,15 +16,16 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
     {
         try
         {
-            var stableWithPosts = await context.Stables
-                .Include(stable => stable.StablePosts)
-                .FirstOrDefaultAsync(stable => stable.Id == stableId);
+            var stablePosts = await context.StablePosts
+                .Where(sp => sp.StableIdFk == stableId)
+                .Include(sp => sp.User)
+                .ToListAsync();
 
-            if (stableWithPosts == null)
+            if (stablePosts == null)
                 return ApiResponse<List<StablePostDto>>.Failure(HttpStatusCode.NotFound,
                     "Error: Stable not found");
 
-            var stablePostDtos = mapper.Map<List<StablePostDto>>(stableWithPosts.StablePosts);
+            var stablePostDtos = mapper.Map<List<StablePostDto>>(stablePosts);
 
             return ApiResponse<List<StablePostDto>>.Success(HttpStatusCode.OK,
                 stablePostDtos,

@@ -1,10 +1,12 @@
-﻿using equilog_backend.DTOs.UserDTOs;
-
-namespace equilog_backend.DTOs.StablePostDTOs;
+﻿namespace equilog_backend.DTOs.StablePostDTOs;
 
 public class StablePostDto
 {
-    public required UserDto User { get; init; }
+    public required int Id { get; set; }
+
+    public required string PosterFirstName { get; init; }
+
+    public required string PosterLastName { get; init; }
 
     public required string Title { get; init; }
 
