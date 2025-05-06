@@ -37,7 +37,46 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
 
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                 Unit.Value,
-                "Stable join request created successfully");
+                "Stable invite created successfully");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+
+    public async Task<ApiResponse<Unit>> AcceptStableInvite(StableInviteDto stableInviteDto)
+    {
+        try
+        {
+            var stableInvite = await context.StableJoinRequests
+                .Where(sjr =>
+                    sjr.UserIdFk == stableInviteDto.UserId && 
+                    sjr.StableIdFk == stableInviteDto.StableId)
+                .FirstOrDefaultAsync();
+            
+            if (stableInvite == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: Stable invite not found");
+
+            context.StableJoinRequests.Remove(stableInvite);
+            await context.SaveChangesAsync();
+
+            var userStable = new UserStable
+            {
+                UserIdFk = stableInviteDto.UserId,
+                StableIdFk = stableInviteDto.StableId,
+                Role = 2
+            };
+
+            context.UserStables.Add(userStable);
+            await context.SaveChangesAsync();
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                "User was accepted into stable successfully");
+
         }
         catch (Exception ex)
         {
