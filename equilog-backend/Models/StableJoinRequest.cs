@@ -15,6 +15,4 @@ public class StableJoinRequest
     [ForeignKey("Stable")]
     public required int StableIdFk { get; set; }
     public virtual Stable? Stable { get; set; }
-
-    public required bool Accepted { get; set; }
 }
