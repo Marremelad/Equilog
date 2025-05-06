@@ -6,6 +6,8 @@ namespace equilog_backend.Interfaces;
 
 public interface IStableJoinRequestService
 {
+    Task<ApiResponse<List<UserDto>?>> GetStableJoinRequestsByStableIdAsync(int stableId);
+    
     Task<ApiResponse<List<UserDto>?>> GetStableJoinRequestsByUserIdAsync(int userId);
     
     Task<ApiResponse<Unit>> CreateStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto);
