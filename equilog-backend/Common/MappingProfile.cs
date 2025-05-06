@@ -3,6 +3,7 @@ using equilog_backend.DTOs.AuthDTOs;
 using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.DTOs.PasswordDTOs;
+using equilog_backend.DTOs.StableCompositionDtos;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.DTOs.UserDTOs;
@@ -37,6 +38,8 @@ namespace equilog_backend.Common
                 .ReverseMap();
             CreateMap<StablePostCreateDto, StablePost>(MemberList.Source);
             CreateMap<StablePostUpdateDto, StablePost>(MemberList.Source);
+
+            CreateMap<StableCompositionCreateDto, StableCreateDto>();
 
             CreateMap<CalendarEvent, CalendarEventDto>().ReverseMap();
             CreateMap<CalendarEventCreateDto, CalendarEvent>(MemberList.Source);

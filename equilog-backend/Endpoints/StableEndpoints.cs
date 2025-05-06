@@ -1,4 +1,5 @@
 ﻿using equilog_backend.Common;
+using equilog_backend.DTOs.StableCompositionDtos;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -76,9 +77,9 @@ public class StableEndpoints
     // -- Result generators for compositions --
     private static async Task<IResult> CreateStableWithWallPost(
         IStableComposition stableComposition, 
-        StableCreateDto stableCreateDto)
+        StableCompositionCreateDto stableCompositionCreateDto)
     {
-        var result = await stableComposition.CreateStableComposition(stableCreateDto);
+        var result = await stableComposition.CreateStableComposition(stableCompositionCreateDto);
         return Result.Generate(result);
     }
 }
