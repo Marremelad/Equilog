@@ -63,7 +63,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             // maybe put this in validator?
             page = Math.Max(0, page);
             pageSize = Math.Clamp(pageSize, 1, 50);
-            if (searchTerm?.Length > 100)
+            if (searchTerm.Length > 50)
             {
                 searchTerm = searchTerm.Substring(0, 50);
             }
@@ -73,10 +73,6 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 var term = searchTerm.Trim()
-                    .Replace("[", "[[]")
-                    .Replace("%", "[%]")
-                    .Replace("_", "[_]")
-                    .Replace(".", "[.]")
                     .ToLower();
 
                 var starts = $"{term}%";
