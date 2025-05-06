@@ -11,12 +11,12 @@ public class StableEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         // Get all stables.
-        app.MapGet("/api/stable", GetStables)
-            .WithName("GetStables");
+        // app.MapGet("/api/stable", GetStables)
+        //     .WithName("GetStables");
 
         // Get stable by id.
-        app.MapGet("/api/stable/{id:int}", GetStable)
-            .WithName("GetStable");
+        // app.MapGet("/api/stable/{id:int}", GetStable)
+        //     .WithName("GetStable");
 
         // Get stables by name.
         app.MapGet("/api/stable/search", SearchStables)
@@ -39,15 +39,15 @@ public class StableEndpoints
             .WithName("CreateStableWithWallPost");
     }
 
-    private static async Task<IResult> GetStables(IStableService stableService)
-    {
-        return Result.Generate(await stableService.GetStablesAsync());
-    }
+    // private static async Task<IResult> GetStables(IStableService stableService)
+    // {
+    //     return Result.Generate(await stableService.GetStablesAsync());
+    // }
 
-    private static async Task<IResult> GetStable(IStableService stableService, int id)
-    {
-        return Result.Generate(await stableService.GetStableAsync(id));
-    }
+    // private static async Task<IResult> GetStable(IStableService stableService, int id)
+    // {
+    //     return Result.Generate(await stableService.GetStableAsync(id));
+    // }
 
     private static async Task<IResult> SearchStables(
         IStableService stableService,
