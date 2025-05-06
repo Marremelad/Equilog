@@ -36,4 +36,6 @@ public class User
     public virtual List<RefreshToken>? RefreshTokens { get; set; }
     
     public virtual List<StableJoinRequest>? StableJoinRequests { get; set; }
+    
+    public virtual List<StableInvite>? StableInvites { get; set; }
 }
