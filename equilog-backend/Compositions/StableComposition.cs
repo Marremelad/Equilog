@@ -13,7 +13,7 @@ public class StableComposition(
     IUserStableService userStableService,
     IMapper mapper) : IStableComposition
 {
-    public async Task<ApiResponse<Unit>> CreateStableComposition(StableCompositionCreateDto stableCompositionCreateDto)
+    public async Task<ApiResponse<Unit>> CreateStableCompositionAsync(StableCompositionCreateDto stableCompositionCreateDto)
     {
         var stableCreateDto = mapper.Map<StableCreateDto>(stableCompositionCreateDto);
         
