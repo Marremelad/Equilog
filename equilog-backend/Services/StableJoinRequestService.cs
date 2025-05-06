@@ -97,7 +97,6 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
                 "User was accepted into stable successfully");
-
         }
         catch (Exception ex)
         {

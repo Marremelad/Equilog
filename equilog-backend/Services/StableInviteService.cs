@@ -46,11 +46,11 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
         }
     }
 
-    public async Task<ApiResponse<Unit>> AcceptStableInvite(StableInviteDto stableInviteDto)
+    public async Task<ApiResponse<Unit>> AcceptStableInviteAsync(StableInviteDto stableInviteDto)
     {
         try
         {
-            var stableInvite = await context.StableJoinRequests
+            var stableInvite = await context.StableInvites
                 .Where(sjr =>
                     sjr.UserIdFk == stableInviteDto.UserId && 
                     sjr.StableIdFk == stableInviteDto.StableId)
@@ -60,7 +60,7 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                     "Error: Stable invite not found");
 
-            context.StableJoinRequests.Remove(stableInvite);
+            context.StableInvites.Remove(stableInvite);
             await context.SaveChangesAsync();
 
             var userStable = new UserStable
@@ -76,7 +76,34 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
                 "User was accepted into stable successfully");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
 
+    public async Task<ApiResponse<Unit>> DenyStableInviteAsync(StableInviteDto stableInviteDto)
+    {
+        try
+        {
+            var stableInvite = await context.StableInvites
+                .Where(sjr =>
+                    sjr.UserIdFk == stableInviteDto.UserId && 
+                    sjr.StableIdFk == stableInviteDto.StableId)
+                .FirstOrDefaultAsync();
+            
+            if (stableInvite == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: Stable invite not found");
+
+            context.StableInvites.Remove(stableInvite);
+            await context.SaveChangesAsync();
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                "User was not accepted into stable successfully");
         }
         catch (Exception ex)
         {
