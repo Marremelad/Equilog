@@ -105,7 +105,7 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
         }
     }
 
-    public async Task<ApiResponse<Unit>> DenyStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto)
+    public async Task<ApiResponse<Unit>> RefuseStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto)
     {
         try
         {

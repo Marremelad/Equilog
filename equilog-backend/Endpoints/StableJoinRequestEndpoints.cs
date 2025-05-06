@@ -18,8 +18,8 @@ public class StableJoinRequestEndpoints
         app.MapPost("/api/accept-stable-join-request", AcceptStableJoinRequest)
             .WithName("AcceptStableJoinRequest");
 
-        app.MapPost("/api/deny-stable-join-request", DenyStableJoinRequest)
-            .WithName("DenyStableJoinRequest");
+        app.MapPost("/api/deny-stable-join-request", RefuseStableJoinRequest)
+            .WithName("RefuseStableJoinRequest");
     }
 
     private static async Task<IResult> GetStableJoinRequestByStable(
@@ -43,10 +43,10 @@ public class StableJoinRequestEndpoints
         return Result.Generate(await stableJoinRequestService.AcceptStableJoinRequestAsync(stableJoinRequestDto));
     }
 
-    private static async Task<IResult> DenyStableJoinRequest(
+    private static async Task<IResult> RefuseStableJoinRequest(
         IStableJoinRequestService stableJoinRequestService,
         StableJoinRequestDto stableJoinRequestDto)
     {
-        return Result.Generate(await stableJoinRequestService.DenyStableJoinRequestAsync(stableJoinRequestDto));
+        return Result.Generate(await stableJoinRequestService.RefuseStableJoinRequestAsync(stableJoinRequestDto));
     }
 }

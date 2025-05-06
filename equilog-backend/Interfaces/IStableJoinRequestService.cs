@@ -12,5 +12,5 @@ public interface IStableJoinRequestService
 
     Task<ApiResponse<Unit>> AcceptStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto);
 
-    Task<ApiResponse<Unit>> DenyStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto);
+    Task<ApiResponse<Unit>> RefuseStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto);
 }
