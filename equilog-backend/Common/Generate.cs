@@ -2,7 +2,7 @@
 
 public static class Generate
 {
-    public static string PasswordResetCode()
+    public static string PasswordResetToken()
     {
         return Convert.ToBase64String(Guid.NewGuid().ToByteArray())
             .Replace("/", "_")

@@ -34,7 +34,7 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
             var passwordResetRequest = new PasswordResetRequest()
             {
                 Email = email,
-                Token = Generate.PasswordResetCode(),
+                Token = Generate.PasswordResetToken(),
                 ExpirationDate = DateTime.Now.AddHours(24)
             };
 
