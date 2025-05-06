@@ -9,14 +9,6 @@ public class StableEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        // Get all stables.
-        // app.MapGet("/api/stable", GetStables)
-        //     .WithName("GetStables");
-
-        // Get stable by id.
-        // app.MapGet("/api/stable/{id:int}", GetStable)
-        //     .WithName("GetStable");
-
         // Get stables by name.
         app.MapGet("/api/stable/search", SearchStables)
             .WithName("SearchStables");
