@@ -15,6 +15,17 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
     {
         try
         {
+            var userStable = await context.UserStables
+                .Where(us => us.UserIdFk == stableJoinRequestDto.UserId &&
+                             us.StableIdFk == stableJoinRequestDto.StableId)
+                .FirstOrDefaultAsync();
+
+            if (userStable != null)
+            {
+                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                    "Error: User is already a member of this stable");
+            }
+            
             var stableJoinRequest = new StableJoinRequest
             {
                 UserIdFk = stableJoinRequestDto.UserId,
@@ -27,7 +38,6 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                 Unit.Value,
                 "Stable join request created successfully");
-
         }
         catch (Exception ex)
         {
