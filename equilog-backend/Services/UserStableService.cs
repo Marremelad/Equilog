@@ -25,14 +25,14 @@ namespace equilog_backend.Services
                     return ApiResponse<List<UserStableDto>?>.Failure(HttpStatusCode.NotFound,
                         "Error: User not connected to any stables");
 
-                return ApiResponse<List<UserStableDto>?>.Success(HttpStatusCode.OK,
-            userStableDtos,
-            null);
+                return ApiResponse<List<UserStableDto>?>.Success(HttpStatusCode.OK, 
+                    userStableDtos, 
+                    null);
             }
             catch (Exception ex)
             {
-                return ApiResponse<List<UserStableDto>?>.Failure(HttpStatusCode.InternalServerError,
-            ex.Message);
+                return ApiResponse<List<UserStableDto>?>.Failure(HttpStatusCode.InternalServerError, 
+                    ex.Message);
             }
         }
     }
