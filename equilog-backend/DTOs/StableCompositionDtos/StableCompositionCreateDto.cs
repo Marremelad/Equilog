@@ -1,12 +1,13 @@
-namespace equilog_backend.DTOs.StableDTOs;
+﻿namespace equilog_backend.DTOs.StableCompositionDtos;
 
-public class StableDto
+public class StableCompositionCreateDto
 {
-    public required int Id { get; init; }
+    public required int UserId { get; set; }
     
     public required string Name { get; set; }
     
     public required string Type { get; set; }
     
     public required string County { get; set; }
+    
 }
