@@ -58,5 +58,6 @@ public static class PipelineInitialization
         CalendarEventEndpoints.RegisterEndpoints(app);
         WallPostEndpoints.RegisterEndpoints(app);
         StableJoinRequestEndpoints.RegisterEndpoints(app);
+        StableInviteEndpoints.RegisterEndpoints(app);
     }
 }
