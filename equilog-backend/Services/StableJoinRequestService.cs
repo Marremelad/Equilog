@@ -1,6 +1,10 @@
-﻿namespace equilog_backend.Services;
+﻿using AutoMapper;
+using equilog_backend.Data;
+using equilog_backend.Interfaces;
 
-public class StableJoinRequestService
+namespace equilog_backend.Services;
+
+public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) : IStableJoinRequestService
 {
     
 }
