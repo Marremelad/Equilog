@@ -9,7 +9,7 @@ public interface IStableService
     //
     // Task<ApiResponse<StableDto?>> GetStableAsync(int stableId);
 
-    Task<ApiResponse<List<StableSearchDto>?>> SearchStablesAsync(string searchTerm, int page = 0, int pageSize = 10);
+    Task<ApiResponse<List<StableSearchDto>?>> SearchStablesAsync(StableSearchParametersDto stableSearchParametersDto);
 
     Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto);
 

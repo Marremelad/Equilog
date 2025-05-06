@@ -52,13 +52,14 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
    // }
 
     public async Task<ApiResponse<List<StableSearchDto>?>> SearchStablesAsync(
-    string searchTerm,
-    int page = 0,
-    int pageSize = 10)
+        StableSearchParametersDto stableSearchParametersDto)
     {
         try
         {
-
+            var searchTerm = stableSearchParametersDto.SearchTerm;
+            var page = stableSearchParametersDto.Page;
+            var pageSize = stableSearchParametersDto.PageSize;
+            
             // maybe put this in validator?
             page = Math.Max(0, page);
             pageSize = Math.Clamp(pageSize, 1, 50);
@@ -66,8 +67,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             {
                 searchTerm = searchTerm.Substring(0, 50);
             }
-
-
+            
             var query = context.Stables.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
