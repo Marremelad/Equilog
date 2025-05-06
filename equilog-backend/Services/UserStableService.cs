@@ -35,5 +35,31 @@ namespace equilog_backend.Services
                     ex.Message);
             }
         }
+
+        public async Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId)
+        {
+            try
+            {
+                var userStable = new UserStable
+                {
+                    UserIdFk = userId,
+                    StableIdFk = stableId,
+                    Role = 0
+                };
+
+                context.UserStables.Add(userStable);
+                await context.SaveChangesAsync();
+                
+                return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+                    Unit.Value,
+                    null);
+
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                    ex.Message);
+            }
+        }
     }
 }
