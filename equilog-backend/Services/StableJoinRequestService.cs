@@ -2,6 +2,7 @@
 using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
+using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.StableJoinRequestDTOs;
 using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.Interfaces;
@@ -32,22 +33,22 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
         }
     }
     
-    public async Task<ApiResponse<List<UserDto>?>> GetStableJoinRequestsByUserIdAsync(int userId)
+    public async Task<ApiResponse<List<StableDto>?>> GetStableJoinRequestsByUserIdAsync(int userId)
     {
         try
         {
             var stableJoinRequests = await context.StableJoinRequests
                 .Where(sjr => sjr.UserIdFk == userId)
-                .Select(srj => srj.User)
+                .Select(srj => srj.Stable)
                 .ToListAsync();
 
-            return ApiResponse<List<UserDto>>.Success(HttpStatusCode.OK,
-                mapper.Map<List<UserDto>>(stableJoinRequests),
+            return ApiResponse<List<StableDto>>.Success(HttpStatusCode.OK,
+                mapper.Map<List<StableDto>>(stableJoinRequests),
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<UserDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<StableDto>>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

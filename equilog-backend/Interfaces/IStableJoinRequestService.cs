@@ -1,4 +1,5 @@
 ﻿using equilog_backend.Common;
+using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.StableJoinRequestDTOs;
 using equilog_backend.DTOs.UserDTOs;
 
@@ -8,7 +9,7 @@ public interface IStableJoinRequestService
 {
     Task<ApiResponse<List<UserDto>?>> GetStableJoinRequestsByStableIdAsync(int stableId);
     
-    Task<ApiResponse<List<UserDto>?>> GetStableJoinRequestsByUserIdAsync(int userId);
+    Task<ApiResponse<List<StableDto>?>> GetStableJoinRequestsByUserIdAsync(int userId);
     
     Task<ApiResponse<Unit>> CreateStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto);
 
