@@ -194,6 +194,7 @@ public static class AppConfiguration
         services.AddScoped<ICalendarEventService, CalendarEventService>();
         services.AddScoped<IWallPostService, WallPostService>();
         services.AddScoped<IStableJoinRequestService, StableJoinRequestService>();
+        services.AddScoped<IStableInviteService, StableInviteService>();
         
         // Composition services
         services.AddScoped<IStableComposition, StableComposition>();
