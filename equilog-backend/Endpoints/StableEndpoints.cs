@@ -33,21 +33,11 @@ public class StableEndpoints
         // -- Endpoints for compositions --
         
         // Create stable with required components and relations.
-        app.MapPost("/api/stable/create", CreateStableWithWallPost)
+        app.MapPost("/api/stable/create", CreateStableComposition)
             .AddEndpointFilter<ValidationFilter<StableCreateDto>>()
             .WithName("CreateStableWithWallPost");
     }
-
-    // private static async Task<IResult> GetStables(IStableService stableService)
-    // {
-    //     return Result.Generate(await stableService.GetStablesAsync());
-    // }
-
-    // private static async Task<IResult> GetStable(IStableService stableService, int id)
-    // {
-    //     return Result.Generate(await stableService.GetStableAsync(id));
-    // }
-
+    
     private static async Task<IResult> SearchStables(
         IStableService stableService, 
         StableSearchParametersDto stableSearchParametersDto)
@@ -68,11 +58,11 @@ public class StableEndpoints
     }
     
     // -- Result generators for compositions --
-    private static async Task<IResult> CreateStableWithWallPost(
+    private static async Task<IResult> CreateStableComposition(
         IStableComposition stableComposition, 
         StableCompositionCreateDto stableCompositionCreateDto)
     {
-        var result = await stableComposition.CreateStableComposition(stableCompositionCreateDto);
+        var result = await stableComposition.CreateStableCompositionAsync(stableCompositionCreateDto);
         return Result.Generate(result);
     }
 }
