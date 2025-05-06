@@ -17,13 +17,6 @@ public class PasswordEndpoints
         // Change password.
         app.MapPost("/api/change-password", ChangePassword)
             .WithName("ChangePassword");
-        
-        // -- Endpoints for compositions --
-        
-        // Send password reset email.
-        app.MapPost("/api/password-reset-email/send", SendPasswordResetEmail)
-            .AddEndpointFilter<ValidationFilter<EmailDto>>()
-            .WithName("SendPasswordResetEmail");
     }
     
     private static async Task<IResult> ResetPassword(IPasswordService passwordService,
@@ -36,11 +29,5 @@ public class PasswordEndpoints
         PasswordChangeDto passwordChangeDto)
     {
         return Result.Generate(await passwordService.ChangePasswordAsync(passwordChangeDto));
-    }
-    
-    // -- Result generators for compositions --
-    private static async Task<IResult> SendPasswordResetEmail(IPasswordResetComposition passwordResetComposition, EmailDto emailDto)
-    {
-        return Result.Generate(await passwordResetComposition.SendPasswordResetEmailAsync(emailDto.Email));
     }
 }
