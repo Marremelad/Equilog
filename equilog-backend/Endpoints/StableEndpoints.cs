@@ -9,14 +9,6 @@ public class StableEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        // Get all stables.
-        // app.MapGet("/api/stable", GetStables)
-        //     .WithName("GetStables");
-
-        // Get stable by id.
-        // app.MapGet("/api/stable/{id:int}", GetStable)
-        //     .WithName("GetStable");
-
         // Get stables by name.
         app.MapGet("/api/stable/search", SearchStables)
             .WithName("SearchStables");
@@ -40,7 +32,7 @@ public class StableEndpoints
     
     private static async Task<IResult> SearchStables(
         IStableService stableService, 
-        StableSearchParametersDto stableSearchParametersDto)
+        [AsParameters]StableSearchParametersDto stableSearchParametersDto)
     {
         return Result.Generate(await stableService.SearchStablesAsync(stableSearchParametersDto));
     }
