@@ -12,12 +12,12 @@ namespace equilog_backend.Services;
 
 public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) : IStableJoinRequestService
 {
-    public async Task<ApiResponse<List<UserDto>?>> GetStableJoinRequestsByStableAsync(int stableId)
+    public async Task<ApiResponse<List<UserDto>?>> GetStableJoinRequestsByUserIdAsync(int userId)
     {
         try
         {
             var stableJoinRequests = await context.StableJoinRequests
-                .Where(sjr => sjr.StableIdFk == stableId)
+                .Where(sjr => sjr.UserIdFk == userId)
                 .Select(srj => srj.User)
                 .ToListAsync();
 

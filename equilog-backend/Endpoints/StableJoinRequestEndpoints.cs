@@ -9,8 +9,8 @@ public class StableJoinRequestEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        app.MapGet("/api/get-stable-join-requests-by-stable/{id:int}", GetStableJoinRequestByStable)
-            .WithName("GetStableJoinRequestByStable");
+        app.MapGet("/api/get-stable-join-requests-by-user/{id:int}", GetStableJoinRequestByUserId)
+            .WithName("GetStableJoinRequestByUserId");
         
         app.MapPost("/api/create-stable-join-request", CreateStableJoinRequest)
             .WithName("CreateStableJoinRequest");
@@ -22,11 +22,11 @@ public class StableJoinRequestEndpoints
             .WithName("RefuseStableJoinRequest");
     }
 
-    private static async Task<IResult> GetStableJoinRequestByStable(
+    private static async Task<IResult> GetStableJoinRequestByUserId(
         IStableJoinRequestService stableJoinRequestService,
         int id)
     {
-        return Result.Generate(await stableJoinRequestService.GetStableJoinRequestsByStableAsync(id));
+        return Result.Generate(await stableJoinRequestService.GetStableJoinRequestsByUserIdAsync(id));
     }
 
     private static async Task<IResult> CreateStableJoinRequest(
