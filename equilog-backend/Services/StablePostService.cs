@@ -20,11 +20,7 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
                 .Where(sp => sp.StableIdFk == stableId)
                 .Include(sp => sp.User)
                 .ToListAsync();
-
-            if (stablePosts == null)
-                return ApiResponse<List<StablePostDto>>.Failure(HttpStatusCode.NotFound,
-                    "Error: Stable not found");
-
+            
             var stablePostDtos = mapper.Map<List<StablePostDto>>(stablePosts);
 
             return ApiResponse<List<StablePostDto>>.Success(HttpStatusCode.OK,
