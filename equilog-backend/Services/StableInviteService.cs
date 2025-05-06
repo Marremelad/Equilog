@@ -3,6 +3,7 @@ using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.StableInviteDTOs;
+using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,26 @@ namespace equilog_backend.Services;
 
 public class StableInviteService(EquilogDbContext context, IMapper mapper) : IStableInviteService
 {
+    public async Task<ApiResponse<List<UserDto>?>> GetStableInviteByStableIdAsync(int stableId)
+    {
+        try
+        {
+            var stableInvites = await context.StableInvites
+                .Where(sjr => sjr.StableIdFk == stableId)
+                .Select(srj => srj.User)
+                .ToListAsync();
+
+            return ApiResponse<List<UserDto>>.Success(HttpStatusCode.OK,
+                mapper.Map<List<UserDto>>(stableInvites),
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<List<UserDto>>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+    
     public async Task<ApiResponse<Unit>> CreateStableInviteAsync(StableInviteDto stableInviteDto)
     {
         try
