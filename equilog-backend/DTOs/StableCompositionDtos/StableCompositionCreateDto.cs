@@ -3,8 +3,6 @@
 public class StableCompositionCreateDto
 {
     public required int UserId { get; set; }
-
-    public required int StableId { get; set; }
     
     public required string Name { get; set; }
     
