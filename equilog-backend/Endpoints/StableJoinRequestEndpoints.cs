@@ -18,7 +18,7 @@ public class StableJoinRequestEndpoints
         app.MapPost("/api/accept-stable-join-request", AcceptStableJoinRequest)
             .WithName("AcceptStableJoinRequest");
 
-        app.MapPost("/api/deny-stable-join-request", RefuseStableJoinRequest)
+        app.MapPost("/api/refuse-stable-join-request", RefuseStableJoinRequest)
             .WithName("RefuseStableJoinRequest");
     }
 
