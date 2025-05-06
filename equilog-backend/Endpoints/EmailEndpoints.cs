@@ -13,10 +13,23 @@ public class EmailEndpoints
         app.MapPost("/api/email-send/welcome/", SendEmail)
             .AddEndpointFilter<ValidationFilter<EmailDto>>()
             .WithName("SendTwilioMail");
+        
+        // -- Endpoints for compositions --
+        
+        // Send password reset email.
+        app.MapPost("/api/password-reset-email/send", SendPasswordResetEmail)
+            .AddEndpointFilter<ValidationFilter<EmailDto>>()
+            .WithName("SendPasswordResetEmail");
     }
 
     private static async Task<IResult> SendEmail(IEmailService emailService, EmailDto emailDto)
     {
         return Result.Generate(await emailService.SendEmailAsync(new EmailSendWelcomeDto(), emailDto.Email));
+    }
+    
+    // -- Result generators for compositions --
+    private static async Task<IResult> SendPasswordResetEmail(IPasswordResetComposition passwordResetComposition, EmailDto emailDto)
+    {
+        return Result.Generate(await passwordResetComposition.SendPasswordResetEmailAsync(emailDto.Email));
     }
 }
