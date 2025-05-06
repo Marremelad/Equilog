@@ -1,7 +1,5 @@
 ﻿using equilog_backend.Common;
-using equilog_backend.DTOs.EmailDTOs;
 using equilog_backend.DTOs.PasswordDTOs;
-using equilog_backend.DTOs.PasswordResetDTOs;
 using equilog_backend.Interfaces;
 
 namespace equilog_backend.Endpoints;
