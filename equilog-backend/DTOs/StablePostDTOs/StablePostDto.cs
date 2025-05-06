@@ -4,6 +4,8 @@ public class StablePostDto
 {
     public required int Id { get; set; }
 
+    public required int UserId { get; set; }
+    
     public required string PosterFirstName { get; init; }
 
     public required string PosterLastName { get; init; }
