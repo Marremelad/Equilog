@@ -33,7 +33,7 @@ public class StableEndpoints
         
         // -- Endpoints for compositions --
         
-        // Create stable with wall post.
+        // Create stable with required components and relations.
         app.MapPost("/api/stable/create", CreateStableWithWallPost)
             .AddEndpointFilter<ValidationFilter<StableCreateDto>>()
             .WithName("CreateStableWithWallPost");
