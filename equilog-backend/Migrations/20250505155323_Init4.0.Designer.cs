@@ -12,7 +12,7 @@ using equilog_backend.Data;
 namespace equilog_backend.Migrations
 {
     [DbContext(typeof(EquilogDbContext))]
-    [Migration("20250505091919_Init4.0")]
+    [Migration("20250505155323_Init4.0")]
     partial class Init40
     {
         /// <inheritdoc />

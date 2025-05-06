@@ -9,7 +9,7 @@ public class StablePostEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         // Get all stable posts.
-        app.MapGet("/api/stable-post", GetStablePosts)
+        app.MapGet("/api/stable-post-by-stable-id/{id:int}", GetStablePosts)
             .WithName("GetStablePosts");
 
         // Get stable post.
@@ -31,9 +31,9 @@ public class StablePostEndpoints
             .WithName("DeleteStablePost");
     }
 
-    private static async Task<IResult> GetStablePosts(IStablePostService stablePostService)
+    private static async Task<IResult> GetStablePosts(IStablePostService stablePostService, int id)
     {
-        return Result.Generate(await stablePostService.GetStablePostsAsync());
+        return Result.Generate(await stablePostService.GetStablePostsAsync(id));
     }
 
     private static async Task<IResult> GetStablePost(IStablePostService stablePostService, int id)

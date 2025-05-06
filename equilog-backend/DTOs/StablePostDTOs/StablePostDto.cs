@@ -2,8 +2,12 @@
 
 public class StablePostDto
 {
-    public required int Id { get; init; }
-    
+    public required int Id { get; set; }
+
+    public required string PosterFirstName { get; init; }
+
+    public required string PosterLastName { get; init; }
+
     public required string Title { get; init; }
 
     public required string Content { get; init; }
