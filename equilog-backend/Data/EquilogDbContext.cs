@@ -31,4 +31,6 @@ public class EquilogDbContext(DbContextOptions<EquilogDbContext> options)
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     
     public DbSet<StableJoinRequest> StableJoinRequests { get; set; }
+    
+    public DbSet<StableInvite> StableInvites { get; set; }
 }
