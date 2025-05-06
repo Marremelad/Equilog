@@ -7,7 +7,7 @@ namespace equilog_backend.Compositions;
 
 public class StableComposition(IStableService stableService, IWallPostService wallPostService) : IStableComposition
 {
-    public async Task<ApiResponse<Unit>> CreateStableWithWallPostAsync(StableCreateDto stableCreateDto)
+    public async Task<ApiResponse<Unit>> CreateStableComposition(StableCreateDto stableCreateDto)
     {
         var stableResponse = await stableService.CreateStableAsync(stableCreateDto);
         

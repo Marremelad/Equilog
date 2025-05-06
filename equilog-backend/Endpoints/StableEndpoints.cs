@@ -78,7 +78,7 @@ public class StableEndpoints
         IStableComposition stableComposition, 
         StableCreateDto stableCreateDto)
     {
-        var result = await stableComposition.CreateStableWithWallPostAsync(stableCreateDto);
+        var result = await stableComposition.CreateStableComposition(stableCreateDto);
         return Result.Generate(result);
     }
 }
