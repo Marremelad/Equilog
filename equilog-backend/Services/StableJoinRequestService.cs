@@ -74,4 +74,32 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
                 ex.Message);
         }
     }
+
+    public async Task<ApiResponse<Unit>> DenyStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto)
+    {
+        try
+        {
+            var stableJoinRequest = await context.StableJoinRequests
+                .Where(sjr =>
+                    sjr.UserIdFk == stableJoinRequestDto.UserId && 
+                    sjr.StableIdFk == stableJoinRequestDto.StableId)
+                .FirstOrDefaultAsync();
+            
+            if (stableJoinRequest == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: Stable join request not found");
+
+            context.StableJoinRequests.Remove(stableJoinRequest);
+            await context.SaveChangesAsync();
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                "User was not accepted into stable successfully");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
 }
