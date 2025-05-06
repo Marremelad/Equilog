@@ -32,7 +32,7 @@ public class StableEndpoints
     
     private static async Task<IResult> SearchStables(
         IStableService stableService, 
-        StableSearchParametersDto stableSearchParametersDto)
+        [AsParameters]StableSearchParametersDto stableSearchParametersDto)
     {
         return Result.Generate(await stableService.SearchStablesAsync(stableSearchParametersDto));
     }
