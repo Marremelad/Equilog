@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using equilog_backend.Common;
+using equilog_backend.DTOs.StableCompositionDtos;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.Interfaces;
 
@@ -7,9 +8,9 @@ namespace equilog_backend.Compositions;
 
 public class StableComposition(IStableService stableService, IWallPostService wallPostService) : IStableComposition
 {
-    public async Task<ApiResponse<Unit>> CreateStableComposition(StableCreateDto stableCreateDto)
+    public async Task<ApiResponse<Unit>> CreateStableComposition(StableCompositionCreateDto stableCompositionCreateDto)
     {
-        var stableResponse = await stableService.CreateStableAsync(stableCreateDto);
+        var stableResponse = await stableService.CreateStableAsync(stableCompositionCreateDto);
         
         if (!stableResponse.IsSuccess)
         {
