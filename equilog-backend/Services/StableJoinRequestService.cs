@@ -31,6 +31,7 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
                 ex.Message);
         }
     }
+    
     public async Task<ApiResponse<Unit>> CreateStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto)
     {
         try
