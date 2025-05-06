@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace equilog_backend.DTOs.StableDTOs
 
-namespace equilog_backend.DTOs.StableDTOs
 {
     public class StableSearchDto
     {
@@ -8,7 +7,7 @@ namespace equilog_backend.DTOs.StableDTOs
         
         public required string Name { get; set; }
         
-        public string? Address { get; set; } = null;
+        public string? Address { get; set; }
         
         public required string County { get; set; }
     }

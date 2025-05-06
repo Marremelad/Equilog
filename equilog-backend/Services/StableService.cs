@@ -11,72 +11,68 @@ namespace equilog_backend.Services;
 
 public class StableService(EquilogDbContext context, IMapper mapper) : IStableService
 {
-   public async Task<ApiResponse<List<StableDto>?>> GetStablesAsync()
-   {
-      try
-      {
-         var stableDtos = mapper.Map<List<StableDto>>(await context.Stables.ToListAsync());
+   // public async Task<ApiResponse<List<StableDto>?>> GetStablesAsync()
+   // {
+   //    try
+   //    {
+   //       var stableDtos = mapper.Map<List<StableDto>>(await context.Stables.ToListAsync());
+   //
+   //       return ApiResponse<List<StableDto>>.Success(HttpStatusCode.OK,
+   //          stableDtos,
+   //          null);
+   //    }
+   //    catch (Exception ex)
+   //    {
+   //       return ApiResponse<List<StableDto>>.Failure(HttpStatusCode.InternalServerError,
+   //          ex.Message);
+   //    }
+   // }
 
-         return ApiResponse<List<StableDto>>.Success(HttpStatusCode.OK,
-            stableDtos,
-            null);
-      }
-      catch (Exception ex)
-      {
-         return ApiResponse<List<StableDto>>.Failure(HttpStatusCode.InternalServerError,
-            ex.Message);
-      }
-   }
-
-   public async Task<ApiResponse<StableDto?>> GetStableAsync(int stableId)
-   {
-      try
-      {
-         var stable = await context.Stables
-            .Where(s => s.Id == stableId)
-            .FirstOrDefaultAsync();
-
-         if (stable == null)
-            return ApiResponse<StableDto>.Failure(HttpStatusCode.NotFound,
-               "Error: Stable not found");
-
-         return ApiResponse<StableDto>.Success(HttpStatusCode.OK,
-            mapper.Map<StableDto>(stable),
-            null);
-      }
-      catch (Exception ex)
-      {
-         return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
-            ex.Message);
-      }
-   }
+   // public async Task<ApiResponse<StableDto?>> GetStableAsync(int stableId)
+   // {
+   //    try
+   //    {
+   //       var stable = await context.Stables
+   //          .Where(s => s.Id == stableId)
+   //          .FirstOrDefaultAsync();
+   //
+   //       if (stable == null)
+   //          return ApiResponse<StableDto>.Failure(HttpStatusCode.NotFound,
+   //             "Error: Stable not found");
+   //
+   //       return ApiResponse<StableDto>.Success(HttpStatusCode.OK,
+   //          mapper.Map<StableDto>(stable),
+   //          null);
+   //    }
+   //    catch (Exception ex)
+   //    {
+   //       return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
+   //          ex.Message);
+   //    }
+   // }
 
     public async Task<ApiResponse<List<StableSearchDto>?>> SearchStablesAsync(
-    string searchTerm,
-    int page = 0,
-    int pageSize = 10)
+        StableSearchParametersDto stableSearchParametersDto)
     {
         try
         {
-
+            var searchTerm = stableSearchParametersDto.SearchTerm;
+            var page = stableSearchParametersDto.Page;
+            var pageSize = stableSearchParametersDto.PageSize;
+            
             // maybe put this in validator?
             page = Math.Max(0, page);
             pageSize = Math.Clamp(pageSize, 1, 50);
-            if (searchTerm?.Length > 100)
+            if (searchTerm.Length > 50)
             {
                 searchTerm = searchTerm.Substring(0, 50);
             }
-
-
+            
             var query = context.Stables.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 var term = searchTerm.Trim()
-                    .Replace("[", "[[]")
-                    .Replace("%", "[%]")
-                    .Replace("_", "[_]")
-                    .Replace(".", "[.]")
                     .ToLower();
 
                 var starts = $"{term}%";

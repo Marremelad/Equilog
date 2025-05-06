@@ -1,6 +1,5 @@
 ﻿using equilog_backend.Common;
 using equilog_backend.DTOs.PasswordDTOs;
-using equilog_backend.DTOs.PasswordResetDTOs;
 
 namespace equilog_backend.Interfaces;
 
