@@ -84,7 +84,7 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
         }
     }
 
-    public async Task<ApiResponse<Unit>> DenyStableInviteAsync(StableInviteDto stableInviteDto)
+    public async Task<ApiResponse<Unit>> RefuseStableInviteAsync(StableInviteDto stableInviteDto)
     {
         try
         {
