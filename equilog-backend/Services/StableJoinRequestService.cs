@@ -11,7 +11,7 @@ namespace equilog_backend.Services;
 
 public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) : IStableJoinRequestService
 {
-    public async Task<ApiResponse<Unit>> CreateStableJoinRequest(StableJoinRequestDto stableJoinRequestDto)
+    public async Task<ApiResponse<Unit>> CreateStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto)
     {
         try
         {
@@ -36,7 +36,7 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
         }
     }
 
-    public async Task<ApiResponse<Unit>> AcceptStableJoinRequest(StableJoinRequestDto stableJoinRequestDto)
+    public async Task<ApiResponse<Unit>> AcceptStableJoinRequestAsync(StableJoinRequestDto stableJoinRequestDto)
     {
         try
         {

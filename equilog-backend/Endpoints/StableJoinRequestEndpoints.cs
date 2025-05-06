@@ -20,13 +20,13 @@ public class StableJoinRequestEndpoints
         IStableJoinRequestService stableJoinRequestService,
         StableJoinRequestDto stableJoinRequestDto)
     {
-        return Result.Generate(await stableJoinRequestService.CreateStableJoinRequest(stableJoinRequestDto));
+        return Result.Generate(await stableJoinRequestService.CreateStableJoinRequestAsync(stableJoinRequestDto));
     }
 
     private static async Task<IResult> AcceptStableJoinRequest(
         IStableJoinRequestService stableJoinRequestService,
         StableJoinRequestDto stableJoinRequestDto)
     {
-        return Result.Generate(await stableJoinRequestService.AcceptStableJoinRequest(stableJoinRequestDto));
+        return Result.Generate(await stableJoinRequestService.AcceptStableJoinRequestAsync(stableJoinRequestDto));
     }
 }
