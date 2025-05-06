@@ -5,6 +5,7 @@ using equilog_backend.Data;
 using equilog_backend.DTOs.StableJoinRequestDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
 
@@ -26,6 +27,45 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                 Unit.Value,
                 "Stable join request created successfully");
+
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+
+    public async Task<ApiResponse<Unit>> AcceptStableJoinRequest(StableJoinRequestDto stableJoinRequestDto)
+    {
+        try
+        {
+            var stableJoinRequest = await context.StableJoinRequests
+                .Where(sjr =>
+                    sjr.UserIdFk == stableJoinRequestDto.UserId && 
+                    sjr.StableIdFk == stableJoinRequestDto.StableId)
+                .FirstOrDefaultAsync();
+            
+            if (stableJoinRequest == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: Stable join request not found");
+
+            context.StableJoinRequests.Remove(stableJoinRequest);
+            await context.SaveChangesAsync();
+
+            var userStable = new UserStable
+            {
+                UserIdFk = stableJoinRequestDto.UserId,
+                StableIdFk = stableJoinRequestDto.StableId,
+                Role = 2
+            };
+
+            context.UserStables.Add(userStable);
+            await context.SaveChangesAsync();
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                "User was accepted into stable successfully");
 
         }
         catch (Exception ex)
