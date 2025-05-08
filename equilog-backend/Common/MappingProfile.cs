@@ -57,6 +57,11 @@ namespace equilog_backend.Common
             CreateMap<PasswordResetRequest, PasswordResetRequestDto>().ReverseMap();
 
             CreateMap<UserStable, UserStableDto>();
+            CreateMap<UserStable, StableUserDto>()
+                .ForMember(dest => dest.UserStableId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserIdFk))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName));
         }
     }
 }
