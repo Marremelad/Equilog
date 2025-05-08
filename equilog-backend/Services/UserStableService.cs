@@ -36,6 +36,34 @@ namespace equilog_backend.Services
             }
         }
 
+        public async Task<ApiResponse<List<StableUserDto>?>> GetStableUsersAsync(int stableId)
+        {
+            try
+            {
+                var userStables = await context.UserStables
+                    .Where(us => us.StableIdFk == stableId)
+                    .Include(us => us.User)
+                    .ToListAsync();
+
+                if (userStables == null || !userStables.Any())
+                {
+                    return ApiResponse<List<StableUserDto>?>.Failure(
+                        HttpStatusCode.NotFound,
+                        $"Error: No users found for stable with ID {stableId}");
+                }
+
+                var stableUserDtos = mapper.Map<List<StableUserDto>>(userStables);
+
+                return ApiResponse<List<StableUserDto>?>.Success(HttpStatusCode.OK,stableUserDtos,null);
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<List<StableUserDto>?>.Failure(
+                    HttpStatusCode.InternalServerError,
+                    ex.Message);
+            }
+        }
+
         public async Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId)
         {
             try
