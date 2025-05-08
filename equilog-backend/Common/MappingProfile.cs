@@ -33,8 +33,12 @@ namespace equilog_backend.Common
             CreateMap<StableUpdateDto, Stable>(MemberList.Source);
 
             CreateMap<StablePost, StablePostDto>()
-                .ForMember(dest => dest.PosterFirstName, opt => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
-                .ForMember(dest => dest.PosterLastName, opt => opt.MapFrom(src => src.User != null ? src.User.LastName : null))
+                .ForMember(dest => dest.PosterFirstName, opt 
+                    => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
+                .ForMember(dest => dest.PosterLastName, opt 
+                    => opt.MapFrom(src => src.User != null ? src.User.LastName : null))
+                .ForMember(dest => dest.UserId, opt =>
+                    opt.MapFrom(src => src.User != null ? src.User.Id : 0))
                 .ReverseMap();
             CreateMap<StablePostCreateDto, StablePost>(MemberList.Source);
             CreateMap<StablePostUpdateDto, StablePost>(MemberList.Source);
