@@ -64,11 +64,24 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<Unit> UpdateStableUserRole(int stableUserId)
+        public async Task<ApiResponse<Unit>> UpdateStableUserRole(int userStableId, int userStableRole)
         {
             try
             {
-                
+                var userStable = await context.UserStables
+                    .Where(us => us.Id == userStableId)
+                    .FirstOrDefaultAsync();
+
+                if (userStable == null)
+                {
+                    return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    $"userStable with ID: {userStableId} not found");
+                }
+
+                userStable.Role = userStableRole;
+                await context.SaveChangesAsync();
+
+                return ApiResponse<Unit>.Success(HttpStatusCode.OK, Unit.Value, "Role updated successfully.");
             }
             catch (Exception ex)
             {
