@@ -64,6 +64,19 @@ namespace equilog_backend.Services
             }
         }
 
+        public async Task<ApiResponse<Unit> UpdateStableUserRole(int stableUserId)
+        {
+            try
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                    ex.Message);
+            }
+        }
+
         public async Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId)
         {
             try
