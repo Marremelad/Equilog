@@ -7,6 +7,8 @@ namespace equilog_backend.Interfaces
     {
         Task<ApiResponse<List<UserStableDto>?>> GetUserStablesAsync(int userId);
 
+        Task<ApiResponse<List<StableUserDto>?>> GetStableUsersAsync(int stableId);
+
         Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId);
     }
 }

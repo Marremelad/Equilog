@@ -12,8 +12,8 @@ using equilog_backend.Data;
 namespace equilog_backend.Migrations
 {
     [DbContext(typeof(EquilogDbContext))]
-    [Migration("20250505155323_Init4.0")]
-    partial class Init40
+    [Migration("20250506155013_Init4.1_StableJoinRequest")]
+    partial class Init41_StableJoinRequest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -209,6 +209,29 @@ namespace equilog_backend.Migrations
                     b.HasIndex("StableIdFk");
 
                     b.ToTable("StableHorses");
+                });
+
+            modelBuilder.Entity("equilog_backend.Models.StableJoinRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("StableIdFk")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserIdFk")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StableIdFk");
+
+                    b.HasIndex("UserIdFk");
+
+                    b.ToTable("StableJoinRequests");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.StablePost", b =>
@@ -427,7 +450,7 @@ namespace equilog_backend.Migrations
             modelBuilder.Entity("equilog_backend.Models.RefreshToken", b =>
                 {
                     b.HasOne("equilog_backend.Models.User", "User")
-                        .WithMany()
+                        .WithMany("RefreshTokens")
                         .HasForeignKey("UserIdFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -454,10 +477,29 @@ namespace equilog_backend.Migrations
                     b.Navigation("Stable");
                 });
 
+            modelBuilder.Entity("equilog_backend.Models.StableJoinRequest", b =>
+                {
+                    b.HasOne("equilog_backend.Models.Stable", "Stable")
+                        .WithMany()
+                        .HasForeignKey("StableIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("equilog_backend.Models.User", "User")
+                        .WithMany("StableJoinRequests")
+                        .HasForeignKey("UserIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stable");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("equilog_backend.Models.StablePost", b =>
                 {
                     b.HasOne("equilog_backend.Models.Stable", "Stable")
-                        .WithMany("StablePost")
+                        .WithMany("StablePosts")
                         .HasForeignKey("StableIdFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -555,7 +597,7 @@ namespace equilog_backend.Migrations
                 {
                     b.Navigation("StableHorses");
 
-                    b.Navigation("StablePost");
+                    b.Navigation("StablePosts");
 
                     b.Navigation("UserStables");
 
@@ -564,6 +606,10 @@ namespace equilog_backend.Migrations
 
             modelBuilder.Entity("equilog_backend.Models.User", b =>
                 {
+                    b.Navigation("RefreshTokens");
+
+                    b.Navigation("StableJoinRequests");
+
                     b.Navigation("StablePost");
 
                     b.Navigation("UserEvents");

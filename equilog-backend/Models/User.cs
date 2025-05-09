@@ -32,4 +32,10 @@ public class User
     public virtual List<UserCalendarEvent>? UserEvents { get; set; }
 
     public virtual List<StablePost>? StablePost { get; set; }
+    
+    public virtual List<RefreshToken>? RefreshTokens { get; set; }
+    
+    public virtual List<StableJoinRequest>? StableJoinRequests { get; set; }
+    
+    public virtual List<StableInvite>? StableInvites { get; set; }
 }
