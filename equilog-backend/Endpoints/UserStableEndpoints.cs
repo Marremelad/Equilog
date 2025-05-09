@@ -26,9 +26,9 @@ namespace equilog_backend.Endpoints
             return Result.Generate(await userStableService.GetStableUsersAsync(stableId));
         }
 
-        private static async Task<IResult> UpdateStableUserRole(IUserStableService userStableService, int stableUserId)
+        private static async Task<IResult> UpdateStableUserRole(IUserStableService userStableService, int userStableId, int userStableRole)
         {
-            return Result.Generate(await userStableService.UpdateStableUserRoleAsync(stableUserId));
+            return Result.Generate(await userStableService.UpdateStableUserRoleAsync(userStableId, userStableRole));
         }
     }
 }
