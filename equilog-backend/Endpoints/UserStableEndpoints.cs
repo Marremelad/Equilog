@@ -13,7 +13,7 @@ namespace equilog_backend.Endpoints
             app.MapGet("/api/userstables/stable/{stableId:int}", GetStableUsers)
                 .WithName("GetStableUsers");
 
-            app.MapPut("/api/userstables/stable-user/{stableUserId:int}", UpdateStableUserRole)
+            app.MapPut("/api/userstables/stable-user/{userStableId:int}", UpdateStableUserRole)
                 .WithName("UpdateStableUserRole");
         }
         private static async Task<IResult> GetUserStables(IUserStableService userStableService, int userId)

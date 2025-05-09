@@ -64,7 +64,7 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<Unit>> UpdateStableUserRole(int userStableId, int userStableRole)
+        public async Task<ApiResponse<Unit>> UpdateStableUserRoleAsync(int userStableId, int userStableRole)
         {
             try
             {
