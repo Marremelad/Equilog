@@ -10,8 +10,11 @@ namespace equilog_backend.Endpoints
             app.MapGet("/api/userstables/user/{userId:int}", GetUserStables)
                 .WithName("GetUserStables");
 
-            app.MapGet("/api/userstables/stableId/{stableId:int}", GetStableUsers)
+            app.MapGet("/api/userstables/stable/{stableId:int}", GetStableUsers)
                 .WithName("GetStableUsers");
+
+            app.MapPut("/api/userstables/stable-user/{stableUserId:int}", UpdateStableUserRole)
+                .WithName("UpdateStableUserRole");
         }
         private static async Task<IResult> GetUserStables(IUserStableService userStableService, int userId)
         {
@@ -21,6 +24,11 @@ namespace equilog_backend.Endpoints
         private static async Task<IResult> GetStableUsers(IUserStableService userStableService, int stableId)
         {
             return Result.Generate(await userStableService.GetStableUsersAsync(stableId));
+        }
+
+        private static async Task<IResult> UpdateStableUserRole(IUserStableService userStableService, int stableUserId)
+        {
+            return Result.Generate(await userStableService.GetStableUsersAsync(stableUserId));
         }
     }
 }
