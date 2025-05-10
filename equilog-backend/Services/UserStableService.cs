@@ -21,7 +21,7 @@ namespace equilog_backend.Services
                     .Where(us => us.UserIdFk == userId)
                     .ToListAsync());
 
-                if (userStableDtos == null || !userStableDtos.Any())
+                if (userStableDtos == null || userStableDtos.Count == 0)
                     return ApiResponse<List<UserStableDto>?>.Failure(HttpStatusCode.NotFound,
                         "Error: User not connected to any stables");
 
@@ -45,7 +45,7 @@ namespace equilog_backend.Services
                     .Include(us => us.User)
                     .ToListAsync();
 
-                if (userStables == null || !userStables.Any())
+                if (userStables.Count == 0)
                 {
                     return ApiResponse<List<StableUserDto>?>.Failure(
                         HttpStatusCode.NotFound,
