@@ -104,6 +104,32 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
         }
     }
 
+    public async Task<ApiResponse<Unit>> ChangeStablePostIsPinnedFlagAsync(int id)
+    {
+        try
+        {
+            var stablePost = await context.StablePosts
+                .Where(sp => sp.Id == id)
+                .FirstOrDefaultAsync();
+            
+            if (stablePost == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: Stable post not found");
+
+            stablePost.IsPinned = !stablePost.IsPinned;
+            await context.SaveChangesAsync();
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+
     public async Task<ApiResponse<Unit>> DeleteStablePostAsync(int stablePostId)
     {
         try
