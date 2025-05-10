@@ -136,7 +136,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         }
     }
     
-    public async Task<ApiResponse<Unit>> ValidatePassword(ValidatePasswordDto validatePasswordDto)
+    public async Task<ApiResponse<Unit>> ValidatePasswordAsync(ValidatePasswordDto validatePasswordDto)
     {
         try
         {
