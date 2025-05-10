@@ -11,6 +11,7 @@ using equilog_backend.Models;
 using equilog_backend.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Twilio.Rest.Trunking.V1;
 
 namespace equilog_backend.Services;
 
@@ -131,6 +132,33 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         {
             return ApiResponse<AuthResponseDto>.Failure(
                 HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+    
+    public async Task<ApiResponse<Unit>> ValidatePassword(ValidatePasswordDto validatePasswordDto)
+    {
+        try
+        {
+            var user = await context.Users
+                .Where(u => u.Id == validatePasswordDto.UserId)
+                .FirstOrDefaultAsync();
+            
+            if (user == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: User not found.");
+            
+            if (BCrypt.Net.BCrypt.Verify(validatePasswordDto.Password, user.PasswordHash))
+                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                    Unit.Value,
+                    null);
+            
+            return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                "Incorrect password.");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

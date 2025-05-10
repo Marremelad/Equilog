@@ -108,18 +108,18 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
     {
         try
         {
+            var user = await context.Users
+                .Where(u => u.Id == passwordChangeDto.UserId)
+                .FirstOrDefaultAsync();
+            
+            if (user == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: User not found.");
+            
             if (passwordChangeDto.NewPassword != passwordChangeDto.ConfirmPassword)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
                     "Passwords have to match.");
-        
-            var user = await context.Users
-                .Where(u => u.Email == passwordChangeDto.Email) // Change this to Id.
-                .FirstOrDefaultAsync();
-        
-            if (user == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    $"Account tied to email {passwordChangeDto.Email} does not exist.");
-        
+            
             var salt = BCrypt.Net.BCrypt.GenerateSalt();
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(passwordChangeDto.NewPassword, salt);
 
