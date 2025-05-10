@@ -16,6 +16,8 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
         try
         {
             var stable = await context.Stables
+                .Include(s => s.UserStables)
+                .Include(s => s.StableHorses)
                 .Where(s => s.Id == stableId)
                 .FirstOrDefaultAsync();
             

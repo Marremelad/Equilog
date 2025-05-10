@@ -9,4 +9,10 @@ public class StableDto
     public required string Type { get; set; }
     
     public required string County { get; set; }
+    
+    public required int MemberCount { get; set; }
+    
+    public required int HorseCount { get; set; }
+    
+    public required int BoxCount { get; set; }
 }

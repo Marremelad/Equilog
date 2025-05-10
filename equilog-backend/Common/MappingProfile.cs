@@ -27,7 +27,12 @@ namespace equilog_backend.Common
             CreateMap<HorseCreateDto, Horse>(MemberList.Source);
             CreateMap<HorseUpdateDto, Horse>(MemberList.Source);
 
-            CreateMap<Stable, StableDto>().ReverseMap();
+            CreateMap<Stable, StableDto>()
+                .ForMember(dest => dest.MemberCount, opt 
+                    => opt.MapFrom(src => src.UserStables != null ? src.UserStables.Count : 0))
+                .ForMember(dest => dest.HorseCount, opt 
+                    => opt.MapFrom(src => src.StableHorses != null ? src.StableHorses.Count : 0))
+                .ReverseMap();
             CreateMap<Stable, StableSearchDto>(MemberList.Source);
             CreateMap<StableCreateDto, Stable>(MemberList.Source);
             CreateMap<StableUpdateDto, Stable>(MemberList.Source);
