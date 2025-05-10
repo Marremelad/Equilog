@@ -11,6 +11,29 @@ namespace equilog_backend.Services;
 
 public class StableService(EquilogDbContext context, IMapper mapper) : IStableService
 {
+    public async Task<ApiResponse<StableDto?>> GetStableByStableIdAsync(int stableId)
+    {
+        try
+        {
+            var stable = await context.Stables
+                .Where(s => s.Id == stableId)
+                .FirstOrDefaultAsync();
+            
+            if (stable == null)
+                return ApiResponse<StableDto>.Failure(HttpStatusCode.NotFound,
+                    "Error: Stable not found.");
+            
+            return ApiResponse<StableDto>.Success(HttpStatusCode.OK,
+                mapper.Map<StableDto>(stable),
+                null);
+        }
+        catch (Exception ex)
+        {
+           return ApiResponse<StableDto?>.Failure(HttpStatusCode.InternalServerError,
+               ex.Message);
+        }
+    }
+    
     public async Task<ApiResponse<List<StableSearchDto>?>> SearchStablesAsync(
         StableSearchParametersDto stableSearchParametersDto)
     {

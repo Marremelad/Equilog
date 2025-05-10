@@ -9,6 +9,10 @@ public class StableEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
+        // Get stables by stableId.
+        app.MapGet("/api/stable/{id:int}", GetStableByStableId)
+            .WithName("GetStableByStableId");
+        
         // Get stables by name.
         app.MapGet("/api/stable/search", SearchStables)
             .WithName("SearchStables");
@@ -28,6 +32,12 @@ public class StableEndpoints
         app.MapPost("/api/stable/create", CreateStableComposition)
             .AddEndpointFilter<ValidationFilter<StableCreateDto>>()
             .WithName("CreateStableWithWallPost");
+    }
+
+    private static async Task<IResult> GetStableByStableId(IStableService stableService,
+        int id)
+    {
+        return Result.Generate(await stableService.GetStableByStableIdAsync(id));
     }
     
     private static async Task<IResult> SearchStables(
