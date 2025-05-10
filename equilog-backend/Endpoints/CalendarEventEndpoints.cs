@@ -40,35 +40,44 @@ public class CalendarEventEndpoints
             .WithName("DeleteCalendarEvent")
             .RequireAuthorization();
     }
-
-    private static async Task<IResult> GetCalendarEventsByStableId(ICalendarEventService calendarEventService, int id)
-    {
-        return Result.Generate(await calendarEventService.GetCalendarEventsByStableIdAsync(id));
-    }
-
-    private static async Task<IResult> GetCalendarEvents(ICalendarEventService calendarEventService)
+    
+    private static async Task<IResult> GetCalendarEvents(
+        ICalendarEventService calendarEventService)
     {
         return Result.Generate(await calendarEventService.GetCalendarEventsAsync());
     }
 
-    private static async Task<IResult> GetCalendarEvent(ICalendarEventService calendarEventService, int id)
+    private static async Task<IResult> GetCalendarEventsByStableId(
+        ICalendarEventService calendarEventService,
+        int id)
+    {
+        return Result.Generate(await calendarEventService.GetCalendarEventsByStableIdAsync(id));
+    }
+    
+    private static async Task<IResult> GetCalendarEvent(
+        ICalendarEventService calendarEventService,
+        int id)
     {
         return Result.Generate(await calendarEventService.GetCalendarEventAsync(id));
     }
 
-    private static async Task<IResult> CreateCalendarEvent(ICalendarEventService calendarEventService,
+    private static async Task<IResult> CreateCalendarEvent(
+        ICalendarEventService calendarEventService,
         CalendarEventCreateDto newCalendarEvent)
     {
         return Result.Generate(await calendarEventService.CreateCalendarEventAsync(newCalendarEvent));
     }
 
-    private static async Task<IResult> UpdateCalendarEvent(ICalendarEventService calendarEventService,
+    private static async Task<IResult> UpdateCalendarEvent(
+        ICalendarEventService calendarEventService,
         CalendarEventUpdateDto updatedEvent)
     {
         return Result.Generate(await calendarEventService.UpdateCalendarEventAsync(updatedEvent));
     }
 
-    private static async Task<IResult> DeleteCalendarEvent(ICalendarEventService calendarEventService, int id)
+    private static async Task<IResult> DeleteCalendarEvent(
+        ICalendarEventService calendarEventService,
+        int id)
     {
         return Result.Generate(await calendarEventService.DeleteCalendarEventAsync(id));
     }

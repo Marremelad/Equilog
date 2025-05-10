@@ -29,27 +29,37 @@ namespace equilog_backend.Endpoints
                 .WithName("CreateWallPost");
         }
 
-        private static async Task<IResult> GetWallPost(IWallPostService wallPostService, int stableId)
+        private static async Task<IResult> GetWallPost(
+            IWallPostService wallPostService,
+            int stableId)
         {
             return Result.Generate(await wallPostService.GetWallPostAsync(stableId));
         }
 
-        private static async Task<IResult> ReplaceWallPost(IWallPostService wallPostService, WallPostReplaceDto wallPostReplaceDto)
+        private static async Task<IResult> ReplaceWallPost(
+            IWallPostService wallPostService,
+            WallPostReplaceDto wallPostReplaceDto)
         {
             return Result.Generate(await wallPostService.ReplaceWallPostAsync(wallPostReplaceDto));
         }
 
-        private static async Task<IResult> EditWallPost(IWallPostService wallPostService, WallPostEditDto wallPostEditDto)
+        private static async Task<IResult> EditWallPost(
+            IWallPostService wallPostService,
+            WallPostEditDto wallPostEditDto)
         {
             return Result.Generate(await wallPostService.EditWallPostAsync(wallPostEditDto));
         }
 
-        private static async Task<IResult> ClearWallPost(IWallPostService wallPostService, int stableId)
+        private static async Task<IResult> ClearWallPost(
+            IWallPostService wallPostService,
+            int stableId)
         {
             return Result.Generate(await wallPostService.ClearWallPostAsync(stableId));
         }
 
-        private static async Task<IResult> CreateWallPost(IWallPostService wallPostService, int stableId)
+        private static async Task<IResult> CreateWallPost(
+            IWallPostService wallPostService,
+            int stableId)
         {
             return Result.Generate(await wallPostService.CreateWallPostAsync(stableId));
         }
