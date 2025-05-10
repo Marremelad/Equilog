@@ -39,15 +39,15 @@ public class StableComposition(
                 $"Failed to establish connection between user and stable: {userStableResponse.Message}");
         }
 
-        var wallPostResponse = await wallPostService.CreateWallPostAsync(stableId);
-        
-        if (!wallPostResponse.IsSuccess)
-        {
-            return await RollbackStableCreation(
-                stableId, 
-                wallPostResponse.StatusCode,
-                $"Failed to create wall post: {wallPostResponse.Message}");
-        }
+        // var wallPostResponse = await wallPostService.CreateWallPostAsync(stableId);
+        //
+        // if (!wallPostResponse.IsSuccess)
+        // {
+        //     return await RollbackStableCreation(
+        //         stableId, 
+        //         wallPostResponse.StatusCode,
+        //         $"Failed to create wall post: {wallPostResponse.Message}");
+        // }
         
         return ApiResponse<Unit>.Success(
             HttpStatusCode.Created,
