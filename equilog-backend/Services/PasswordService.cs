@@ -34,7 +34,7 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
             {
                 Email = email,
                 Token = Generate.PasswordResetToken(),
-                ExpirationDate = DateTime.Now.AddHours(24)
+                ExpirationDate = DateTime.UtcNow.AddHours(24)
             };
 
             context.PasswordResetRequests.Add(passwordResetRequest);
@@ -63,7 +63,7 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                     "Invalid reset token.");
             
-            if (passwordResetRequest.ExpirationDate < DateTime.Now)
+            if (passwordResetRequest.ExpirationDate < DateTime.UtcNow)
             {
                 context.PasswordResetRequests.Remove(passwordResetRequest);
                 await context.SaveChangesAsync();
