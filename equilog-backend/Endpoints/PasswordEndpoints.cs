@@ -17,13 +17,15 @@ public class PasswordEndpoints
             .WithName("ChangePassword");
     }
     
-    private static async Task<IResult> ResetPassword(IPasswordService passwordService,
+    private static async Task<IResult> ResetPassword(
+        IPasswordService passwordService,
         PasswordResetDto passwordResetDto)
     {
         return Result.Generate(await passwordService.ResetPasswordAsync(passwordResetDto));
     }
 
-    private static async Task<IResult> ChangePassword(IPasswordService passwordService,
+    private static async Task<IResult> ChangePassword(
+        IPasswordService passwordService,
         PasswordChangeDto passwordChangeDto)
     {
         return Result.Generate(await passwordService.ChangePasswordAsync(passwordChangeDto));

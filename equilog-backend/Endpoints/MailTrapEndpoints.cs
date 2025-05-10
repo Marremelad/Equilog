@@ -13,7 +13,9 @@ public class MailTrapEndpoints
             .WithName("SendEmail");
     }
 
-    private static IResult SendEmail(MailTrapService mailTrapService, string recipient)
+    private static IResult SendEmail(
+        MailTrapService mailTrapService,
+        string recipient)
     {
         return Result.Generate(mailTrapService.SendEmail(new MailTrapWelcomeDto(), recipient));
     }

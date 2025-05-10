@@ -2,15 +2,15 @@
 
 public class StableCreateDto
 {
-    public required string Name { get; set; }
+    public required string Name { get; init; }
     
-    public required string Type { get; set; }
+    public required string Type { get; init; }
     
-    public required string Address { get; set; }
+    public required string Address { get; init; }
     
-    public required string County { get; set; }
+    public required string County { get; init; }
 
-    public required int PostCode { get; set; }
+    public required int PostCode { get; init; }
 
-    public required int BoxCount { get; set; }
+    public required int BoxCount { get; init; }
 }

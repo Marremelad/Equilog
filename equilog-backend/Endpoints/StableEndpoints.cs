@@ -34,7 +34,8 @@ public class StableEndpoints
             .WithName("CreateStableWithWallPost");
     }
 
-    private static async Task<IResult> GetStableByStableId(IStableService stableService,
+    private static async Task<IResult> GetStableByStableId(
+        IStableService stableService,
         int id)
     {
         return Result.Generate(await stableService.GetStableByStableIdAsync(id));
@@ -54,7 +55,9 @@ public class StableEndpoints
         return Result.Generate(await stableService.UpdateStableAsync(updatedStable));
     }
 
-    private static async Task<IResult> DeleteStable(IStableService stableService, int id)
+    private static async Task<IResult> DeleteStable(
+        IStableService stableService,
+        int id)
     {
         return Result.Generate(await stableService.DeleteStableAsync(id));
     }

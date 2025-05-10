@@ -1,14 +1,12 @@
-﻿namespace equilog_backend.DTOs.StableDTOs
+﻿namespace equilog_backend.DTOs.StableDTOs;
 
+public class StableSearchDto
 {
-    public class StableSearchDto
-    {
-        public int Id { get; set; }
+    public int Id { get; init; }
         
-        public required string Name { get; set; }
+    public required string Name { get; init; }
         
-        public string? Address { get; set; }
+    public string? Address { get; init; }
         
-        public required string County { get; set; }
-    }
+    public required string County { get; init; }
 }

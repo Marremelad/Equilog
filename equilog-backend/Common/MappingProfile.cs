@@ -63,10 +63,14 @@ namespace equilog_backend.Common
 
             CreateMap<UserStable, UserStableDto>();
             CreateMap<UserStable, StableUserDto>()
-                .ForMember(dest => dest.UserStableId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserIdFk))
-                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
-                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName));
+                .ForMember(dest => dest.UserStableId, opt 
+                    => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.UserId, opt 
+                    => opt.MapFrom(src => src.UserIdFk))
+                .ForMember(dest => dest.FirstName, opt 
+                    => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
+                .ForMember(dest => dest.LastName, opt 
+                    => opt.MapFrom(src => src.User != null ? src.User.LastName : null));
         }
     }
 }

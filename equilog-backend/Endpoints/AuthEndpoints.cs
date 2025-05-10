@@ -27,22 +27,30 @@ public class AuthEndpoints
             .WithName("RevokeToken");
     }
 
-    private static async Task<IResult> Register(IAuthService authService, RegisterDto registerDto)
+    private static async Task<IResult> Register(
+        IAuthService authService,
+        RegisterDto registerDto)
     {
         return Result.Generate(await authService.RegisterAsync(registerDto));
     }
 
-    private static async Task<IResult> Login(IAuthService authService, LoginDto loginDto)
+    private static async Task<IResult> Login(
+        IAuthService authService,
+        LoginDto loginDto)
     {
         return Result.Generate(await authService.LoginAsync(loginDto));
     }
     
-    private static async Task<IResult> RefreshToken(IAuthService authService, RefreshTokenDto refreshTokenDto)
+    private static async Task<IResult> RefreshToken(
+        IAuthService authService,
+        RefreshTokenDto refreshTokenDto)
     {
         return Result.Generate(await authService.RefreshTokenAsync(refreshTokenDto.RefreshToken));
     }
     
-    private static async Task<IResult> LogOut(IAuthService authService, RefreshTokenDto refreshTokenDto)
+    private static async Task<IResult> LogOut(
+        IAuthService authService,
+        RefreshTokenDto refreshTokenDto)
     {
         return Result.Generate(await authService.RevokeRefreshTokenAsync(refreshTokenDto.RefreshToken));
     }

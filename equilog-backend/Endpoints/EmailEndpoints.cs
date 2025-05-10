@@ -22,13 +22,17 @@ public class EmailEndpoints
             .WithName("SendPasswordResetEmail");
     }
 
-    private static async Task<IResult> SendEmail(IEmailService emailService, EmailDto emailDto)
+    private static async Task<IResult> SendEmail(
+        IEmailService emailService,
+        EmailDto emailDto)
     {
         return Result.Generate(await emailService.SendEmailAsync(new EmailSendWelcomeDto(), emailDto.Email));
     }
     
     // -- Result generators for compositions --
-    private static async Task<IResult> SendPasswordResetEmail(IPasswordResetComposition passwordResetComposition, EmailDto emailDto)
+    private static async Task<IResult> SendPasswordResetEmail(
+        IPasswordResetComposition passwordResetComposition,
+        EmailDto emailDto)
     {
         return Result.Generate(await passwordResetComposition.SendPasswordResetEmailAsync(emailDto.Email));
     }

@@ -4,7 +4,7 @@ public class StableSearchParametersDto
 {
     public required string SearchTerm { get; set; }
 
-    public required int Page { get; set; } = 0;
+    public required int Page { get; init; } = 0;
 
-    public required int PageSize { get; set; } = 10;
+    public required int PageSize { get; init; } = 10;
 }
