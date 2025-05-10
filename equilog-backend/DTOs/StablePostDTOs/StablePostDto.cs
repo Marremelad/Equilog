@@ -2,9 +2,9 @@
 
 public class StablePostDto
 {
-    public required int Id { get; set; }
+    public required int Id { get; init; }
 
-    public required int UserId { get; set; }
+    public required int UserId { get; init; }
     
     public required string PosterFirstName { get; init; }
 
