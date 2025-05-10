@@ -89,6 +89,30 @@ namespace equilog_backend.Services
             }
         }
 
+        public async Task<ApiResponse<Unit>> RemoveUserFromStableAsync(int userStableId)
+        {
+            try
+            {
+                var userStable = await context.UserStables
+                .Where(us => us.Id == userStableId)
+                .FirstOrDefaultAsync();
+
+                if (userStable == null)
+                {
+                    return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound, $"userStable with ID: {userStableId} not found.");
+                }
+
+                context.Remove(userStable);
+                await context.SaveChangesAsync();
+
+                return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,Unit.Value,"User successfully removed from stable.");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
         public async Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId)
         {
             try
