@@ -9,7 +9,7 @@ public class StableEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        // Get stables by stableId.
+        // Get stable by stableId.
         app.MapGet("/api/stable/{id:int}", GetStableByStableId)
             .WithName("GetStableByStableId");
         
