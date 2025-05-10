@@ -25,6 +25,10 @@ public class StablePostEndpoints
         app.MapPut("/api/stable-post/update", UpdateStablePost)
             .AddEndpointFilter<ValidationFilter<StablePostUpdateDto>>()
             .WithName("UpdateStablePost");
+        
+        // Change IsPinned flag.
+        app.MapPatch("/api/stable-post/is-pinned/change/{id:int}", ChangeStablePostIsPinnedFlag)
+            .WithName("ChangeStablePostIsPinnedFlag");
 
         // Delete stable post.
         app.MapDelete("/api/stable-post/delete/{id:int}", DeleteStablePost)
@@ -49,6 +53,13 @@ public class StablePostEndpoints
     private static async Task<IResult> UpdateStablePost(IStablePostService stablePostService, StablePostUpdateDto updatedStablePost)
     {
         return Result.Generate(await stablePostService.UpdateStablePostAsync(updatedStablePost));
+    }
+
+    private static async Task<IResult> ChangeStablePostIsPinnedFlag(
+        IStablePostService stablePostService,
+        int id)
+    {
+        return Result.Generate(await stablePostService.ChangeStablePostIsPinnedFlagAsync(id));
     }
 
     private static async Task<IResult> DeleteStablePost(IStablePostService stablePostService, int id)

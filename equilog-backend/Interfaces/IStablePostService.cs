@@ -13,5 +13,7 @@ public interface IStablePostService
 
     Task<ApiResponse<Unit>> UpdateStablePostAsync(StablePostUpdateDto stablePostUpdateDto);
 
+    Task<ApiResponse<Unit>> ChangeStablePostIsPinnedFlagAsync(int id);
+
     Task<ApiResponse<Unit>> DeleteStablePostAsync(int stablePostId);
 }
