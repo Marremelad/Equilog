@@ -27,7 +27,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             ]),
-            Expires = DateTime.Now.AddMinutes(jwtSettings.DurationInMinutes),
+            Expires = DateTime.UtcNow.AddMinutes(jwtSettings.DurationInMinutes),
             Issuer = jwtSettings.Issuer,
             Audience = jwtSettings.Audience,
             SigningCredentials = new SigningCredentials(
@@ -143,8 +143,8 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         {
             Token = token,
             UserIdFk = userId,
-            ExpirationDate = DateTime.UtcNow.AddDays(7),
             CreatedDate = DateTime.UtcNow,
+            ExpirationDate = DateTime.UtcNow.AddDays(7),
             IsRevoked = false,
             IsUsed = false
         };
