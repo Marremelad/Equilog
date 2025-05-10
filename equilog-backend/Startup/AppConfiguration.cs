@@ -10,7 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SendGrid;
 using System.Text;
+using equilog_backend.Common;
 using equilog_backend.Compositions;
+using Microsoft.AspNetCore.Http.Json;
 using Twilio;
 
 namespace equilog_backend.Startup;
@@ -25,6 +27,7 @@ public static class AppConfiguration
         // Core services.
         AddCoreServices(services);
         ConfigureDatabase(services, configuration);
+        ConfigureJsonOptions(services, configuration);
 
         // Authentication and security.
         ConfigureAuthentication(services, configuration);
@@ -56,6 +59,14 @@ public static class AppConfiguration
         services.AddDbContext<EquilogDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        });
+    }
+
+    private static void ConfigureJsonOptions(IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<JsonOptions>(options =>
+        {
+            options.SerializerOptions.Converters.Add(new LocalDateTimeConverter());
         });
     }
 
