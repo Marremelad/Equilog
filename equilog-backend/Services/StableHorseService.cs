@@ -3,6 +3,7 @@ using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
 
@@ -31,4 +32,29 @@ public class StableHorseService(EquilogDbContext context) : IStableHorseService
                 ex.Message);
         }
     }
+
+    public async Task<ApiResponse<Unit>> RemoveHorseFromStable(int stableHorseId)
+    {
+        try
+        {
+            var stableHorse = await context.StableHorses
+                .Where(sh => sh.Id == stableHorseId)
+                .FirstOrDefaultAsync();
+            
+            if (stableHorse == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotAcceptable,
+                    "Error: Relation entity not found.");
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+    
+    
 }
