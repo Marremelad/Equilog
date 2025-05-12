@@ -5,6 +5,7 @@ using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.DTOs.PasswordDTOs;
 using equilog_backend.DTOs.StableCompositionDtos;
 using equilog_backend.DTOs.StableDTOs;
+using equilog_backend.DTOs.StableHorseDTOs;
 using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.DTOs.UserStableDTOs;
@@ -71,6 +72,12 @@ namespace equilog_backend.Common
                     => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
                 .ForMember(dest => dest.LastName, opt
                     => opt.MapFrom(src => src.User != null ? src.User.LastName : null));
+
+            CreateMap<StableHorse, StableHorseDto>()
+                .ForMember(dest => dest.StableHorseId, opt 
+                    => opt.MapFrom(src => src.Id) )
+                .ForMember(dest => dest.HorseId, opt
+                    => opt.MapFrom(src => src.HorseIdFk));
         }
     }
 }

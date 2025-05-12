@@ -59,5 +59,6 @@ public static class PipelineInitialization
         WallPostEndpoints.RegisterEndpoints(app);
         StableJoinRequestEndpoints.RegisterEndpoints(app);
         StableInviteEndpoints.RegisterEndpoints(app);
+        StableHorseEndpoints.RegisterEndpoints(app);
     }
 }
