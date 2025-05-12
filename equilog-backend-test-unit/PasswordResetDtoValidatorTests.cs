@@ -1,5 +1,4 @@
 ﻿using equilog_backend.DTOs.PasswordDTOs;
-using equilog_backend.DTOs.PasswordResetDTOs;
 using equilog_backend.Validators;
 using FluentValidation.TestHelper;
 
@@ -20,9 +19,9 @@ namespace equilog_backend_test_unit
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = "test@example.com",
                 NewPassword = "Password123!",
-                ConfirmPassword = "Password123!"
+                ConfirmPassword = "Password123!",
+                Token = "SomeToken"
             };
 
             // Act
@@ -33,50 +32,14 @@ namespace equilog_backend_test_unit
         }
 
         [Fact]
-        public void Should_Fail_When_Email_IsInvalid()
-        {
-            // Arrange
-            var dto = new PasswordResetDto
-            {
-                Email = "invalid-email",
-                NewPassword = "Password123!",
-                ConfirmPassword = "Password123!"
-            };
-
-            // Act
-            var result = _validator.TestValidate(dto);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Email);
-        }
-
-        [Fact]
-        public void Should_Fail_When_Email_IsEmpty()
-        {
-            // Arrange
-            var dto = new PasswordResetDto
-            {
-                Email = "",
-                NewPassword = "Password123!",
-                ConfirmPassword = "Password123!"
-            };
-
-            // Act
-            var result = _validator.TestValidate(dto);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Email);
-        }
-
-        [Fact]
         public void Should_Fail_When_Password_TooShort()
         {
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = "test@example.com",
                 NewPassword = "Short1!",  // 7 characters
-                ConfirmPassword = "Short1!"
+                ConfirmPassword = "Short1!",
+                Token = "SomeToken"
             };
 
             // Act
@@ -92,9 +55,9 @@ namespace equilog_backend_test_unit
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = "test@example.com",
                 NewPassword = new string('A', 101) + "a1!",  // 104 characters
-                ConfirmPassword = new string('A', 101) + "a1!"
+                ConfirmPassword = new string('A', 101) + "a1!",
+                Token = "SomeToken"
             };
 
             // Act
@@ -110,9 +73,9 @@ namespace equilog_backend_test_unit
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = "test@example.com",
                 NewPassword = "password123!",
-                ConfirmPassword = "password123!"
+                ConfirmPassword = "password123!",
+                Token = "SomeToken"
             };
 
             // Act
@@ -128,9 +91,9 @@ namespace equilog_backend_test_unit
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = "test@example.com",
                 NewPassword = "PASSWORD123!",
-                ConfirmPassword = "PASSWORD123!"
+                ConfirmPassword = "PASSWORD123!",
+                Token = "SomeToken"
             };
 
             // Act
@@ -146,9 +109,9 @@ namespace equilog_backend_test_unit
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = "test@example.com",
                 NewPassword = "Password!",
-                ConfirmPassword = "Password!"
+                ConfirmPassword = "Password!",
+                Token = "SomeToken"
             };
 
             // Act
@@ -164,9 +127,9 @@ namespace equilog_backend_test_unit
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = "test@example.com",
                 NewPassword = "Password123",
-                ConfirmPassword = "Password123"
+                ConfirmPassword = "Password123",
+                Token = "SomeToken"
             };
 
             // Act
@@ -182,9 +145,9 @@ namespace equilog_backend_test_unit
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = "test@example.com",
                 NewPassword = "",
-                ConfirmPassword = ""
+                ConfirmPassword = "",
+                Token = "SomeToken"
             };
 
             // Act
@@ -200,9 +163,9 @@ namespace equilog_backend_test_unit
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = "test@example.com",
                 NewPassword = "Password123!",
-                ConfirmPassword = "DifferentPassword123!"
+                ConfirmPassword = "DifferentPassword123!",
+                Token = "SomeToken"
             };
 
             // Act
@@ -218,9 +181,9 @@ namespace equilog_backend_test_unit
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = "test@example.com",
                 NewPassword = "Password123!",
-                ConfirmPassword = ""
+                ConfirmPassword = "",
+                Token = "SomeToken"
             };
 
             // Act
@@ -231,17 +194,17 @@ namespace equilog_backend_test_unit
         }
 
         [Theory]
-        [InlineData("test@example.com", "Password123!", "Password123!")]
-        [InlineData("user.name+tag@example.co.uk", "Abcdef1@", "Abcdef1@")]
-        [InlineData("name@host.io", "P@55w0rdXYZ", "P@55w0rdXYZ")]
-        public void Should_Pass_When_AllInputsAreValid(string email, string password, string confirmPassword)
+        [InlineData("Password123!", "Password123!", "SomeToken")]
+        [InlineData("Abcdef1@", "Abcdef1@", "SomeToken")]
+        [InlineData("P@55w0rdXYZ", "P@55w0rdXYZ", "SomeToken")]
+        public void Should_Pass_When_AllInputsAreValid(string password, string confirmPassword, string token)
         {
             // Arrange
             var dto = new PasswordResetDto
             {
-                Email = email,
                 NewPassword = password,
-                ConfirmPassword = confirmPassword
+                ConfirmPassword = confirmPassword,
+                Token = token
             };
 
             // Act
