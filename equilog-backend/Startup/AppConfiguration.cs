@@ -210,6 +210,7 @@ public static class AppConfiguration
         // Composition services
         services.AddScoped<IStableComposition, StableComposition>();
         services.AddScoped<IPasswordResetComposition, PasswordResetComposition>();
+        services.AddScoped<IHorseComposition, HorseComposition>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();
