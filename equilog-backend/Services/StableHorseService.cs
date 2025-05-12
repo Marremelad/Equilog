@@ -70,6 +70,9 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
             if (stableHorse == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotAcceptable,
                     "Error: Relation entity not found.");
+
+            context.StableHorses.Remove(stableHorse);
+            await context.SaveChangesAsync();
             
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
