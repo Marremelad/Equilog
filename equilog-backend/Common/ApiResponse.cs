@@ -8,8 +8,8 @@ public class ApiResponse<T> : IApiResponse
     public HttpStatusCode StatusCode { get; set; }
     public T? Value { get; set; }
     public string? Message { get; set; }
-
-    private ApiResponse(bool isSuccess, HttpStatusCode statusCode, T value, string? message)
+    //public ApiResponse() { }
+    public ApiResponse(bool isSuccess, HttpStatusCode statusCode, T value, string? message)
     {
         IsSuccess = isSuccess;
         StatusCode = statusCode;
