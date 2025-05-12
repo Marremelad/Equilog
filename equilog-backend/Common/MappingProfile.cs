@@ -74,8 +74,10 @@ namespace equilog_backend.Common
                     => opt.MapFrom(src => src.User != null ? src.User.LastName : null));
 
             CreateMap<StableHorse, StableHorseDto>()
+                .ForMember(dest => dest.StableHorseId, opt 
+                    => opt.MapFrom(src => src.Id) )
                 .ForMember(dest => dest.HorseId, opt
-                    => opt.MapFrom(src => src.Horse != null ? src.Horse.Id : 0));
+                    => opt.MapFrom(src => src.Horse!.Id));
         }
     }
 }
