@@ -77,7 +77,7 @@ namespace equilog_backend.Common
                 .ForMember(dest => dest.StableHorseId, opt 
                     => opt.MapFrom(src => src.Id) )
                 .ForMember(dest => dest.HorseId, opt
-                    => opt.MapFrom(src => src.Horse!.Id));
+                    => opt.MapFrom(src => src.HorseIdFk));
         }
     }
 }

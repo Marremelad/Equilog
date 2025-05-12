@@ -17,7 +17,6 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
         {
             var stableHorseDtos = mapper.Map<List<StableHorseDto>>(
                 await context.StableHorses
-                    .Include(sh => sh.Horse)
                 .Where(sh => sh.StableIdFk == stableId)
                 .ToListAsync()); 
             
