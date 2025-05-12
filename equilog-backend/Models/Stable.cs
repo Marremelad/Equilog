@@ -19,8 +19,8 @@ public class Stable
     [StringLength(50)]
     public string? Address { get; set; }
 
-    [StringLength(50)]
-    public int? PostCode { get; set; }
+    [StringLength(5)]
+    public string? PostCode { get; set; }
 
     public int? BoxCount { get; set; }
 
@@ -31,9 +31,9 @@ public class Stable
     public virtual List<StablePost>? StablePosts { get; set; }
 
     public virtual WallPost? WallPost { get; set; }
-    
+
     public virtual List<StableJoinRequest>? StableJoinRequests { get; set; }
-    
+
     public virtual List<StableInvite>? StableInvites { get; set; }
 
 }
