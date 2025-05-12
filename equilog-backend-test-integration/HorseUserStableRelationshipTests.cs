@@ -33,7 +33,9 @@ namespace equilog_backend.Tests.Integration
 
             var stable = new Stable
             {
-                Name = "Test Stable"
+                Name = "Test Stable",
+                Type = "Test Type",
+                County = "Test County"
             };
 
             var horse = new Horse
