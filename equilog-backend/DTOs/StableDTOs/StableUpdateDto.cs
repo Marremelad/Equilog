@@ -4,5 +4,15 @@ public class StableUpdateDto
 {
     public required int Id { get; set; }
 
-    public required string Name { get; set; }
+    public required string Name { get; init; }
+
+    public required string Type { get; init; }
+
+    public required string County { get; init; }
+
+    public string? Address { get; init; }
+
+    public string? PostCode { get; init; }
+
+    public int? BoxCount { get; init; }
 }
