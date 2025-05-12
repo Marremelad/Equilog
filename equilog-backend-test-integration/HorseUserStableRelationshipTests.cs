@@ -2,7 +2,7 @@
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace equilog_backend_test_integration
+namespace equilog_backend.Tests.Integration
 {
     public class HorseUserStableRelationshipTests : IDisposable
     {
@@ -33,9 +33,7 @@ namespace equilog_backend_test_integration
 
             var stable = new Stable
             {
-                Name = "Test Stable",
-                Type = "SomeType",
-                County = "SomeCounty"
+                Name = "Test Stable"
             };
 
             var horse = new Horse
