@@ -28,19 +28,19 @@ namespace equilog_backend.Common
             CreateMap<HorseUpdateDto, Horse>(MemberList.Source);
 
             CreateMap<Stable, StableDto>()
-                .ForMember(dest => dest.MemberCount, opt 
+                .ForMember(dest => dest.MemberCount, opt
                     => opt.MapFrom(src => src.UserStables != null ? src.UserStables.Count : 0))
-                .ForMember(dest => dest.HorseCount, opt 
+                .ForMember(dest => dest.HorseCount, opt
                     => opt.MapFrom(src => src.StableHorses != null ? src.StableHorses.Count : 0))
                 .ReverseMap();
-            CreateMap<Stable, StableSearchDto>(MemberList.Source);
+            CreateMap<Stable, StableSearchDto>(MemberList.Destination);
             CreateMap<StableCreateDto, Stable>(MemberList.Source);
             CreateMap<StableUpdateDto, Stable>(MemberList.Source);
 
             CreateMap<StablePost, StablePostDto>()
-                .ForMember(dest => dest.PosterFirstName, opt 
+                .ForMember(dest => dest.PosterFirstName, opt
                     => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
-                .ForMember(dest => dest.PosterLastName, opt 
+                .ForMember(dest => dest.PosterLastName, opt
                     => opt.MapFrom(src => src.User != null ? src.User.LastName : null))
                 .ForMember(dest => dest.UserId, opt =>
                     opt.MapFrom(src => src.User != null ? src.User.Id : 0))
@@ -63,13 +63,13 @@ namespace equilog_backend.Common
 
             CreateMap<UserStable, UserStableDto>();
             CreateMap<UserStable, StableUserDto>()
-                .ForMember(dest => dest.UserStableId, opt 
+                .ForMember(dest => dest.UserStableId, opt
                     => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.UserId, opt 
+                .ForMember(dest => dest.UserId, opt
                     => opt.MapFrom(src => src.UserIdFk))
-                .ForMember(dest => dest.FirstName, opt 
+                .ForMember(dest => dest.FirstName, opt
                     => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
-                .ForMember(dest => dest.LastName, opt 
+                .ForMember(dest => dest.LastName, opt
                     => opt.MapFrom(src => src.User != null ? src.User.LastName : null));
         }
     }
