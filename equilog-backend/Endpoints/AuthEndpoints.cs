@@ -13,16 +13,20 @@ public class AuthEndpoints
             .AddEndpointFilter<ValidationFilter<RegisterDto>>()
             .WithName("Register");
 
-        // Log in.
+        // Login.
         app.MapPost("/api/auth/login", Login)
             .AddEndpointFilter<ValidationFilter<LoginDto>>()
             .WithName("Login");
+
+        // Validate password.
+        app.MapPost("/api/auth/validate-password", ValidatePassword)
+            .WithName("ValidatePassword");
         
         // Refresh token.
         app.MapPost("/api/auth/refresh-token", RefreshToken)
             .WithName("RefreshToken");
         
-        // Log out.
+        // Logout.
         app.MapPost("/api/auth/revoke-token", LogOut)
             .WithName("RevokeToken");
     }
@@ -39,6 +43,13 @@ public class AuthEndpoints
         LoginDto loginDto)
     {
         return Result.Generate(await authService.LoginAsync(loginDto));
+    }
+
+    private static async Task<IResult> ValidatePassword(
+        IAuthService authService,
+        ValidatePasswordDto validatePasswordDto)
+    {
+        return Result.Generate(await authService.ValidatePasswordAsync(validatePasswordDto));
     }
     
     private static async Task<IResult> RefreshToken(

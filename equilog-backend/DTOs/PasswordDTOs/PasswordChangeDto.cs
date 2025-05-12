@@ -2,7 +2,7 @@ namespace equilog_backend.DTOs.PasswordDTOs;
 
 public class PasswordChangeDto
 {
-    public required string Email { get; set; }
+    public int UserId { get; set; }
 
     public required string NewPassword { get; set; }
 
