@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Xunit.Abstractions;
 
-namespace equilog_backend.Tests.Integration
+namespace equilog_backend_test_integration
 {
     // Custom fixture to be reused for all tests.
     public class AuthTestsFixture : IDisposable

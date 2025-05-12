@@ -2,7 +2,7 @@
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace equilog_backend.Tests.Integration
+namespace equilog_backend_test_integration
 {
     public class HorseUserStableRelationshipTests : IDisposable
     {
