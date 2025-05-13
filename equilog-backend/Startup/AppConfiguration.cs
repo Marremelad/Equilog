@@ -208,6 +208,7 @@ public static class AppConfiguration
         services.AddScoped<IWallPostService, WallPostService>();
         services.AddScoped<IStableJoinRequestService, StableJoinRequestService>();
         services.AddScoped<IStableInviteService, StableInviteService>();
+        services.AddScoped<ICommentService, CommentService>();
         
         // Composition services
         services.AddScoped<IStableComposition, StableComposition>();
