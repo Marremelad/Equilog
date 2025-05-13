@@ -6,7 +6,7 @@ public class HorseUpdateDtoValidator : AbstractValidator<HorseUpdateDto>
 {
     public HorseUpdateDtoValidator()
     {
-        RuleFor(e => e.Id)
+        RuleFor(h => h.Id)
             .NotEmpty()
             .GreaterThan(0).WithMessage("Horse ID must be greater than 0.");
 
@@ -15,8 +15,9 @@ public class HorseUpdateDtoValidator : AbstractValidator<HorseUpdateDto>
             .MaximumLength(50).WithMessage("Name cannot exceed 50 characters.");
 
         RuleFor(h => h.Age)
-            .Must(age => age == null || age <= DateOnly.FromDateTime(DateTime.Today))
-            .WithMessage("Age can't be a date in the future.");
+            .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Today))
+            .When(h => h.Age.HasValue)
+            .WithMessage("Age must be today or a past date.");
 
         RuleFor(h => h.Color)
             .MaximumLength(50).When(h => h.Color != null);
