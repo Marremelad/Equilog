@@ -2,230 +2,216 @@
 using equilog_backend.Validators;
 using FluentValidation.TestHelper;
 
-namespace equilog_backend_test_unit;
-
-public class PasswordResetDtoValidatorTests
+namespace equilog_backend_test_unit
 {
-    private readonly PasswordResetDtoValidator _validator;
-
-    public PasswordResetDtoValidatorTests()
+    public class PasswordResetDtoValidatorTests
     {
-        _validator = new PasswordResetDtoValidator();
-    }
+        private readonly PasswordResetDtoValidator _validator;
 
-    [Fact]
-    public void Should_Pass_When_Valid_PasswordResetDto()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        public PasswordResetDtoValidatorTests()
         {
-            NewPassword = "Password123!",
-            ConfirmPassword = "Password123!",
-            Token = "SomeToken"
-        };
+            _validator = new PasswordResetDtoValidator();
+        }
 
-        // Act
-        var result = _validator.TestValidate(dto);
-
-        // Assert
-        result.ShouldNotHaveAnyValidationErrors();
-    }
-
-    [Fact]
-    public void Should_Fail_When_Email_IsInvalid()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        [Fact]
+        public void Should_Pass_When_Valid_PasswordResetDto()
         {
-            NewPassword = "Password123!",
-            ConfirmPassword = "Password123!",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = "Password123!",
+                ConfirmPassword = "Password123!",
+                Token = "SomeToken"
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
-            
-    }
+            // Act
+            var result = _validator.TestValidate(dto);
 
-    [Fact]
-    public void Should_Fail_When_Email_IsEmpty()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+            // Assert
+            result.ShouldNotHaveAnyValidationErrors();
+        }
+
+        [Fact]
+        public void Should_Fail_When_Password_TooShort()
         {
-            NewPassword = "Password123!",
-            ConfirmPassword = "Password123!",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = "Short1!",  // 7 characters
+                ConfirmPassword = "Short1!",
+                Token = "SomeToken"
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
+            // Act
+            var result = _validator.TestValidate(dto);
 
-    }
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.NewPassword);
+        }
 
-    [Fact]
-    public void Should_Fail_When_Password_TooShort()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        [Fact]
+        public void Should_Fail_When_Password_TooLong()
         {
-            NewPassword = "Short1!", // 7 characters
-            ConfirmPassword = "Short1!",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = new string('A', 101) + "a1!",  // 104 characters
+                ConfirmPassword = new string('A', 101) + "a1!",
+                Token = "SomeToken"
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
+            // Act
+            var result = _validator.TestValidate(dto);
 
-        // Assert
-        result.ShouldHaveValidationErrorFor(x => x.NewPassword);
-    }
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.NewPassword);
+        }
 
-    [Fact]
-    public void Should_Fail_When_Password_TooLong()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        [Fact]
+        public void Should_Fail_When_Password_HasNoUppercase()
         {
-            NewPassword = new string('A',
-                              101) +
-                          "a1!", // 104 characters
-            ConfirmPassword = new string('A',
-                                  101) +
-                              "a1!",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = "password123!",
+                ConfirmPassword = "password123!",
+                Token = "SomeToken"
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
+            // Act
+            var result = _validator.TestValidate(dto);
 
-        // Assert
-        result.ShouldHaveValidationErrorFor(x => x.NewPassword);
-    }
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.NewPassword);
+        }
 
-    [Fact]
-    public void Should_Fail_When_Password_HasNoUppercase()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        [Fact]
+        public void Should_Fail_When_Password_HasNoLowercase()
         {
-            NewPassword = "password123!",
-            ConfirmPassword = "password123!",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = "PASSWORD123!",
+                ConfirmPassword = "PASSWORD123!",
+                Token = "SomeToken"
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
+            // Act
+            var result = _validator.TestValidate(dto);
 
-        // Assert
-        result.ShouldHaveValidationErrorFor(x => x.NewPassword);
-    }
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.NewPassword);
+        }
 
-    [Fact]
-    public void Should_Fail_When_Password_HasNoLowercase()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        [Fact]
+        public void Should_Fail_When_Password_HasNoDigit()
         {
-            NewPassword = "PASSWORD123!",
-            ConfirmPassword = "PASSWORD123!",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = "Password!",
+                ConfirmPassword = "Password!",
+                Token = "SomeToken"
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
+            // Act
+            var result = _validator.TestValidate(dto);
 
-        // Assert
-        result.ShouldHaveValidationErrorFor(x => x.NewPassword);
-    }
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.NewPassword);
+        }
 
-    [Fact]
-    public void Should_Fail_When_Password_HasNoDigit()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        [Fact]
+        public void Should_Fail_When_Password_HasNoSpecialChar()
         {
-            NewPassword = "Password!",
-            ConfirmPassword = "Password!",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = "Password123",
+                ConfirmPassword = "Password123",
+                Token = "SomeToken"
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
+            // Act
+            var result = _validator.TestValidate(dto);
 
-        // Assert
-        result.ShouldHaveValidationErrorFor(x => x.NewPassword);
-    }
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.NewPassword);
+        }
 
-    [Fact]
-    public void Should_Fail_When_Password_HasNoSpecialChar()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        [Fact]
+        public void Should_Fail_When_Password_IsEmpty()
         {
-            NewPassword = "Password123",
-            ConfirmPassword = "Password123",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = "",
+                ConfirmPassword = "",
+                Token = "SomeToken"
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
+            // Act
+            var result = _validator.TestValidate(dto);
 
-        // Assert
-        result.ShouldHaveValidationErrorFor(x => x.NewPassword);
-    }
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.NewPassword);
+        }
 
-    [Fact]
-    public void Should_Fail_When_Password_IsEmpty()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        [Fact]
+        public void Should_Fail_When_Passwords_DoNotMatch()
         {
-            NewPassword = "",
-            ConfirmPassword = "",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = "Password123!",
+                ConfirmPassword = "DifferentPassword123!",
+                Token = "SomeToken"
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
+            // Act
+            var result = _validator.TestValidate(dto);
 
-        // Assert
-        result.ShouldHaveValidationErrorFor(x => x.NewPassword);
-    }
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.ConfirmPassword);
+        }
 
-    [Fact]
-    public void Should_Fail_When_Passwords_DoNotMatch()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        [Fact]
+        public void Should_Fail_When_ConfirmPassword_IsEmpty()
         {
-            NewPassword = "Password123!",
-            ConfirmPassword = "DifferentPassword123!",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = "Password123!",
+                ConfirmPassword = "",
+                Token = "SomeToken"
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
+            // Act
+            var result = _validator.TestValidate(dto);
 
-        // Assert
-        result.ShouldHaveValidationErrorFor(x => x.ConfirmPassword);
-    }
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.ConfirmPassword);
+        }
 
-    [Fact]
-    public void Should_Fail_When_ConfirmPassword_IsEmpty()
-    {
-        // Arrange
-        var dto = new PasswordResetDto
+        [Theory]
+        [InlineData("Password123!", "Password123!", "SomeToken")]
+        [InlineData("Abcdef1@", "Abcdef1@", "SomeToken")]
+        [InlineData("P@55w0rdXYZ", "P@55w0rdXYZ", "SomeToken")]
+        public void Should_Pass_When_AllInputsAreValid(string password, string confirmPassword, string token)
         {
-            NewPassword = "Password123!",
-            ConfirmPassword = "",
-            Token = "SomeToken"
-        };
+            // Arrange
+            var dto = new PasswordResetDto
+            {
+                NewPassword = password,
+                ConfirmPassword = confirmPassword,
+                Token = token
+            };
 
-        // Act
-        var result = _validator.TestValidate(dto);
+            // Act
+            var result = _validator.TestValidate(dto);
 
-        // Assert
-        result.ShouldHaveValidationErrorFor(x => x.ConfirmPassword);
+            // Assert
+            result.ShouldNotHaveAnyValidationErrors();
+        }
     }
 }
