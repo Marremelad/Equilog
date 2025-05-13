@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using equilog_backend.Common;
+﻿using equilog_backend.Common;
 using equilog_backend.DTOs.HorseCompositionDTOs;
-using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Interfaces;
 using System.Net;
 
@@ -10,14 +8,11 @@ namespace equilog_backend.Compositions;
 public class HorseComposition(
     IHorseService horseService,
     IStableHorseService stableHorseService,
-    IUserHorseService userHorseService,
-    IMapper mapper) : IHorseComposition
+    IUserHorseService userHorseService) : IHorseComposition
 {
     public async Task<ApiResponse<Unit>> CreateHorseCompositionAsync(HorseCompositionCreateDto horseCompositionCreateDto)
     {
-        var horseCreateDto = mapper.Map<HorseCreateDto>(horseCompositionCreateDto.Horse);
-
-        var horseResponse = await horseService.CreateHorseAsync(horseCreateDto);
+        var horseResponse = await horseService.CreateHorseAsync(horseCompositionCreateDto.Horse);
 
         if (!horseResponse.IsSuccess)
             return ApiResponse<Unit>.Failure(horseResponse.StatusCode,
