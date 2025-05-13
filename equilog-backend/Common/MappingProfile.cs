@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using equilog_backend.DTOs.AuthDTOs;
 using equilog_backend.DTOs.CalendarEventDTOs;
+using equilog_backend.DTOs.CommentDTOs;
+using equilog_backend.DTOs.HorseCompositionDTOs;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.DTOs.PasswordDTOs;
 using equilog_backend.DTOs.StableDTOs;
@@ -85,9 +87,11 @@ namespace equilog_backend.Common
                     => opt.MapFrom(src => src.Horse!.Color))
                 .ForMember(dest => dest.HorseOwners, opt => opt.MapFrom(src
                     => src.Horse!.UserHorses != null ? src.Horse.UserHorses
-                        .Where(uh => uh != null && uh.User != null && uh.UserRole == 0)
+                        .Where(uh => uh.User != null && uh.UserRole == 0)
                         .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
                         .ToList() : new List<string>()));
+
+            CreateMap<Comment, CommentDto>().ReverseMap();
         }
     }
 }
