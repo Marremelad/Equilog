@@ -197,6 +197,7 @@ public static class AppConfiguration
         // Relational services
         services.AddScoped<IUserStableService, UserStableService>();
         services.AddScoped<IStableHorseService, StableHorseService>();
+        services.AddScoped<IUserHorseService, UserHorseService>();
 
         // Email service.
         services.AddScoped<IEmailService, EmailService>();
