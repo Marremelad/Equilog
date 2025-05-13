@@ -17,7 +17,7 @@ namespace equilog_backend.Services
                 {
                     UserIdFk = userId,
                     HorseIdFk = horseId,
-                    UserRole = "0"
+                    UserRole = 0
                 };
 
                 context.UserHorses.Add(userHorse);

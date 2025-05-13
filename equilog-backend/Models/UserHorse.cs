@@ -17,5 +17,5 @@ public class UserHorse
     public virtual Horse? Horse { get; set; }
 
     [StringLength(20)]
-    public required string UserRole { get; set; }
+    public required int UserRole { get; set; }
 }
