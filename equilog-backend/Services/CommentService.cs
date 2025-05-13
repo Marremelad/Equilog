@@ -15,8 +15,19 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
     {
         try
         {
-            return mapper.Map<>(await context.Comments
-                .Where(c => c.))
+            var commentDtos = mapper.Map<List<CommentDto>>(await context.Comments
+                .Include(c => c.StablePostComments)
+                .Where(c => c.StablePostComments != null &&
+                            c.StablePostComments.Any(spc => spc.StablePostIdFk == stablePostId))
+                .ToListAsync());
+            
+            if (commentDtos.Count == 0)
+                return ApiResponse<List<CommentDto>?>.Failure(HttpStatusCode.NotFound,
+                    "This post has no comments.");
+            
+            return ApiResponse<List<CommentDto>?>.Success(HttpStatusCode.OK,
+                commentDtos,
+                null);
         }
         catch (Exception ex)
         {

@@ -8,6 +8,10 @@ public class CommentEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
+        // Get comments by StablePost id.
+        app.MapGet("/api/comment/{id:int}", GetCommentsByStablePostId)
+            .WithName("GetCommentByStableId");
+        
         // Create comment.
         app.MapPost("/api/comment/create", CreateComment)
             .WithName("CreateComment");
@@ -15,6 +19,13 @@ public class CommentEndpoints
         // Delete comment.
         app.MapDelete("/api/comment/delete/{id:int}", DeleteComment)
             .WithName("DeleteComment");
+    }
+
+    private static async Task<IResult> GetCommentsByStablePostId(
+        ICommentService commentService,
+        int id)
+    {
+        return Result.Generate(await commentService.GetCommentByStablePostId(id));
     }
 
     private static async Task<IResult> CreateComment(
