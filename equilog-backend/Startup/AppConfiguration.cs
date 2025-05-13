@@ -197,6 +197,7 @@ public static class AppConfiguration
         // Relational services
         services.AddScoped<IUserStableService, UserStableService>();
         services.AddScoped<IStableHorseService, StableHorseService>();
+        services.AddScoped<IUserHorseService, UserHorseService>();
 
         // Email service.
         services.AddScoped<IEmailService, EmailService>();
@@ -211,6 +212,7 @@ public static class AppConfiguration
         // Composition services
         services.AddScoped<IStableComposition, StableComposition>();
         services.AddScoped<IPasswordResetComposition, PasswordResetComposition>();
+        services.AddScoped<IHorseComposition, HorseComposition>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();
