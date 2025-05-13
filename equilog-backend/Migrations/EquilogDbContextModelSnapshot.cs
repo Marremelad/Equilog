@@ -56,6 +56,37 @@ namespace equilog_backend.Migrations
                     b.ToTable("CalendarEvents");
                 });
 
+            modelBuilder.Entity("equilog_backend.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CommentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(4094)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StablePostId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StablePostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("equilog_backend.Models.Horse", b =>
                 {
                     b.Property<int>("Id")
@@ -293,6 +324,29 @@ namespace equilog_backend.Migrations
                     b.ToTable("StablePosts");
                 });
 
+            modelBuilder.Entity("equilog_backend.Models.StablePostComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CommentIdFk")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StablePostIdFk")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentIdFk");
+
+                    b.HasIndex("StablePostIdFk");
+
+                    b.ToTable("StablePostComments");
+                });
+
             modelBuilder.Entity("equilog_backend.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -359,6 +413,29 @@ namespace equilog_backend.Migrations
                     b.HasIndex("UserIdFk");
 
                     b.ToTable("UserCalendarEvents");
+                });
+
+            modelBuilder.Entity("equilog_backend.Models.UserComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CommentIdFk")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserIdFk")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentIdFk");
+
+                    b.HasIndex("UserIdFk");
+
+                    b.ToTable("UserComments");
                 });
 
             modelBuilder.Entity("equilog_backend.Models.UserHorse", b =>
@@ -466,6 +543,17 @@ namespace equilog_backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("equilog_backend.Models.Comment", b =>
+                {
+                    b.HasOne("equilog_backend.Models.StablePost", null)
+                        .WithMany("StablePostComments")
+                        .HasForeignKey("StablePostId");
+
+                    b.HasOne("equilog_backend.Models.User", null)
+                        .WithMany("StablePostComments")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("equilog_backend.Models.RefreshToken", b =>
                 {
                     b.HasOne("equilog_backend.Models.User", "User")
@@ -553,6 +641,25 @@ namespace equilog_backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("equilog_backend.Models.StablePostComment", b =>
+                {
+                    b.HasOne("equilog_backend.Models.Comment", "Comment")
+                        .WithMany("StablePostComments")
+                        .HasForeignKey("CommentIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("equilog_backend.Models.StablePost", "StablePost")
+                        .WithMany()
+                        .HasForeignKey("StablePostIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("StablePost");
+                });
+
             modelBuilder.Entity("equilog_backend.Models.UserCalendarEvent", b =>
                 {
                     b.HasOne("equilog_backend.Models.CalendarEvent", "CalendarEvent")
@@ -566,6 +673,25 @@ namespace equilog_backend.Migrations
                         .IsRequired();
 
                     b.Navigation("CalendarEvent");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("equilog_backend.Models.UserComment", b =>
+                {
+                    b.HasOne("equilog_backend.Models.Comment", "Comment")
+                        .WithMany("UserComments")
+                        .HasForeignKey("CommentIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("equilog_backend.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserIdFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
 
                     b.Navigation("User");
                 });
@@ -624,6 +750,13 @@ namespace equilog_backend.Migrations
                     b.Navigation("UserCalendarEvents");
                 });
 
+            modelBuilder.Entity("equilog_backend.Models.Comment", b =>
+                {
+                    b.Navigation("StablePostComments");
+
+                    b.Navigation("UserComments");
+                });
+
             modelBuilder.Entity("equilog_backend.Models.Horse", b =>
                 {
                     b.Navigation("StableHorses");
@@ -646,6 +779,11 @@ namespace equilog_backend.Migrations
                     b.Navigation("WallPost");
                 });
 
+            modelBuilder.Entity("equilog_backend.Models.StablePost", b =>
+                {
+                    b.Navigation("StablePostComments");
+                });
+
             modelBuilder.Entity("equilog_backend.Models.User", b =>
                 {
                     b.Navigation("RefreshTokens");
@@ -655,6 +793,8 @@ namespace equilog_backend.Migrations
                     b.Navigation("StableJoinRequests");
 
                     b.Navigation("StablePost");
+
+                    b.Navigation("StablePostComments");
 
                     b.Navigation("UserEvents");
 

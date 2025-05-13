@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace equilog_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Init41_StableJoinRequest : Migration
+    public partial class Init44_Comments : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,7 +52,7 @@ namespace equilog_backend.Migrations
                     Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     County = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    PostCode = table.Column<int>(type: "int", maxLength: 50, nullable: true),
+                    PostCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
                     BoxCount = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -181,6 +181,32 @@ namespace equilog_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StableInvites",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserIdFk = table.Column<int>(type: "int", nullable: false),
+                    StableIdFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StableInvites", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StableInvites_Stables_StableIdFk",
+                        column: x => x.StableIdFk,
+                        principalTable: "Stables",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StableInvites_Users_UserIdFk",
+                        column: x => x.UserIdFk,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StableJoinRequests",
                 columns: table => new
                 {
@@ -244,7 +270,7 @@ namespace equilog_backend.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserIdFk = table.Column<int>(type: "int", nullable: false),
                     HorseIdFk = table.Column<int>(type: "int", nullable: false),
-                    UserRole = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    UserRole = table.Column<int>(type: "int", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -316,6 +342,84 @@ namespace equilog_backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CommentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", maxLength: 4094, nullable: false),
+                    StablePostId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_StablePosts_StablePostId",
+                        column: x => x.StablePostId,
+                        principalTable: "StablePosts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Comments_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StablePostComments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StablePostIdFk = table.Column<int>(type: "int", nullable: false),
+                    CommentIdFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StablePostComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StablePostComments_Comments_CommentIdFk",
+                        column: x => x.CommentIdFk,
+                        principalTable: "Comments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StablePostComments_StablePosts_StablePostIdFk",
+                        column: x => x.StablePostIdFk,
+                        principalTable: "StablePosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserComments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserIdFk = table.Column<int>(type: "int", nullable: false),
+                    CommentIdFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserComments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserComments_Comments_CommentIdFk",
+                        column: x => x.CommentIdFk,
+                        principalTable: "Comments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserComments_Users_UserIdFk",
+                        column: x => x.UserIdFk,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CalendarEvents_StableIdFk",
                 table: "CalendarEvents",
@@ -325,6 +429,16 @@ namespace equilog_backend.Migrations
                 name: "IX_CalendarEvents_UserIdFk",
                 table: "CalendarEvents",
                 column: "UserIdFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_StablePostId",
+                table: "Comments",
+                column: "StablePostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserId",
+                table: "Comments",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserIdFk",
@@ -342,6 +456,16 @@ namespace equilog_backend.Migrations
                 column: "StableIdFk");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StableInvites_StableIdFk",
+                table: "StableInvites",
+                column: "StableIdFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StableInvites_UserIdFk",
+                table: "StableInvites",
+                column: "UserIdFk");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StableJoinRequests_StableIdFk",
                 table: "StableJoinRequests",
                 column: "StableIdFk");
@@ -350,6 +474,16 @@ namespace equilog_backend.Migrations
                 name: "IX_StableJoinRequests_UserIdFk",
                 table: "StableJoinRequests",
                 column: "UserIdFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StablePostComments_CommentIdFk",
+                table: "StablePostComments",
+                column: "CommentIdFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StablePostComments_StablePostIdFk",
+                table: "StablePostComments",
+                column: "StablePostIdFk");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StablePosts_StableIdFk",
@@ -369,6 +503,16 @@ namespace equilog_backend.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserCalendarEvents_UserIdFk",
                 table: "UserCalendarEvents",
+                column: "UserIdFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserComments_CommentIdFk",
+                table: "UserComments",
+                column: "CommentIdFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserComments_UserIdFk",
+                table: "UserComments",
                 column: "UserIdFk");
 
             migrationBuilder.CreateIndex(
@@ -411,13 +555,19 @@ namespace equilog_backend.Migrations
                 name: "StableHorses");
 
             migrationBuilder.DropTable(
+                name: "StableInvites");
+
+            migrationBuilder.DropTable(
                 name: "StableJoinRequests");
 
             migrationBuilder.DropTable(
-                name: "StablePosts");
+                name: "StablePostComments");
 
             migrationBuilder.DropTable(
                 name: "UserCalendarEvents");
+
+            migrationBuilder.DropTable(
+                name: "UserComments");
 
             migrationBuilder.DropTable(
                 name: "UserHorses");
@@ -432,7 +582,13 @@ namespace equilog_backend.Migrations
                 name: "CalendarEvents");
 
             migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
                 name: "Horses");
+
+            migrationBuilder.DropTable(
+                name: "StablePosts");
 
             migrationBuilder.DropTable(
                 name: "Stables");

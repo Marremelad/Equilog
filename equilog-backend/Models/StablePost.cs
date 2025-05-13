@@ -26,6 +26,6 @@ namespace equilog_backend.Models
 
         public required bool IsPinned { get; set; }
         
-        public virtual List<StablePostComment>? StablePostComments { get; set; }
+        public virtual List<Comment>? StablePostComments { get; set; }
     }
 }
