@@ -7,15 +7,15 @@ namespace equilog_backend.Validators
     {
         public HorseCompositionCreateDtoValidator()
         {
-            RuleFor(e => e.UserId)
+            RuleFor(c => c.UserId)
                 .NotEmpty()
                 .GreaterThan(0).WithMessage("User ID must be greater than 0.");
 
-            RuleFor(e => e.StableId)
+            RuleFor(c => c.StableId)
                 .NotEmpty()
                 .GreaterThan(0).WithMessage("Stable ID must be greater than 0.");
 
-            RuleFor(x => x.Horse)
+            RuleFor(c => c.Horse)
                 .SetValidator(new HorseCreateDtoValidator());
         }
     }

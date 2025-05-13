@@ -34,6 +34,36 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
                 ex.Message);
         }
     }
+
+    public async Task<ApiResponse<List<StableHorseOwnersDto>?>> GetHorsesWithOwnersByStableAsync(int stableId)
+    {
+        try
+        {
+            var stableHorses = await context.StableHorses
+                .Where(sh => sh.StableIdFk == stableId)
+                .Include(sh => sh.Horse)
+                .ThenInclude(h => h!.UserHorses)!
+                    .ThenInclude(uh => uh.User)
+            .ToListAsync();
+
+            if (stableHorses.Count == 0)
+            {
+                return ApiResponse<List<StableHorseOwnersDto>>.Failure(HttpStatusCode.NotFound,
+                    $"No horses found for stable with ID {stableId}");
+            }
+
+            var stableHorseOwnersDtos = mapper.Map<List<StableHorseOwnersDto>>(stableHorses);
+
+            return ApiResponse<List<StableHorseOwnersDto>>.Success(HttpStatusCode.OK,
+                stableHorseOwnersDtos,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<List<StableHorseOwnersDto>>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
     
     public async Task<ApiResponse<int>> CreateStableHorseConnectionAsync(int stableId, int horseId)
     {
