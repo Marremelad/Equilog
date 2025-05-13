@@ -81,7 +81,7 @@ namespace equilog_backend.Common
 
             CreateMap<StableHorse, StableHorseOwnersDto>()
                 .ForMember(dest => dest.HorseId, opt
-                    => opt.MapFrom(src => src.Horse!.Id))  // Using null-forgiving operator since we filtered nulls
+                    => opt.MapFrom(src => src.Horse!.Id))
                 .ForMember(dest => dest.HorseName, opt
                     => opt.MapFrom(src => src.Horse!.Name))
                 .ForMember(dest => dest.HorseColor, opt
@@ -93,19 +93,6 @@ namespace equilog_backend.Common
                 .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
                 .ToList()
             : new List<string>()));
-
-            //CreateMap<StableHorse, StableHorseOwnersDto>()
-            //    .ForMember(dest => dest.HorseId, opt 
-            //     => opt.MapFrom(src => src.Horse.Id))
-            //    .ForMember(dest => dest.HorseName, opt 
-            //     => opt.MapFrom(src => src.Horse.Name))
-            //    .ForMember(dest => dest.HorseColor, opt 
-            //     => opt.MapFrom(src => src.Horse.Color))
-            //    .ForMember(dest => dest.HorseOwners, opt => opt.MapFrom(src 
-            //     => src.Horse.UserHorses
-            //    .Where(uh => uh.UserRole == 0)
-            //    .Select(uh => uh.User.FirstName + " " + uh.User.LastName)
-            //    .ToList()));
         }
     }
 }
