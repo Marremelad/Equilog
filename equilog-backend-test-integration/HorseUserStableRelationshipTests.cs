@@ -89,7 +89,7 @@ namespace equilog_backend_test_integration
             {
                 UserIdFk = user.Id,
                 HorseIdFk = horse.Id,
-                UserRole = "Owner"
+                UserRole = 0
             };
 
             // Act
@@ -105,7 +105,7 @@ namespace equilog_backend_test_integration
             Assert.NotNull(result);
             Assert.Equal(user.Id, result.User?.Id);
             Assert.Equal(horse.Id, result.Horse?.Id);
-            Assert.Equal("Owner", result.UserRole);
+            Assert.Equal(0, result.UserRole);
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace equilog_backend_test_integration
             {
                 UserIdFk = user.Id,
                 HorseIdFk = horse.Id,
-                UserRole = "Rider"
+                UserRole = 2
             };
 
             var stableHorse = new StableHorse

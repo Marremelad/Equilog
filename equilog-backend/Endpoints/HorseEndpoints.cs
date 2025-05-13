@@ -1,4 +1,5 @@
 ﻿using equilog_backend.Common;
+using equilog_backend.DTOs.HorseCompositionDTOs;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Interfaces;
 
@@ -10,8 +11,8 @@ public class HorseEndpoints
     {
         // Get all horses.
         app.MapGet("/api/horse", GetHorses)
-            .WithName("GetHorses")
-            .RequireAuthorization();
+            .WithName("GetHorses");
+        // .RequireAuthorization();
 
         // Get Horse.
         app.MapGet("/api/horse/{id:int}", GetHorse)
@@ -30,6 +31,13 @@ public class HorseEndpoints
         // Delete horse.
         app.MapDelete("/api/horse/delete/{id:int}", DeleteHorse)
             .WithName("DeleteHorse");
+
+        // -- Endpoints for compositions --
+
+        // Create a horse with required relations.
+        app.MapPost("/api/horse/create/composition", CreateHorseComposition)
+            .AddEndpointFilter<ValidationFilter<HorseCompositionCreateDto>>()
+            .WithName("CreateHorseComposition");
     }
 
     private static async Task<IResult> GetHorses(
@@ -64,5 +72,12 @@ public class HorseEndpoints
         int id)
     {
         return Result.Generate(await horseService.DeleteHorseAsync(id));
+    }
+
+    private static async Task<IResult> CreateHorseComposition(
+        IHorseComposition horseComposition,
+        HorseCompositionCreateDto horseCompositionCreateDto)
+    {
+        return Result.Generate(await horseComposition.CreateHorseCompositionAsync(horseCompositionCreateDto));
     }
 }

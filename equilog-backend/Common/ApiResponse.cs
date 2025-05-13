@@ -1,5 +1,6 @@
 ﻿using equilog_backend.Interfaces;
 using System.Net;
+using System.Text.Json.Serialization;
 namespace equilog_backend.Common;
 
 public class ApiResponse<T> : IApiResponse
@@ -8,8 +9,9 @@ public class ApiResponse<T> : IApiResponse
     public HttpStatusCode StatusCode { get; set; }
     public T? Value { get; set; }
     public string? Message { get; set; }
-    //public ApiResponse() { }
-    public ApiResponse(bool isSuccess, HttpStatusCode statusCode, T value, string? message)
+
+    [JsonConstructor]
+    private ApiResponse(bool isSuccess, HttpStatusCode statusCode, T value, string? message)
     {
         IsSuccess = isSuccess;
         StatusCode = statusCode;

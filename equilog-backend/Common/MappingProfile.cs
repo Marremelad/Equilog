@@ -3,7 +3,6 @@ using equilog_backend.DTOs.AuthDTOs;
 using equilog_backend.DTOs.CalendarEventDTOs;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.DTOs.PasswordDTOs;
-using equilog_backend.DTOs.StableCompositionDtos;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.StableHorseDTOs;
 using equilog_backend.DTOs.StablePostDTOs;
@@ -49,8 +48,6 @@ namespace equilog_backend.Common
             CreateMap<StablePostCreateDto, StablePost>(MemberList.Source);
             CreateMap<StablePostUpdateDto, StablePost>(MemberList.Source);
 
-            CreateMap<StableCompositionCreateDto, StableCreateDto>();
-
             CreateMap<CalendarEvent, CalendarEventDto>().ReverseMap();
             CreateMap<CalendarEventCreateDto, CalendarEvent>(MemberList.Source);
             CreateMap<CalendarEventUpdateDto, CalendarEvent>(MemberList.Source);
@@ -74,8 +71,8 @@ namespace equilog_backend.Common
                     => opt.MapFrom(src => src.User != null ? src.User.LastName : null));
 
             CreateMap<StableHorse, StableHorseDto>()
-                .ForMember(dest => dest.StableHorseId, opt 
-                    => opt.MapFrom(src => src.Id) )
+                .ForMember(dest => dest.StableHorseId, opt
+                    => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.HorseId, opt
                     => opt.MapFrom(src => src.HorseIdFk));
 
