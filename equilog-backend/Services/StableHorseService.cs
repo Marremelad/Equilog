@@ -3,6 +3,7 @@ using AutoMapper;
 using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.StableHorseDTOs;
+using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -34,8 +35,43 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
                 ex.Message);
         }
     }
+<<<<<<< HEAD
+
+    public async Task<ApiResponse<List<StableHorseOwnersDto>?>> GetHorsesWithOwnersByStableAsync(int stableId)
+    {
+        try
+        {
+            var stableHorses = await context.StableHorses
+            .Where(sh => sh.StableIdFk == stableId)
+            .Include(sh => sh.Horse)
+                .ThenInclude(h => h.UserHorses)
+                    .ThenInclude(uh => uh.User)
+            .ToListAsync();
+
+            if (stableHorses == null || !stableHorses.Any())
+            {
+                return ApiResponse<List<StableHorseOwnersDto>>.Failure(HttpStatusCode.NotFound,
+                    $"No horses found for stable with ID {stableId}");
+            }
+
+            var stableHorseOwnersDtos = mapper.Map<List<StableHorseOwnersDto>>(stableHorses);
+
+            return ApiResponse<List<StableHorseOwnersDto>>.Success(HttpStatusCode.OK,
+                stableHorseOwnersDtos,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<List<StableHorseOwnersDto>>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+
+    public async Task<ApiResponse<Unit>> CreateStableHorseConnectionAsync(int stableId, int horseId)
+=======
     
     public async Task<ApiResponse<int>> CreateStableHorseConnectionAsync(int stableId, int horseId)
+>>>>>>> main
     {
         try
         {

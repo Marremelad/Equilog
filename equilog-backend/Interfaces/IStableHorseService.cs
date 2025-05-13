@@ -10,4 +10,6 @@ public interface IStableHorseService
     Task<ApiResponse<Unit>> RemoveHorseFromStableAsync(int stableHorseId);
 
     Task<ApiResponse<List<StableHorseDto>?>> GetStableHorsesAsync(int stableId);
+
+    Task<ApiResponse<List<StableHorseOwnersDto>?>> GetHorsesWithOwnersByStableAsync(int stableId);
 }
