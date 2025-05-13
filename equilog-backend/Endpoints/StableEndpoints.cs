@@ -12,11 +12,11 @@ public class StableEndpoints
         // Get stable by stableId.
         app.MapGet("/api/stable/{id:int}", GetStableByStableId)
             .WithName("GetStableByStableId");
-        
+
         // Get stables by name.
         app.MapGet("/api/stable/search", SearchStables)
             .WithName("SearchStables");
-        
+
         // Update stable.
         app.MapPut("/api/stable/update", UpdateStable)
             .AddEndpointFilter<ValidationFilter<StableUpdateDto>>()
@@ -25,13 +25,13 @@ public class StableEndpoints
         // Delete stable.
         app.MapDelete("/api/stable/delete/{id:int}", DeleteStable)
             .WithName("DeleteStable");
-        
+
         // -- Endpoints for compositions --
-        
+
         // Create stable with required components and relations.
         app.MapPost("/api/stable/create", CreateStableComposition)
-            .AddEndpointFilter<ValidationFilter<StableCreateDto>>()
-            .WithName("CreateStableWithWallPost");
+            .AddEndpointFilter<ValidationFilter<StableCompositionCreateDto>>()
+            .WithName("CreateStable");
     }
 
     private static async Task<IResult> GetStableByStableId(
@@ -40,14 +40,14 @@ public class StableEndpoints
     {
         return Result.Generate(await stableService.GetStableByStableIdAsync(id));
     }
-    
+
     private static async Task<IResult> SearchStables(
-        IStableService stableService, 
-        [AsParameters]StableSearchParametersDto stableSearchParametersDto)
+        IStableService stableService,
+        [AsParameters] StableSearchParametersDto stableSearchParametersDto)
     {
         return Result.Generate(await stableService.SearchStablesAsync(stableSearchParametersDto));
     }
-    
+
     private static async Task<IResult> UpdateStable(
         IStableService stableService,
         StableUpdateDto updatedStable)
@@ -61,10 +61,10 @@ public class StableEndpoints
     {
         return Result.Generate(await stableService.DeleteStableAsync(id));
     }
-    
+
     // -- Result generators for compositions --
     private static async Task<IResult> CreateStableComposition(
-        IStableComposition stableComposition, 
+        IStableComposition stableComposition,
         StableCompositionCreateDto stableCompositionCreateDto)
     {
         var result = await stableComposition.CreateStableCompositionAsync(stableCompositionCreateDto);
