@@ -6,4 +6,6 @@ namespace equilog_backend.Interfaces;
 public interface ICommentService
 {
     Task<ApiResponse<int>> CreateCommentAsync(CommentCreateDto commentCreateDto);
+
+    Task<ApiResponse<Unit>> DeleteCommentAsync(int commentId);
 }

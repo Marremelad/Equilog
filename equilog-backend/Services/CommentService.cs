@@ -4,6 +4,7 @@ using equilog_backend.Data;
 using equilog_backend.DTOs.CommentDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
 
@@ -30,6 +31,32 @@ public class CommentService(EquilogDbContext context) : ICommentService
         catch (Exception ex)
         {
             return ApiResponse<int>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+
+    public async Task<ApiResponse<Unit>> DeleteCommentAsync(int commentId)
+    {
+        try
+        {
+            var comment = await context.Comments
+                .Where(c => c.Id == commentId)
+                .FirstOrDefaultAsync();
+            
+            if (comment == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: Comment not found");
+
+            context.Comments.Remove(comment);
+            await context.SaveChangesAsync();
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                "Comment deleted successfully");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
