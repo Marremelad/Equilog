@@ -12,7 +12,7 @@ public class HorseEndpoints
         // Get all horses.
         app.MapGet("/api/horse", GetHorses)
             .WithName("GetHorses");
-            // .RequireAuthorization();
+        // .RequireAuthorization();
 
         // Get Horse.
         app.MapGet("/api/horse/{id:int}", GetHorse)
@@ -31,11 +31,12 @@ public class HorseEndpoints
         // Delete horse.
         app.MapDelete("/api/horse/delete/{id:int}", DeleteHorse)
             .WithName("DeleteHorse");
-        
+
         // -- Endpoints for compositions --
-        
+
         // Create a horse with required relations.
         app.MapPost("/api/horse/create/composition", CreateHorseComposition)
+            .AddEndpointFilter<ValidationFilter<HorseCompositionCreateDto>>()
             .WithName("CreateHorseComposition");
     }
 
