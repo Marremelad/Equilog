@@ -87,12 +87,10 @@ namespace equilog_backend.Common
                 .ForMember(dest => dest.HorseColor, opt
                     => opt.MapFrom(src => src.Horse!.Color))
                 .ForMember(dest => dest.HorseOwners, opt => opt.MapFrom(src
-                    => src.Horse!.UserHorses != null
-            ? src.Horse.UserHorses
-                .Where(uh => uh != null && uh.User != null && uh.UserRole == 0)
-                .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
-                .ToList()
-            : new List<string>()));
+                    => src.Horse!.UserHorses != null ? src.Horse.UserHorses
+                        .Where(uh => uh != null && uh.User != null && uh.UserRole == 0)
+                        .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
+                        .ToList() : new List<string>()));
         }
     }
 }
