@@ -8,7 +8,7 @@ public class StableHorseEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        app.MapGet("/api/stable-horses/{Id:int}", GetStableHorses)
+        app.MapGet("/api/stable-horses/{id:int}", GetStableHorses)
             .WithName("GetStableHorses");
 
         app.MapGet("/api/stables/{stableId:int}/horses/with-owners", GetHorsesWithOwnersByStable)
