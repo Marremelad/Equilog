@@ -22,7 +22,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 Password = "Password123!",
                 PhoneNumber = "1234567890"
             };
@@ -43,7 +42,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 Password = "Password123!",
                 PhoneNumber = null
             };
@@ -66,7 +64,6 @@ namespace equilog_backend_test_unit
                 FirstName = firstName,
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 Password = "Password123!"
             };
 
@@ -87,7 +84,6 @@ namespace equilog_backend_test_unit
                 FirstName = new string('A', 51),
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 Password = "Password123!"
             };
 
@@ -110,7 +106,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = lastName,
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 Password = "Password123!"
             };
 
@@ -131,7 +126,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = new string('A', 51),
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 Password = "Password123!"
             };
 
@@ -154,7 +148,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = email,
-                UserName = "johndoe",
                 Password = "Password123!"
             };
 
@@ -176,7 +169,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = longEmail,
-                UserName = "johndoe",
                 Password = "Password123!"
             };
 
@@ -200,7 +192,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = email,
-                UserName = "johndoe",
                 Password = "Password123!"
             };
 
@@ -212,49 +203,6 @@ namespace equilog_backend_test_unit
                 .WithErrorMessage("Invalid email format.");
         }
 
-        [Theory]
-        [InlineData("", "Username is required.")]
-        [InlineData(null, "Username is required.")]
-        public void Should_Fail_When_UserName_IsNullOrEmpty(string userName, string expectedError)
-        {
-            // Arrange
-            var dto = new RegisterDto
-            {
-                FirstName = "John",
-                LastName = "Doe",
-                Email = "john.doe@example.com",
-                UserName = userName,
-                Password = "Password123!"
-            };
-
-            // Act
-            var result = _validator.TestValidate(dto);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.UserName)
-                .WithErrorMessage(expectedError);
-        }
-
-        [Fact]
-        public void Should_Fail_When_UserName_ExceedsMaxLength()
-        {
-            // Arrange
-            var dto = new RegisterDto
-            {
-                FirstName = "John",
-                LastName = "Doe",
-                Email = "john.doe@example.com",
-                UserName = new string('a', 31),
-                Password = "Password123!"
-            };
-
-            // Act
-            var result = _validator.TestValidate(dto);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.UserName)
-                .WithErrorMessage("Email cannot exceed 30 characters.");
-        }
 
         [Theory]
         [InlineData("", "Password is required.")]
@@ -267,7 +215,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 Password = password
             };
 
@@ -288,7 +235,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 Password = "Pass1!"  // 6 chars, minimum is 8
             };
 
@@ -309,7 +255,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 Password = "Password123!" + new string('a', 101)
             };
 
@@ -330,7 +275,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe123",
                 Password = "password123!",
                 PhoneNumber = "+1234567890"
             };
@@ -351,7 +295,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe123",
                 Password = "PASSWORD123!",
                 PhoneNumber = "+1234567890"
             };
@@ -372,7 +315,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe123",
                 Password = "Password!",
                 PhoneNumber = "+1234567890"
             };
@@ -393,7 +335,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe123",
                 Password = "Password123",
                 PhoneNumber = "+1234567890"
             };
@@ -414,7 +355,6 @@ namespace equilog_backend_test_unit
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 Password = "password123",
                 PhoneNumber = new string('1', 21)
             };

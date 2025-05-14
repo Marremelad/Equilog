@@ -27,7 +27,6 @@ namespace equilog_backend_test_integration
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                UserName = "johndoe",
                 PasswordHash = "hashedpassword",
             };
 

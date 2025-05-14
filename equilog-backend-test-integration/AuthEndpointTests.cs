@@ -59,7 +59,6 @@ namespace equilog_backend_test_integration
 
             return new RegisterDto
             {
-                UserName = username,
                 Email = $"{username}@example.com",
                 Password = "SecureP@ssw0rd!123",
                 FirstName = $"Test{uniqueId}",
@@ -188,7 +187,6 @@ namespace equilog_backend_test_integration
             // Arrange: User with invalid email.
             var invalidRegisterDto = new RegisterDto
             {
-                UserName = "invalid_format_user",
                 Email = "not-an-email",
                 Password = "weak",
                 FirstName = "Invalid",
