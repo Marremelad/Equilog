@@ -44,16 +44,6 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
     {
         try
         {
-            var existingUserByUsername = await context.Users
-                .FirstOrDefaultAsync(u => u.UserName.ToLower() == registerDto.UserName.ToLower());
-
-            if (existingUserByUsername != null)
-            {
-                return ApiResponse<AuthResponseDto>.Failure(
-                    HttpStatusCode.BadRequest,
-                    "Username already exists");
-            }
-
             var existingUserByEmail = await context.Users
                 .FirstOrDefaultAsync(u => u.Email.ToLower() == registerDto.Email.ToLower());
 
