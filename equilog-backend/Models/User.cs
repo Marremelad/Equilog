@@ -16,8 +16,14 @@ public class User
     [StringLength(254)]
     public required string Email { get; set; }
 
-    [StringLength(30)]
-    public required string UserName { get; set; }
+    [StringLength(254)]
+    public string? EmergencyContact { get; set; }
+
+    [StringLength(254)]
+    public string? CoreInformation { get; set; }
+
+    [StringLength(254)]
+    public string? Description { get; set; }
 
     [StringLength(100)]
     public required string PasswordHash { get; set; }
