@@ -254,6 +254,42 @@ namespace equilog_backend.Migrations
                     b.ToTable("StableJoinRequests");
                 });
 
+            modelBuilder.Entity("equilog_backend.Models.StableLocation", b =>
+                {
+                    b.Property<string>("PostCode")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CountyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GoogleMaps")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("MunicipalityCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MunicipalityName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PostCode");
+
+                    b.ToTable("StableLocation");
+                });
+
             modelBuilder.Entity("equilog_backend.Models.StablePost", b =>
                 {
                     b.Property<int>("Id")
