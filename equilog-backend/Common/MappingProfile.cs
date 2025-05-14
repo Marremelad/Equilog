@@ -5,6 +5,7 @@ using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.DTOs.PasswordDTOs;
 using equilog_backend.DTOs.StableDTOs;
 using equilog_backend.DTOs.StableHorseDTOs;
+using equilog_backend.DTOs.StableLocationDtos;
 using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.DTOs.UserStableDTOs;
@@ -88,6 +89,8 @@ namespace equilog_backend.Common
                         .Where(uh => uh != null && uh.User != null && uh.UserRole == 0)
                         .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
                         .ToList() : new List<string>()));
+
+            CreateMap<StableLocation, StableLocationDto>().ReverseMap();
         }
     }
 }
