@@ -45,5 +45,5 @@ public class User
     
     public virtual List<StableInvite>? StableInvites { get; set; }
     
-    public virtual List<Comment>? StablePostComments { get; set; }
+    public virtual List<UserComment>? UserComments { get; set; }
 }
