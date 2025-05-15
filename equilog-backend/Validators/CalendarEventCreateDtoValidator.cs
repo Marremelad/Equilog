@@ -15,7 +15,8 @@ public class CalendarEventCreateDtoValidator : AbstractValidator<CalendarEventCr
             .NotEmpty().WithMessage("Start is required.");
 
         RuleFor(e => e.EndDateTime)
-            .NotEmpty().WithMessage("End is required.");
+            .NotEmpty().WithMessage("End is required.")
+            .GreaterThanOrEqualTo(d => d.StartDateTime).WithMessage("Endtime must be after starttime.");
 
         RuleFor(e => e.StableIdFk)
             .NotEmpty().WithMessage("Stable id is required.")
