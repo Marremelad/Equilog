@@ -3,9 +3,9 @@ using equilog_backend.DTOs.UserStableDTOs;
 
 namespace equilog_backend.DTOs.UserDTOs
 {
-	public class UserProfileDto
-	{
-		public required UserStableRoleDto UserStableRole { get; init; }
-		public List<UserHorseRoleDto>? UserHorses { get; init; }
-	}
+    public class UserProfileDto
+    {
+        public required UserStableRoleDto UserStableRole { get; init; }
+        public List<UserHorseRoleDto>? UserHorseRoles { get; init; }
+    }
 }
