@@ -199,6 +199,7 @@ public static class AppConfiguration
         services.AddScoped<IStableHorseService, StableHorseService>();
         services.AddScoped<IUserHorseService, UserHorseService>();
         services.AddScoped<IUserCommentService, UserCommentService>();
+        services.AddScoped<IStablePostCommentService, StablePostCommentService>();
 
         // Email service.
         services.AddScoped<IEmailService, EmailService>();
