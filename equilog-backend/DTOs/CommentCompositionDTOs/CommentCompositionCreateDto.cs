@@ -8,5 +8,5 @@ public class CommentCompositionCreateDto
     
     public required int StablePostId { get; set; }
     
-    public required CommentCreateDto CommentCreateDto { get; set; }
+    public required CommentCreateDto Comment { get; set; }
 }
