@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using equilog_backend.Data;
 
@@ -11,9 +12,11 @@ using equilog_backend.Data;
 namespace equilog_backend.Migrations
 {
     [DbContext(typeof(EquilogDbContext))]
-    partial class EquilogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250515112738_UserProfileInfo")]
+    partial class UserProfileInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,42 +257,6 @@ namespace equilog_backend.Migrations
                     b.ToTable("StableJoinRequests");
                 });
 
-            modelBuilder.Entity("equilog_backend.Models.StableLocation", b =>
-                {
-                    b.Property<string>("PostCode")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CountyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GoogleMaps")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("Latitude")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Longitude")
-                        .HasColumnType("float");
-
-                    b.Property<string>("MunicipalityCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MunicipalityName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PostCode");
-
-                    b.ToTable("StableLocation");
-                });
-
             modelBuilder.Entity("equilog_backend.Models.StablePost", b =>
                 {
                     b.Property<int>("Id")
@@ -439,13 +406,13 @@ namespace equilog_backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
                     b.Property<int>("StableIdFk")
                         .HasColumnType("int");
 
                     b.Property<int>("UserIdFk")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserRole")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

@@ -8,7 +8,9 @@ public interface IUserService
     Task<ApiResponse<List<UserDto>?>> GetUsersAsync();
 
     Task<ApiResponse<UserDto?>> GetUserAsync(int userId);
-    
+
+    Task<ApiResponse<UserProfileDto?>> GetUserProfileAsync(int userId, int stableId);
+
     Task<ApiResponse<Unit>> UpdateUserAsync(UserUpdateDto userUpdateDto);
 
     Task<ApiResponse<Unit>> DeleteUserAsync(int userId);

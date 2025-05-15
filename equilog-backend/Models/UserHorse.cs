@@ -17,5 +17,5 @@ public class UserHorse
     public virtual Horse? Horse { get; set; }
 
     [StringLength(20)]
-    public required int UserRole { get; set; }
+    public required int UserRole { get; set; } // 1: Owner, full access || 2: HorseAdmin, almost full access(?) || 3: Rider, No access, except small stuff
 }
