@@ -18,7 +18,8 @@ public class CalendarEventUpdateValidator : AbstractValidator<CalendarEventUpdat
             .NotEmpty().WithMessage("Start is required.");
 
         RuleFor(e => e.EndDateTime)
-            .NotEmpty().WithMessage("End is required.");
+            .NotEmpty().WithMessage("End is required.")
+            .GreaterThanOrEqualTo(d => d.StartDateTime).WithMessage("Endtime must be after starttime.");
     }
 }
 
