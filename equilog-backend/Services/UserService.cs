@@ -63,10 +63,16 @@ namespace equilog_backend.Services
                     "Error: User not found");
                 }
 
-                // Add nullcheck
                 var userStableRoleDto = mapper.Map<UserStableRoleDto>(
                     await context.UserStables.FirstOrDefaultAsync(us => us.UserIdFk == userId && us.StableIdFk == stableId)
-);
+                );
+
+                if (userStableRoleDto == null)
+                {
+                    return ApiResponse<UserProfileDto>.Failure(HttpStatusCode.NotFound,
+                    "Error: User stable connection not found.");
+                }
+
                 var userHorseRoleDtos = await context.UserHorses
                     .Where(uh => uh.UserIdFk == userId &&
                                  context.StableHorses.Any(sh => sh.HorseIdFk == uh.HorseIdFk && sh.StableIdFk == stableId))
