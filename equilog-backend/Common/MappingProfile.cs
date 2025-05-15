@@ -102,7 +102,7 @@ public class MappingProfile : Profile
                     => opt.MapFrom(src => src.Horse!.Color))
                 .ForMember(dest => dest.HorseOwners, opt => opt.MapFrom(src
                     => src.Horse!.UserHorses != null ? src.Horse.UserHorses
-                        .Where(uh => uh != null && uh.User != null && uh.UserRole == 0)
+                        .Where(uh => uh.User != null && uh.UserRole == 0)
                         .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
                         .ToList() : new List<string>()));
 
@@ -121,11 +121,10 @@ public class MappingProfile : Profile
                     => opt.MapFrom(src => src.Horse!.Color))
                 .ForMember(dest => dest.HorseOwners, opt => opt.MapFrom(src
                     => src.Horse!.UserHorses != null ? src.Horse.UserHorses
-                        .Where(uh => uh != null && uh.User != null && uh.UserRole == 0)
+                        .Where(uh => uh.User != null && uh.UserRole == 0)
                         .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
                         .ToList() : new List<string>()));
 
             CreateMap<StableLocation, StableLocationDto>().ReverseMap();
-        }
     }
 }
