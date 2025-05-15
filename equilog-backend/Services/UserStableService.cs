@@ -77,7 +77,7 @@ namespace equilog_backend.Services
                     $"userStable with ID: {userStableId} not found");
                 }
 
-                userStable.UserRole = userStableRole;
+                userStable.Role = userStableRole;
                 await context.SaveChangesAsync();
 
                 return ApiResponse<Unit>.Success(HttpStatusCode.OK, Unit.Value, "Role updated successfully.");
@@ -121,7 +121,7 @@ namespace equilog_backend.Services
                 {
                     UserIdFk = userId,
                     StableIdFk = stableId,
-                    UserRole = 0
+                    Role = 0
                 };
 
                 context.UserStables.Add(userStable);
