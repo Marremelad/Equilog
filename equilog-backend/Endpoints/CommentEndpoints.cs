@@ -1,4 +1,5 @@
 ﻿using equilog_backend.Common;
+using equilog_backend.DTOs.CommentCompositionDTOs;
 using equilog_backend.DTOs.CommentDTOs;
 using equilog_backend.Interfaces;
 
@@ -19,6 +20,12 @@ public class CommentEndpoints
         // Delete comment.
         app.MapDelete("/api/comment/delete/{id:int}", DeleteComment)
             .WithName("DeleteComment");
+        
+        // -- Endpoints for compositions --
+        
+        // create a comment with required components and relations.
+        app.MapPost("/api/comment/create/composition", CreateCommentComposition)
+            .WithName("CreateCommentComposition");
     }
 
     private static async Task<IResult> GetCommentsByStablePostId(
@@ -40,5 +47,13 @@ public class CommentEndpoints
         int id)
     {
         return Result.Generate(await commentService.DeleteCommentAsync(id));
+    }
+    
+    // -- Result generators for composition --
+    private static async Task<IResult> CreateCommentComposition(
+        ICommentComposition commentComposition,
+        CommentCompositionCreateDto commentCompositionCreateDto)
+    {
+        return Result.Generate(await commentComposition.CreateCommentComposition(commentCompositionCreateDto));
     }
 }
