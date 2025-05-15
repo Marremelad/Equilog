@@ -18,6 +18,10 @@ public class HorseEndpoints
         app.MapGet("/api/horse/{id:int}", GetHorse)
             .WithName("GetHorse");
 
+        // Get horse profile
+        app.MapGet("/api/horse/{horseId:int}/profile", GetHorseProfile)
+            .WithName("GetHorseProfile");
+
         // Create horse.
         app.MapPost("/api/horse/create", CreateHorse)
             .AddEndpointFilter<ValidationFilter<HorseCreateDto>>()
@@ -51,6 +55,13 @@ public class HorseEndpoints
         int id)
     {
         return Result.Generate(await horseService.GetHorseAsync(id));
+    }
+
+    private static async Task<IResult> GetHorseProfile(
+        IHorseService horseService,
+        int horseId)
+    {
+        return Result.Generate(await horseService.GetHorseProfileAsync(horseId));
     }
 
     private static async Task<IResult> CreateHorse(
