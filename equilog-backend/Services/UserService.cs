@@ -1,10 +1,13 @@
-using System.Net;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using equilog_backend.Common;
 using equilog_backend.Data;
 using equilog_backend.DTOs.UserDTOs;
+using equilog_backend.DTOs.UserHorseDTOs;
+using equilog_backend.DTOs.UserStableDTOs;
 using equilog_backend.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace equilog_backend.Services
 {
@@ -46,7 +49,53 @@ namespace equilog_backend.Services
                     ex.Message);
             }
         }
-        
+
+        public async Task<ApiResponse<UserProfileDto?>> GetUserProfileAsync(int userId, int stableId)
+        {
+            try
+            {
+                var userExists = await context.Users
+                    .Where(u => u.Id == userId)
+                    .FirstOrDefaultAsync();
+                if (userExists == null)
+                {
+                    return ApiResponse<UserProfileDto>.Failure(HttpStatusCode.NotFound,
+                    "Error: User not found");
+                }
+
+                var userStableRoleDto = mapper.Map<UserStableRoleDto>(
+                    await context.UserStables.FirstOrDefaultAsync(us => us.UserIdFk == userId && us.StableIdFk == stableId)
+                );
+
+                if (userStableRoleDto == null)
+                {
+                    return ApiResponse<UserProfileDto>.Failure(HttpStatusCode.NotFound,
+                    "Error: User stable connection not found.");
+                }
+
+                var userHorseRoleDtos = await context.UserHorses
+                    .Where(uh => uh.UserIdFk == userId &&
+                                 context.StableHorses.Any(sh => sh.HorseIdFk == uh.HorseIdFk && sh.StableIdFk == stableId))
+                    .ProjectTo<UserHorseRoleDto>(mapper.ConfigurationProvider)
+                    .ToListAsync();
+
+                var userProfileDto = new UserProfileDto
+                {
+                    UserStableRole = userStableRoleDto,
+                    UserHorseRoles = userHorseRoleDtos
+                };
+
+                return ApiResponse<UserProfileDto>.Success(HttpStatusCode.OK,
+                    userProfileDto,
+                    null);
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<UserProfileDto>.Failure(HttpStatusCode.InternalServerError,
+                    ex.Message);
+            }
+        }
+
         public async Task<ApiResponse<Unit>> UpdateUserAsync(UserUpdateDto userUpdateDto)
         {
             try

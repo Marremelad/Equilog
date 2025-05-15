@@ -8,18 +8,18 @@ public static class PipelineInitialization
     {
         // Environment-specific setup.
         InitializeEnvironment(app);
-        
+
         // Security and communication.
         InitializeHttps(app);
         InitializeCors(app);
-        
+
         // Authentication and authorization.
         InitializeSecurity(app);
-        
+
         // API endpoints.
         RegisterEndpoints(app);
     }
-    
+
     private static void InitializeEnvironment(WebApplication app)
     {
         if (app.Environment.IsDevelopment())
@@ -33,7 +33,7 @@ public static class PipelineInitialization
     {
         app.UseHttpsRedirection();
     }
-    
+
     private static void InitializeCors(WebApplication app)
     {
         app.UseCors("Default");
@@ -60,6 +60,7 @@ public static class PipelineInitialization
         StableJoinRequestEndpoints.RegisterEndpoints(app);
         StableInviteEndpoints.RegisterEndpoints(app);
         StableHorseEndpoints.RegisterEndpoints(app);
+        StableLocationEndpoints.RegisterEndpoints(app);
         CommentEndpoints.RegisterEndpoints(app);
     }
 }

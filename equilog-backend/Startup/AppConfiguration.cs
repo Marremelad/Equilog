@@ -1,10 +1,13 @@
-﻿using equilog_backend.Data;
+﻿using equilog_backend.Common;
+using equilog_backend.Compositions;
+using equilog_backend.Data;
 using equilog_backend.Interfaces;
 using equilog_backend.Security;
 using equilog_backend.Services;
 using equilog_backend.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -12,7 +15,6 @@ using SendGrid;
 using System.Text;
 using equilog_backend.Common;
 using equilog_backend.Compositions;
-using Microsoft.AspNetCore.Http.Json;
 using Twilio;
 
 namespace equilog_backend.Startup;
@@ -32,7 +34,7 @@ public static class AppConfiguration
         // Authentication and security.
         ConfigureAuthentication(services, configuration);
         ConfigurePasswordResetSettings(services, configuration);
-        
+
         // Twilio and Sendgrid services.
         ConfigureTwilioSettings(services, configuration);
         ConfigureSendgridSettings(services, configuration);
@@ -73,21 +75,21 @@ public static class AppConfiguration
     private static void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
-        
+
         if (jwtSettings == null)
             throw new InvalidOperationException("JwtSettings not found in configuration");
-        
+
         if (string.IsNullOrWhiteSpace(jwtSettings.Key))
             throw new InvalidOperationException("JwtSettings.Key not found in configuration");
-        
+
         if (string.IsNullOrWhiteSpace(jwtSettings.Issuer))
             throw new InvalidOperationException("JwtSettings.Issuer not found in configuration");
-        
+
         if (string.IsNullOrEmpty(jwtSettings.Audience))
-           throw new InvalidOperationException("JwtSettings.Audience not found in configuration");
-       
+            throw new InvalidOperationException("JwtSettings.Audience not found in configuration");
+
         services.AddSingleton(jwtSettings);
-        
+
         // Set up authentication schemes.
         services.AddAuthentication(options =>
             {
@@ -123,37 +125,37 @@ public static class AppConfiguration
 
         services.AddSingleton(passwordResetSettings);
     }
-    
+
     private static void ConfigureTwilioSettings(IServiceCollection services, IConfiguration configuration)
     {
         var twilioSettings = configuration.GetSection("TwilioSettings").Get<TwilioSettings>();
-    
+
         if (twilioSettings == null)
             throw new InvalidOperationException("TwilioSettings not found in configuration");
-        
+
         if (string.IsNullOrWhiteSpace(twilioSettings.AccountSid))
             throw new InvalidOperationException("TwilioSettings.AccountSid not found in configuration");
-        
+
         if (string.IsNullOrWhiteSpace(twilioSettings.AuthToken))
             throw new InvalidOperationException("TwilioSettings.AuthToken not found in configuration");
-        
+
         if (string.IsNullOrWhiteSpace(twilioSettings.VerifySid))
             throw new InvalidOperationException("TwilioSettings.VerifySid not found in configuration");
-        
+
         TwilioClient.Init(twilioSettings.AccountSid, twilioSettings.AuthToken);
-        
+
         services.AddSingleton(twilioSettings);
     }
-    
+
     private static void ConfigureSendgridSettings(IServiceCollection services, IConfiguration configuration)
     {
         var sendGridSettings = configuration.GetSection("SendGridSettings").Get<SendGridSettings>();
         if (sendGridSettings == null)
             throw new InvalidOperationException("SendGridSettings not found in configuration");
-        
+
         if (string.IsNullOrWhiteSpace(sendGridSettings.ApiKey))
             throw new InvalidOperationException("SendGridSettings.ApiKey not found in configuration");
-        
+
         var client = new SendGridClient(sendGridSettings.ApiKey);
         services.AddSingleton(client);
     }
@@ -167,7 +169,7 @@ public static class AppConfiguration
     {
         var corsConnection = configuration["CorsConnection:Url"]
                      ?? throw new InvalidOperationException("Cors connection is not configured");
-        
+
         services.AddCors(options =>
         {
             options.AddPolicy("Default",
@@ -179,13 +181,13 @@ public static class AppConfiguration
                 });
         });
     }
-    
+
     private static void AddApplicationServices(IServiceCollection services)
     {
         // Authentication services.
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPasswordService, PasswordService>();
-        
+
         // MailTrap services.
         services.AddScoped<IMailTrapService, MailTrapService>();
 
@@ -210,6 +212,7 @@ public static class AppConfiguration
         services.AddScoped<IWallPostService, WallPostService>();
         services.AddScoped<IStableJoinRequestService, StableJoinRequestService>();
         services.AddScoped<IStableInviteService, StableInviteService>();
+        services.AddScoped<IStableLocationService, StableLocationService>();
         services.AddScoped<ICommentService, CommentService>();
         
         // Composition services

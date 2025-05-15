@@ -24,13 +24,13 @@ namespace equilog_backend.Services
                     return ApiResponse<List<UserStableDto>?>.Failure(HttpStatusCode.NotFound,
                         "Error: User not connected to any stables");
 
-                return ApiResponse<List<UserStableDto>?>.Success(HttpStatusCode.OK, 
-                    userStableDtos, 
+                return ApiResponse<List<UserStableDto>?>.Success(HttpStatusCode.OK,
+                    userStableDtos,
                     null);
             }
             catch (Exception ex)
             {
-                return ApiResponse<List<UserStableDto>?>.Failure(HttpStatusCode.InternalServerError, 
+                return ApiResponse<List<UserStableDto>?>.Failure(HttpStatusCode.InternalServerError,
                     ex.Message);
             }
         }
@@ -53,7 +53,7 @@ namespace equilog_backend.Services
 
                 var stableUserDtos = mapper.Map<List<StableUserDto>>(userStables);
 
-                return ApiResponse<List<StableUserDto>?>.Success(HttpStatusCode.OK,stableUserDtos,null);
+                return ApiResponse<List<StableUserDto>?>.Success(HttpStatusCode.OK, stableUserDtos, null);
             }
             catch (Exception ex)
             {
@@ -105,7 +105,7 @@ namespace equilog_backend.Services
                 context.Remove(userStable);
                 await context.SaveChangesAsync();
 
-                return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,Unit.Value,"User successfully removed from stable.");
+                return ApiResponse<Unit>.Success(HttpStatusCode.NoContent, Unit.Value, "User successfully removed from stable.");
             }
             catch (Exception ex)
             {
@@ -126,7 +126,7 @@ namespace equilog_backend.Services
 
                 context.UserStables.Add(userStable);
                 await context.SaveChangesAsync();
-                
+
                 return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                     Unit.Value,
                     null);

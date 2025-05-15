@@ -17,6 +17,10 @@ namespace equilog_backend.Endpoints
             app.MapGet("/api/user/{id:int}", GetUser)
                 .WithName("GetUser");
 
+            // Get user profile
+            app.MapGet("/api/user/{userId:int}/stable/{stableId:int}", GetUserProfile)
+                .WithName("GetUserProfile");
+
             // Update user properties.
             app.MapPut("/api/user/update", UpdateUser)
             .AddEndpointFilter<ValidationFilter<UserUpdateDto>>()
@@ -38,6 +42,13 @@ namespace equilog_backend.Endpoints
             int id)
         {
             return Result.Generate(await userService.GetUserAsync(id));
+        }
+
+        private static async Task<IResult> GetUserProfile(
+            IUserService userService,
+            int userId, int stableId)
+        {
+            return Result.Generate(await userService.GetUserProfileAsync(userId, stableId));
         }
 
         private static async Task<IResult> UpdateUser(

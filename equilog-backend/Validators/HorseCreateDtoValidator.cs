@@ -11,8 +11,9 @@ public class HorseCreateDtoValidator : AbstractValidator<HorseCreateDto>
             .MaximumLength(50).WithMessage("Name cannot exceed 50 characters.");
 
         RuleFor(h => h.Age)
-            .Must(age => age == null || age < DateOnly.FromDateTime(DateTime.Today))
-            .WithMessage("Age must be a date in the past.");
+            .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Today))
+            .When(h => h.Age.HasValue)
+            .WithMessage("Age must be today or a past date.");
 
         RuleFor(h => h.Color)
             .MaximumLength(50).When(h => h.Color != null);
