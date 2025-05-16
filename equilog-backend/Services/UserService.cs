@@ -76,7 +76,7 @@ namespace equilog_backend.Services
                 var userHorseRoleDtos = await context.UserHorses
                     .Where(uh => uh.UserIdFk == userId &&
                                  context.StableHorses.Any(sh => sh.HorseIdFk == uh.HorseIdFk && sh.StableIdFk == stableId))
-                    .ProjectTo<UserHorseRoleDto>(mapper.ConfigurationProvider)
+                    .ProjectTo<HorseWithUserHorseRoleDto>(mapper.ConfigurationProvider)
                     .ToListAsync();
 
                 var userProfileDto = new UserProfileDto

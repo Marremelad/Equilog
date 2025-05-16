@@ -6,6 +6,8 @@ using equilog_backend.Common;
 using equilog_backend.DTOs.HorseDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
+using equilog_backend.DTOs.UserHorseDTOs;
+using AutoMapper.QueryableExtensions;
 
 namespace equilog_backend.Services;
 
@@ -51,6 +53,41 @@ public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseServ
         }
     }
 
+    public async Task<ApiResponse<HorseProfileDto?>> GetHorseProfileAsync(int horseId)
+    {
+        try
+        {
+            var horse = mapper.Map<HorseDto>(await context.Horses
+                .Where(h => h.Id == horseId)
+                .FirstOrDefaultAsync());
+
+            if (horse == null)
+            {
+                return ApiResponse<HorseProfileDto>.Failure(HttpStatusCode.NotFound,
+                "Error: Horse not found");
+            }
+
+            var userWithHorseRoleDtos = await context.UserHorses
+                .Where(uh => uh.HorseIdFk == horseId)
+                .ProjectTo<UserWithUserHorseRoleDto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            var horseProfileDto = new HorseProfileDto 
+            {
+                Horse = horse,
+                UserHorseRoles = userWithHorseRoleDtos 
+            };
+
+            return ApiResponse<HorseProfileDto>.Success(HttpStatusCode.OK,
+                horseProfileDto,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<HorseProfileDto>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
     public async Task<ApiResponse<HorseDto?>> CreateHorseAsync(HorseCreateDto horseCreateDto)
     {
         try

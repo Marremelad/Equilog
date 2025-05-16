@@ -106,12 +106,11 @@ public class MappingProfile : Profile
                         .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
                         .ToList() : new List<string>()));
 
-            CreateMap<UserStable, UserStableRoleDto>()
-              .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
+            CreateMap<UserStable, UserStableRoleDto>();
 
-            CreateMap<UserHorse, UserHorseRoleDto>()
-                .ForMember(dest => dest.Horse, opt => opt.MapFrom(src => src.Horse));
+            CreateMap<UserHorse, HorseWithUserHorseRoleDto>();
 
+            CreateMap<UserHorse, UserWithUserHorseRoleDto>();
             CreateMap<StableHorse, StableHorseOwnersDto>()
                 .ForMember(dest => dest.HorseId, opt
                     => opt.MapFrom(src => src.Horse!.Id))

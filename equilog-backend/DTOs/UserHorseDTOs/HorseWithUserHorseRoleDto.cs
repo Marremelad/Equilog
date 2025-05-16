@@ -2,7 +2,7 @@
 
 namespace equilog_backend.DTOs.UserHorseDTOs
 {
-	public class UserHorseRoleDto
+	public class HorseWithUserHorseRoleDto
 	{
 		public required HorseDto Horse { get; set; }
 
