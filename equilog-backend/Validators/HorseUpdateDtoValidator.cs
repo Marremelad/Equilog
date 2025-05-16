@@ -24,5 +24,21 @@ public class HorseUpdateDtoValidator : AbstractValidator<HorseUpdateDto>
 
         RuleFor(h => h.Breed)
             .MaximumLength(50).When(h => h.Breed != null);
+
+        RuleFor(h => h.CoreInformation)
+            .MaximumLength(254).WithMessage("Core information cannot exceed 254 characters.");
+
+        RuleFor(h => h.Description)
+            .MaximumLength(254).WithMessage("Description cannot exceed 254 characters.");
+
+        RuleFor(h => h.Weight)
+            .GreaterThanOrEqualTo(0).WithMessage("Weight must be greater than 0.");
+
+        RuleFor(h => h.Height)
+            .GreaterThanOrEqualTo(0).WithMessage("Height must be greater than 0.");
+
+        RuleFor(h => h.CurrentBox)
+            .GreaterThanOrEqualTo(0).WithMessage("Current box must be greater than 0.")
+            .LessThan(1000000).WithMessage("Box Count must be less than 1000000");
     }
 }
