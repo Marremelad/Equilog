@@ -35,4 +35,10 @@ public class EquilogDbContext(DbContextOptions<EquilogDbContext> options)
     public DbSet<StableInvite> StableInvites { get; set; }
 
     public DbSet<StableLocation> StableLocation { get; set; }
+    
+    public DbSet<Comment> Comments { get; set; }
+    
+    public DbSet<UserComment> UserComments { get; set; }
+    
+    public DbSet<StablePostComment> StablePostComments { get; set; }
 }
