@@ -18,6 +18,23 @@ namespace equilog_backend.Validators
             RuleFor(u => u.LastName)
                 .NotEmpty().WithMessage("Last name is required.")
                 .MaximumLength(50).WithMessage("Last name cannot exceed 50 characters.");
+
+            RuleFor(u => u.Email)
+                .NotEmpty().WithMessage("Email is required.")
+                .EmailAddress().WithMessage("Invalid email format.")
+                .MaximumLength(254).WithMessage("Email cannot exceed 254 characters.");
+
+            RuleFor(u => u.EmergencyContact)
+                .MaximumLength(254).WithMessage("Last name cannot exceed 254 characters.");
+
+            RuleFor(u => u.CoreInformation)
+                .MaximumLength(254).WithMessage("Last name cannot exceed 254 characters.");
+
+            RuleFor(u => u.Description)
+                .MaximumLength(254).WithMessage("Last name cannot exceed 254 characters.");
+
+            RuleFor(u => u.PhoneNumber)
+                .MaximumLength(20).WithMessage("Phone number cannot exceed 20 characters.");
         }
     }
 }

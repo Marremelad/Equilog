@@ -2,10 +2,20 @@
 {
     public class UserUpdateDto
     {
-        public required int Id { get; init; }
+    public int Id { get; set; }
+    
+    public required string FirstName { get; set; }
 
-        public required string FirstName { get; init; }
+    public required string LastName { get; set; }
 
-        public required string LastName { get; init; }
+    public required string Email { get; set; }
+
+    public string? EmergencyContact { get; set; }
+
+    public string? CoreInformation { get; set; }
+
+    public string? Description { get; set; }
+ 
+    public string? PhoneNumber { get; set; }
     }
 }
