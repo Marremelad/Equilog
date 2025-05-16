@@ -25,5 +25,7 @@ namespace equilog_backend.Models
         public required DateTime Date { get; set; }
 
         public required bool IsPinned { get; set; }
+        
+        public virtual List<StablePostComment>? StablePostComments { get; set; }
     }
 }
