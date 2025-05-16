@@ -6,6 +6,7 @@ using equilog_backend.Interfaces;
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace equilog_backend.Services;
 
@@ -139,14 +140,63 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
         }
     }
 
-    public async Task<bool> CheckNumberOfStableOwners(int userId, int stableId)
+    public async Task<ApiResponse<Unit>> CheckNumberOfStableOwners(int userId, int stableId)
     {
-        var owners = await context.UserStables
-            .Where(us => us.UserIdFk == userId && us.StableIdFk == stableId)
-            .ToListAsync();
+        try
+        {
+            var owners = await context.UserStables
+                .Where(us => us.UserIdFk == userId && us.StableIdFk == stableId)
+                .ToListAsync();
 
-        return owners.Count >= 2;
+            if (owners.Count >= 2)
+                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                    Unit.Value,
+                    null);
+            
+            return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
     }
-    
-    
+
+    public async Task<ApiResponse<Unit>> SetRoleToOwner(int stableId)
+    {
+        try
+        {
+            var admin = await context.UserStables
+                .Where(us => us.StableIdFk == stableId && us.Role == 1)
+                .FirstOrDefaultAsync();
+
+            if (admin != null)
+            {
+                admin.Role = 0;
+                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                    Unit.Value,
+                    null);
+            }
+
+            var member = await context.UserStables
+                .Where(us => us.StableIdFk == stableId)
+                .FirstOrDefaultAsync();
+
+            if (member == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: Stable has no members");
+
+            member.Role = 0;
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
 }
