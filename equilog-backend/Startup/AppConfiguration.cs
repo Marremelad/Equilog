@@ -13,8 +13,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SendGrid;
 using System.Text;
-using equilog_backend.Common;
-using equilog_backend.Compositions;
 using Twilio;
 
 namespace equilog_backend.Startup;
@@ -29,7 +27,7 @@ public static class AppConfiguration
         // Core services.
         AddCoreServices(services);
         ConfigureDatabase(services, configuration);
-        ConfigureJsonOptions(services, configuration);
+        ConfigureJsonOptions(services);
 
         // Authentication and security.
         ConfigureAuthentication(services, configuration);
@@ -64,7 +62,7 @@ public static class AppConfiguration
         });
     }
 
-    private static void ConfigureJsonOptions(IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureJsonOptions(IServiceCollection services)
     {
         services.Configure<JsonOptions>(options =>
         {
