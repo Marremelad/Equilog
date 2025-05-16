@@ -11,4 +11,14 @@ public class HorseUpdateDto
     public string? Color { get; init; }
 
     public string? Breed { get; init; }
+
+    public string? CoreInformation { get; set; }
+
+    public string? Description { get; set; }
+
+    public int? Weight { get; set; }
+
+    public int? Height { get; set; }
+
+    public int? CurrentBox { get; set; }
 }

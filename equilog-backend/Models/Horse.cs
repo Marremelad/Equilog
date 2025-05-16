@@ -17,7 +17,19 @@ namespace equilog_backend.Models
 
         [StringLength(50)]
         public string? Breed { get; set; }
-        
+
+        [StringLength(254)]
+        public string? CoreInformation { get; set; }
+
+        [StringLength(254)]
+        public string? Description { get; set; }
+
+        public int? Weight { get; set; }
+
+        public int? Height { get; set; }
+
+        public int? CurrentBox { get; set; } 
+
         public virtual List<UserHorse>? UserHorses { get; set; }
         
         public virtual List<StableHorse>? StableHorses { get; set; }
