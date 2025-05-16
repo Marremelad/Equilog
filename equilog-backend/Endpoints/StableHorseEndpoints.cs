@@ -11,7 +11,7 @@ public class StableHorseEndpoints
         app.MapGet("/api/stable-horses/{id:int}", GetStableHorses)
             .WithName("GetStableHorses");
 
-        app.MapGet("/api/stables/{stableId:int}/horses/with-owners", GetHorsesWithOwnersByStable)
+        app.MapGet("/api/stable-horses/{stableId:int}/horses/with-owners", GetHorsesWithOwnersByStable)
             .WithName("GetHorsesWithOwnersByStable");
 
         app.MapGet("/api/stable-horse/remove-horse/{id:int}", RemoveHorseFromStable)
