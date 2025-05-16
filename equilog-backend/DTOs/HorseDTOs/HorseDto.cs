@@ -14,13 +14,13 @@ public class HorseDto
 
     public string? Breed { get; init; }
 
-    public string? CoreInformation { get; set; }
+    public string? CoreInformation { get; init; }
 
-    public string? Description { get; set; }
+    public string? Description { get; init; }
 
-    public int? Weight { get; set; }
+    public int? Weight { get; init; }
 
-    public int? Height { get; set; }
+    public int? Height { get; init; }
 
-    public int? CurrentBox { get; set; }
+    public int? CurrentBox { get; init; }
 }
