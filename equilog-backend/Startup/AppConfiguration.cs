@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SendGrid;
 using System.Text;
+using equilog_backend.Common;
+using equilog_backend.Compositions;
 using Twilio;
 
 namespace equilog_backend.Startup;
@@ -198,6 +200,8 @@ public static class AppConfiguration
         services.AddScoped<IUserStableService, UserStableService>();
         services.AddScoped<IStableHorseService, StableHorseService>();
         services.AddScoped<IUserHorseService, UserHorseService>();
+        services.AddScoped<IUserCommentService, UserCommentService>();
+        services.AddScoped<IStablePostCommentService, StablePostCommentService>();
 
         // Email service.
         services.AddScoped<IEmailService, EmailService>();
@@ -209,11 +213,13 @@ public static class AppConfiguration
         services.AddScoped<IStableJoinRequestService, StableJoinRequestService>();
         services.AddScoped<IStableInviteService, StableInviteService>();
         services.AddScoped<IStableLocationService, StableLocationService>();
-
+        services.AddScoped<ICommentService, CommentService>();
+        
         // Composition services
         services.AddScoped<IStableComposition, StableComposition>();
         services.AddScoped<IPasswordResetComposition, PasswordResetComposition>();
         services.AddScoped<IHorseComposition, HorseComposition>();
+        services.AddScoped<ICommentComposition, CommentComposition>();
         services.AddScoped<IUserComposition, UserComposition>();
 
         // Validators

@@ -1,0 +1,89 @@
+﻿using System.Net;
+using AutoMapper;
+using equilog_backend.Common;
+using equilog_backend.Data;
+using equilog_backend.DTOs.CommentDTOs;
+using equilog_backend.Interfaces;
+using equilog_backend.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace equilog_backend.Services;
+
+public class CommentService(EquilogDbContext context, IMapper mapper) : ICommentService
+{
+    public async Task<ApiResponse<List<CommentDto>?>> GetCommentByStablePostId(int stablePostId)
+    {
+        try
+        {
+            var commentDtos = mapper.Map<List<CommentDto>>(await context.Comments
+                .Include(c => c.StablePostComments)
+                .Where(c => c.StablePostComments != null &&
+                            c.StablePostComments.Any(spc => spc.StablePostIdFk == stablePostId))
+                .ToListAsync());
+            
+            if (commentDtos.Count == 0)
+                return ApiResponse<List<CommentDto>?>.Failure(HttpStatusCode.NotFound,
+                    "This post has no comments.");
+            
+            return ApiResponse<List<CommentDto>?>.Success(HttpStatusCode.OK,
+                commentDtos,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<List<CommentDto>>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+    
+    public async Task<ApiResponse<int>> CreateCommentAsync(CommentCreateDto commentCreateDto)
+    {
+        try
+        {
+            var comment = new Comment
+            {
+                CommentDate = DateTime.Now,
+                Content = commentCreateDto.Content
+            };
+
+            context.Comments.Add(comment);
+            await context.SaveChangesAsync();
+            
+            return ApiResponse<int>.Success(HttpStatusCode.Created,
+                comment.Id,
+                "Comment created successfully.");
+
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<int>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+
+    public async Task<ApiResponse<Unit>> DeleteCommentAsync(int commentId)
+    {
+        try
+        {
+            var comment = await context.Comments
+                .Where(c => c.Id == commentId)
+                .FirstOrDefaultAsync();
+            
+            if (comment == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: Comment not found");
+
+            context.Comments.Remove(comment);
+            await context.SaveChangesAsync();
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                "Comment deleted successfully");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+}
