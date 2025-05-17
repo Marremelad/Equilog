@@ -131,7 +131,6 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                 Unit.Value,
                 null);
-
         }
         catch (Exception ex)
         {
@@ -139,67 +138,43 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                 ex.Message);
         }
     }
-
-    public async Task<ApiResponse<Unit>> CheckNumberOfStableOwners(int stableId)
+    
+    public async Task<List<UserStable>> GetConnectionsWithOwnerRole(int userId)
     {
-        try
-        {
-            var owners = await context.UserStables
-                .Where(us => us.StableIdFk == stableId && us.Role == 0)
-                .ToListAsync();
-
-            if (owners.Count >= 2)
-                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
-                    Unit.Value,
-                    null);
-            
-            return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
-                null);
-        }
-        catch (Exception ex)
-        {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
-                ex.Message);
-        }
+        return await context.UserStables
+            .Where(us => us.UserIdFk == userId && us.Role == 0)
+            .ToListAsync();
     }
 
-    public async Task<ApiResponse<Unit>> SetRoleToOwner(int stableId)
+    public async Task<bool> HasOnlyOneUser(int stableId)
     {
-        try
-        {
-            var admin = await context.UserStables
-                .Where(us => us.StableIdFk == stableId && us.Role == 1)
-                .FirstOrDefaultAsync();
+        var count = await context.UserStables
+            .CountAsync(us => us.StableIdFk == stableId);
 
-            if (admin != null)
-            {
-                admin.Role = 0;
-                await context.SaveChangesAsync();
-                
-                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
-                    Unit.Value,
-                    null);
-            }
+        return count == 1;
+    }
 
-            var member = await context.UserStables
-                .Where(us => us.StableIdFk == stableId && us.Role == 2)
-                .FirstOrDefaultAsync();
+    public async Task<bool> HasMoreThanOneOwner(UserStable connection)
+    {
+        var ownerCount = await context.UserStables
+            .CountAsync(us => us.StableIdFk == connection.StableIdFk && us.Role == 0);
 
-            if (member == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    "Error: Stable has no members");
+        return ownerCount >= 2;
+    }
 
-            member.Role = 0;
-            await context.SaveChangesAsync();
-            
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
-                Unit.Value,
-                null);
-        }
-        catch (Exception ex)
-        {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
-                ex.Message);
-        }
+    public async Task<UserStable> FindAdminOrUser(int stableId, int excludeUserId)
+    {
+        return await context.UserStables
+            .Where(us => us.StableIdFk == stableId && 
+                         (us.Role == 1 || us.Role == 2) && 
+                         us.UserIdFk != excludeUserId)
+            .OrderBy(us => us.Role)
+            .FirstAsync();
+    }
+
+    public async Task SetRoleToOwner(UserStable connection)
+    {
+        connection.Role = 0;
+        await context.SaveChangesAsync();
     }
 }
