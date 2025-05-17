@@ -140,12 +140,12 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
         }
     }
 
-    public async Task<ApiResponse<Unit>> CheckNumberOfStableOwners(int userId, int stableId)
+    public async Task<ApiResponse<Unit>> CheckNumberOfStableOwners(int stableId)
     {
         try
         {
             var owners = await context.UserStables
-                .Where(us => us.UserIdFk == userId && us.StableIdFk == stableId)
+                .Where(us => us.StableIdFk == stableId && us.Role == 0)
                 .ToListAsync();
 
             if (owners.Count >= 2)
@@ -174,13 +174,15 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
             if (admin != null)
             {
                 admin.Role = 0;
+                await context.SaveChangesAsync();
+                
                 return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                     Unit.Value,
                     null);
             }
 
             var member = await context.UserStables
-                .Where(us => us.StableIdFk == stableId)
+                .Where(us => us.StableIdFk == stableId && us.Role == 2)
                 .FirstOrDefaultAsync();
 
             if (member == null)
@@ -188,6 +190,7 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                     "Error: Stable has no members");
 
             member.Role = 0;
+            await context.SaveChangesAsync();
             
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,

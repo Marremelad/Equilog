@@ -14,7 +14,7 @@ public class UserComposition(
         var userId = userDeleteDto.UserId;
         var stableId = userDeleteDto.StableId;
 
-        var checkOwners = await userStableService.CheckNumberOfStableOwners(userId, stableId);
+        var checkOwners = await userStableService.CheckNumberOfStableOwners(stableId);
 
         if (checkOwners is { StatusCode: HttpStatusCode.InternalServerError })
             return ApiResponse<Unit>.Failure(checkOwners.StatusCode,
@@ -33,6 +33,8 @@ public class UserComposition(
         if (setRole is { StatusCode: HttpStatusCode.InternalServerError })
             return  ApiResponse<Unit>.Failure(setRole.StatusCode,
                 setRole.Message);
+
+        await userService.DeleteUserAsync(userId);
         
         return ApiResponse<Unit>.Success(HttpStatusCode.OK,
             Unit.Value,

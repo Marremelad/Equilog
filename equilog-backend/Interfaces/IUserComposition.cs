@@ -1,6 +1,10 @@
-﻿namespace equilog_backend.Interfaces;
+﻿using equilog_backend.Common;
+using equilog_backend.DTOs.UserDTOs;
 
-public class IUserComposition
+namespace equilog_backend.Interfaces;
+
+public interface IUserComposition
 {
+    Task<ApiResponse<Unit>> DeleteUserCompositionAsync(UserDeleteDto userDeleteDto);
     
 }

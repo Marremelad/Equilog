@@ -15,7 +15,7 @@ public interface IUserStableService
 
     Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId);
 
-    Task<ApiResponse<Unit>> CheckNumberOfStableOwners(int userId, int stableId);
+    Task<ApiResponse<Unit>> CheckNumberOfStableOwners(int stableId);
 
     Task<ApiResponse<Unit>> SetRoleToOwner(int stableId);
 }
