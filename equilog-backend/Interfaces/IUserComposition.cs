@@ -5,6 +5,5 @@ namespace equilog_backend.Interfaces;
 
 public interface IUserComposition
 {
-    Task<ApiResponse<Unit>> DeleteUserCompositionAsync(UserDeleteDto userDeleteDto);
-    
+    Task<ApiResponse<Unit>> DeleteUserCompositionAsync(int userId);
 }

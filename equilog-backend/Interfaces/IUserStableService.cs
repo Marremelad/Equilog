@@ -1,5 +1,6 @@
 ﻿using equilog_backend.Common;
 using equilog_backend.DTOs.UserStableDTOs;
+using equilog_backend.Models;
 
 namespace equilog_backend.Interfaces;
 
@@ -15,7 +16,13 @@ public interface IUserStableService
 
     Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId);
 
-    Task<ApiResponse<Unit>> CheckNumberOfStableOwners(int stableId);
+    Task<List<UserStable>> GetConnectionsWithOwnerRole(int userId);
 
-    Task<ApiResponse<Unit>> SetRoleToOwner(int stableId);
+    Task<bool> HasOnlyOneUser(int stableId);
+
+    Task<bool> HasMoreThanOneOwner(UserStable connection);
+
+    Task<UserStable> FindAdminOrUser(int stableId, int excludeUserId);
+
+    Task SetRoleToOwner(UserStable connection);
 }

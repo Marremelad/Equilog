@@ -1,43 +1,79 @@
 ﻿using System.Net;
 using equilog_backend.Common;
-using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.Interfaces;
 
 namespace equilog_backend.Compositions;
 
 public class UserComposition(
     IUserStableService userStableService,
-    IUserService userService) : IUserComposition
+    IUserService userService,
+    IStableService stableService) : IUserComposition
 {
-    public async Task<ApiResponse<Unit>> DeleteUserCompositionAsync(UserDeleteDto userDeleteDto)
+    public async Task<ApiResponse<Unit>> DeleteUserCompositionAsync(int userId)
     {
-        var userId = userDeleteDto.UserId;
-        var stableId = userDeleteDto.StableId;
-
-        var checkOwners = await userStableService.CheckNumberOfStableOwners(stableId);
-
-        if (checkOwners is { StatusCode: HttpStatusCode.InternalServerError })
-            return ApiResponse<Unit>.Failure(checkOwners.StatusCode,
-                checkOwners.Message);
-
-        if (checkOwners.IsSuccess)
+        try
         {
-            await userService.DeleteUserAsync(userId);
+            var transferStableOwnership = await TransferStableOwnership(userId);
+
+            if (!transferStableOwnership.IsSuccess)
+                return transferStableOwnership;
+
+            var deleteUser = await userService.DeleteUserAsync(userId);
+
+            if (!deleteUser.IsSuccess)
+                return deleteUser;
+            
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                null);            
+                "User deleted successfully");
         }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
 
-        var setRole = await userStableService.SetRoleToOwner(stableId);
+    private async Task<ApiResponse<Unit>> TransferStableOwnership(int userId)
+    {
+        try
+        {
+            var connections = await userStableService.GetConnectionsWithOwnerRole(userId);
         
-        if (setRole is { StatusCode: HttpStatusCode.InternalServerError })
-            return  ApiResponse<Unit>.Failure(setRole.StatusCode,
-                setRole.Message);
+            if (connections.Count == 0)
+                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                    Unit.Value,
+                    null);
 
-        await userService.DeleteUserAsync(userId);
-        
-        return ApiResponse<Unit>.Success(HttpStatusCode.OK,
-            Unit.Value,
-            null);
+            foreach (var connection in connections)
+            {
+                // Skip if there's only one user in the stable (the owner themselves),
+                if (await userStableService.HasOnlyOneUser(connection.StableIdFk))
+                {
+                    var deleteStable = await stableService.DeleteStableAsync(connection.StableIdFk);
+
+                    if (!deleteStable.IsSuccess)
+                        return deleteStable;
+                    
+                    continue;
+                }
+                
+                // Skip if there's already more than one owner.
+                if (await userStableService.HasMoreThanOneOwner(connection))
+                    continue;
+
+                // We know there are multiple users and only one owner, so this will find someone.
+                await userStableService.SetRoleToOwner(await userStableService.FindAdminOrUser(connection.StableIdFk, userId));
+            }
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
     }
 }

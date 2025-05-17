@@ -71,8 +71,8 @@ public class UserEndpoints
 
     private static async Task<IResult> DeleteUserComposition(
         IUserComposition userComposition,
-        [AsParameters] UserDeleteDto userDeleteDto)
+        int userId)
     {
-        return Result.Generate(await userComposition.DeleteUserCompositionAsync(userDeleteDto));
+        return Result.Generate(await userComposition.DeleteUserCompositionAsync(userId));
     }
 }
