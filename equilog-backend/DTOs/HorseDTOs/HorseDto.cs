@@ -1,4 +1,6 @@
-﻿namespace equilog_backend.DTOs.HorseDTOs;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace equilog_backend.DTOs.HorseDTOs;
 
 public class HorseDto
 {
@@ -11,4 +13,14 @@ public class HorseDto
     public string? Color { get; init; }
 
     public string? Breed { get; init; }
+
+    public string? CoreInformation { get; init; }
+
+    public string? Description { get; init; }
+
+    public int? Weight { get; init; }
+
+    public int? Height { get; init; }
+
+    public int? CurrentBox { get; init; }
 }

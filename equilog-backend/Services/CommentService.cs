@@ -21,10 +21,6 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
                             c.StablePostComments.Any(spc => spc.StablePostIdFk == stablePostId))
                 .ToListAsync());
             
-            if (commentDtos.Count == 0)
-                return ApiResponse<List<CommentDto>?>.Failure(HttpStatusCode.NotFound,
-                    "This post has no comments.");
-            
             return ApiResponse<List<CommentDto>?>.Success(HttpStatusCode.OK,
                 commentDtos,
                 null);
