@@ -13,36 +13,43 @@ public class CommentComposition(
     public async Task<ApiResponse<Unit>> CreateCommentComposition(
         CommentCompositionCreateDto commentCompositionCreateDto)
     {
-        var createComment = await commentService.CreateCommentAsync(commentCompositionCreateDto.Comment);
-        
-        if (!createComment.IsSuccess)
-            return ApiResponse<Unit>.Failure(createComment.StatusCode,
-                $"Failed to create comment: {createComment.Message}");
-
-        var commentId = createComment.Value;
-        var userId = commentCompositionCreateDto.UserId;
-        var stablePostId = commentCompositionCreateDto.StablePostId;
-
-        var createUserComment = await userCommentService.CreateUserCommentConnectionAsync(userId, commentId);
-
-        if (!createUserComment.IsSuccess)
+        try
         {
-            await commentService.DeleteCommentAsync(commentId);
-            return createUserComment;
-        }
+            var createComment = await commentService.CreateCommentAsync(commentCompositionCreateDto.Comment);
         
-        var stablePostCommentResponse =
-            await stablePostCommentService.CreateStablePostCommentConnectionAsync(stablePostId, commentId);
+            if (!createComment.IsSuccess)
+                return ApiResponse<Unit>.Failure(createComment.StatusCode,
+                    $"Failed to create comment: {createComment.Message}");
 
-        if (!stablePostCommentResponse.IsSuccess)
-        {
-            await commentService.DeleteCommentAsync(commentId);
-            return ApiResponse<Unit>.Failure(stablePostCommentResponse.StatusCode,
-                $"{stablePostCommentResponse.Message}: Comment creation and connection between user and comment was rolled back.");
-        }
+            var commentId = createComment.Value;
+            var userId = commentCompositionCreateDto.UserId;
+            var stablePostId = commentCompositionCreateDto.StablePostId;
+
+            var createUserComment = await userCommentService.CreateUserCommentConnectionAsync(userId, commentId);
+
+            if (!createUserComment.IsSuccess)
+            {
+                await commentService.DeleteCommentAsync(commentId);
+                return createUserComment;
+            }
         
-        return ApiResponse<Unit>.Success(HttpStatusCode.Created,
-            Unit.Value,
-            null);
+            var createStablePostComment =
+                await stablePostCommentService.CreateStablePostCommentConnectionAsync(stablePostId, commentId);
+
+            if (!createStablePostComment.IsSuccess)
+            {
+                await commentService.DeleteCommentAsync(commentId);
+                return createStablePostComment;
+            }
+        
+            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+                Unit.Value,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
     }
 }

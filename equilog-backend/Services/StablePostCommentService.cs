@@ -9,7 +9,7 @@ namespace equilog_backend.Services;
 
 public class StablePostCommentService(EquilogDbContext context) : IStablePostCommentService
 {
-    public async Task<ApiResponse<int>> CreateStablePostCommentConnectionAsync(int stablePostId, int commentId)
+    public async Task<ApiResponse<Unit>> CreateStablePostCommentConnectionAsync(int stablePostId, int commentId)
     {
         try
         {
@@ -22,13 +22,13 @@ public class StablePostCommentService(EquilogDbContext context) : IStablePostCom
             context.StablePostComments.Add(stablePostComment);
             await context.SaveChangesAsync();
 
-            return ApiResponse<int>.Success(HttpStatusCode.OK,
-                stablePostComment.Id,
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value, 
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<int>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
