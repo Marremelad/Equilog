@@ -29,9 +29,7 @@ public class Stable
     public virtual List<StableHorse>? StableHorses { get; set; }
 
     public virtual List<StablePost>? StablePosts { get; set; }
-
-    public virtual WallPost? WallPost { get; set; }
-
+    
     public virtual List<StableJoinRequest>? StableJoinRequests { get; set; }
 
     public virtual List<StableInvite>? StableInvites { get; set; }

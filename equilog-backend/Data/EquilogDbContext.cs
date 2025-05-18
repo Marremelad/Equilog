@@ -23,9 +23,7 @@ public class EquilogDbContext(DbContextOptions<EquilogDbContext> options)
     public DbSet<UserCalendarEvent> UserCalendarEvents { get; set; }
 
     public DbSet<StablePost> StablePosts { get; set; }
-
-    public DbSet<WallPost> WallPosts { get; set; }
-
+    
     public DbSet<PasswordResetRequest> PasswordResetRequests { get; set; }
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }

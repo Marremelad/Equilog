@@ -7,7 +7,6 @@ namespace equilog_backend.Compositions;
 
 public class StableComposition(
     IStableService stableService,
-    IWallPostService wallPostService,
     IUserStableService userStableService) : IStableComposition
 {
     public async Task<ApiResponse<Unit>> CreateStableCompositionAsync(StableCompositionCreateDto stableCompositionCreateDto)
@@ -33,17 +32,7 @@ public class StableComposition(
                 userStableResponse.StatusCode,
                 $"Failed to establish connection between user and stable: {userStableResponse.Message}");
         }
-
-        // var wallPostResponse = await wallPostService.CreateWallPostAsync(stableId);
-        //
-        // if (!wallPostResponse.IsSuccess)
-        // {
-        //     return await RollbackStableCreation(
-        //         stableId, 
-        //         wallPostResponse.StatusCode,
-        //         $"Failed to create wall post: {wallPostResponse.Message}");
-        // }
-
+        
         return ApiResponse<Unit>.Success(
             HttpStatusCode.Created,
             Unit.Value,
