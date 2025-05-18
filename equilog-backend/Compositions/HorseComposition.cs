@@ -12,36 +12,44 @@ public class HorseComposition(
 {
     public async Task<ApiResponse<Unit>> CreateHorseCompositionAsync(HorseCompositionCreateDto horseCompositionCreateDto)
     {
-        var horseResponse = await horseService.CreateHorseAsync(horseCompositionCreateDto.Horse);
-
-        if (!horseResponse.IsSuccess)
-            return ApiResponse<Unit>.Failure(horseResponse.StatusCode,
-                $"Failed to create horse: {horseResponse.Message}");
-
-        var horseId = horseResponse.Value;
-        var stableId = horseCompositionCreateDto.StableId;
-        var userId = horseCompositionCreateDto.UserId;
-
-        var stableHorseResponse = await stableHorseService.CreateStableHorseConnectionAsync(stableId, horseId);
-
-        if (!stableHorseResponse.IsSuccess)
+        try
         {
-            await horseService.DeleteHorseAsync(horseId);
-            return ApiResponse<Unit>.Failure(stableHorseResponse.StatusCode,
-                $"{stableHorseResponse.Message}: Horse creation was rolled back");
-        }
+            var horseResponse = await horseService.CreateHorseAsync(horseCompositionCreateDto.Horse);
+
+            if (!horseResponse.IsSuccess)
+                return ApiResponse<Unit>.Failure(horseResponse.StatusCode,
+                    $"Failed to create horse: {horseResponse.Message}");
+
+            var horseId = horseResponse.Value;
+            var stableId = horseCompositionCreateDto.StableId;
+            var userId = horseCompositionCreateDto.UserId;
+
+            var stableHorseResponse = await stableHorseService.CreateStableHorseConnectionAsync(stableId, horseId);
+
+            if (!stableHorseResponse.IsSuccess)
+            {
+                await horseService.DeleteHorseAsync(horseId);
+                return ApiResponse<Unit>.Failure(stableHorseResponse.StatusCode,
+                    $"{stableHorseResponse.Message}: Horse creation was rolled back");
+            }
         
-        var userHorseResponse = await userHorseService.CreateUserHorseConnectionAsync(userId, horseId);
+            var userHorseResponse = await userHorseService.CreateUserHorseConnectionAsync(userId, horseId);
 
-        if (!userHorseResponse.IsSuccess)
-        {
-            await horseService.DeleteHorseAsync(horseId);
-            return ApiResponse<Unit>.Failure(userHorseResponse.StatusCode,
-                $"{userHorseResponse.Message}: Horse creation and connection between stable and horse was rolled back.");
+            if (!userHorseResponse.IsSuccess)
+            {
+                await horseService.DeleteHorseAsync(horseId);
+                return ApiResponse<Unit>.Failure(userHorseResponse.StatusCode,
+                    $"{userHorseResponse.Message}: Horse creation and connection between stable and horse was rolled back.");
+            }
+
+            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+                Unit.Value,
+                "Horse created successfully.");
         }
-
-        return ApiResponse<Unit>.Success(HttpStatusCode.Created,
-            Unit.Value,
-            "Horse created successfully.");
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
     }
 }
