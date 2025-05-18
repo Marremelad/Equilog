@@ -21,7 +21,8 @@ namespace equilog_backend_test_unit
             {
                 Id = 1,
                 FirstName = "John",
-                LastName = "Doe"
+                LastName = "Doe",
+                Email = "test@test.com"
             };
 
             // Act
@@ -42,7 +43,8 @@ namespace equilog_backend_test_unit
             {
                 Id = id,
                 FirstName = "John",
-                LastName = "Doe"
+                LastName = "Doe",
+                Email = "test@test.com"
             };
 
             // Act
@@ -63,7 +65,8 @@ namespace equilog_backend_test_unit
             {
                 Id = 1,
                 FirstName = firstName,
-                LastName = "Doe"
+                LastName = "Doe",
+                Email = "test@test.com"
             };
 
             // Act
@@ -82,7 +85,8 @@ namespace equilog_backend_test_unit
             {
                 Id = 1,
                 FirstName = new string('A', 51), // 51 characters, exceeding the 50 character limit
-                LastName = "Doe"
+                LastName = "Doe",
+                Email = "test@test.com"
             };
 
             // Act
@@ -103,7 +107,8 @@ namespace equilog_backend_test_unit
             {
                 Id = 1,
                 FirstName = "John",
-                LastName = lastName
+                LastName = lastName,
+                Email = "test@test.com"
             };
 
             // Act
@@ -122,7 +127,8 @@ namespace equilog_backend_test_unit
             {
                 Id = 1,
                 FirstName = "John",
-                LastName = new string('A', 51) // 51 characters, exceeding the 50 character limit
+                LastName = new string('A', 51), // 51 characters, exceeding the 50-character limit
+                Email = "test@test.com" 
             };
 
             // Act
