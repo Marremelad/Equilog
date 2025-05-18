@@ -30,15 +30,12 @@ public class HorseComposition(
             return ApiResponse<Unit>.Failure(stableHorseResponse.StatusCode,
                 $"{stableHorseResponse.Message}: Horse creation was rolled back");
         }
-
-        var stableHorseId = stableHorseResponse.Value;
-
+        
         var userHorseResponse = await userHorseService.CreateUserHorseConnectionAsync(userId, horseId);
 
         if (!userHorseResponse.IsSuccess)
         {
             await horseService.DeleteHorseAsync(horseId);
-            await stableHorseService.RemoveHorseFromStableAsync(stableHorseId);
             return ApiResponse<Unit>.Failure(userHorseResponse.StatusCode,
                 $"{userHorseResponse.Message}: Horse creation and connection between stable and horse was rolled back.");
         }

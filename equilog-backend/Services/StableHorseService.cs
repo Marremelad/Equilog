@@ -65,7 +65,7 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
         }
     }
     
-    public async Task<ApiResponse<int>> CreateStableHorseConnectionAsync(int stableId, int horseId)
+    public async Task<ApiResponse<Unit>> CreateStableHorseConnectionAsync(int stableId, int horseId)
     {
         try
         {
@@ -78,13 +78,13 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
             context.StableHorses.Add(stableHorse);
             await context.SaveChangesAsync();
         
-            return ApiResponse<int>.Success(HttpStatusCode.Created,
-                stableHorse.Id,
+            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+                Unit.Value, 
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<int>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
