@@ -6,7 +6,6 @@ using equilog_backend.Interfaces;
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace equilog_backend.Services;
 
@@ -89,7 +88,33 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                 ex.Message);
         }
     }
+    
+    public async Task<ApiResponse<Unit>> LeaveStableAsync(int userId, int stableId)
+    {
+        try
+        {
+            var userStable = await context.UserStables
+                .Where(us => us.UserIdFk == userId && us.StableIdFk == stableId)
+                .FirstOrDefaultAsync();
+                
+            if (userStable == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: User not connected to any stables");
 
+            context.UserStables.Remove(userStable);
+            await context.SaveChangesAsync();
+                
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+    
     public async Task<ApiResponse<Unit>> RemoveUserFromStableAsync(int userStableId)
     {
         try
