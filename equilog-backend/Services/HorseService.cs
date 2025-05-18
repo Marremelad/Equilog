@@ -88,7 +88,7 @@ public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseServ
                 ex.Message);
         }
     }
-    public async Task<ApiResponse<HorseDto?>> CreateHorseAsync(HorseCreateDto horseCreateDto)
+    public async Task<ApiResponse<int>> CreateHorseAsync(HorseCreateDto horseCreateDto)
     {
         try
         {
@@ -97,13 +97,13 @@ public class HorseService(EquilogDbContext context, IMapper mapper) : IHorseServ
             context.Horses.Add(horse);
             await context.SaveChangesAsync();
 
-            return ApiResponse<HorseDto>.Success(HttpStatusCode.Created,
-                mapper.Map<HorseDto>(horse),
+            return ApiResponse<int>.Success(HttpStatusCode.Created,
+                horse.Id,
                 "Horse created successfully");
         }
         catch (Exception ex)
         {
-            return ApiResponse<HorseDto>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<int>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
            

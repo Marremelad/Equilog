@@ -12,7 +12,7 @@ public interface IHorseService
 
     Task<ApiResponse<HorseProfileDto?>> GetHorseProfileAsync(int horseId);
 
-    Task<ApiResponse<HorseDto?>> CreateHorseAsync(HorseCreateDto horseCreateDto);
+    Task<ApiResponse<int>> CreateHorseAsync(HorseCreateDto horseCreateDto);
 
     Task<ApiResponse<Unit>> UpdateHorseAsync(HorseUpdateDto horseUpdateDto);
 

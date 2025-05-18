@@ -18,7 +18,7 @@ public class HorseComposition(
             return ApiResponse<Unit>.Failure(horseResponse.StatusCode,
                 $"Failed to create horse: {horseResponse.Message}");
 
-        var horseId = horseResponse.Value!.Id;
+        var horseId = horseResponse.Value;
         var stableId = horseCompositionCreateDto.StableId;
         var userId = horseCompositionCreateDto.UserId;
 
