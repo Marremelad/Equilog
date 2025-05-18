@@ -12,7 +12,7 @@ public interface IUserStableService
 
     Task<ApiResponse<Unit>> UpdateStableUserRoleAsync(int userStableId, int userStableRole);
     
-    Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId);
+    Task<ApiResponse<Unit>> CreateUserStableConnectionAsync(int userId, int stableId);
     
     Task<ApiResponse<Unit>> LeaveStableAsync(int userId, int stableId);
     

@@ -9,7 +9,7 @@ public interface IStableService
     
     Task<ApiResponse<List<StableSearchDto>?>> SearchStablesAsync(StableSearchParametersDto stableSearchParametersDto);
 
-    Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto);
+    Task<ApiResponse<int>> CreateStableAsync(StableCreateDto stableCreateDto);
 
     Task<ApiResponse<Unit>> UpdateStableAsync(StableUpdateDto stableUpdateDto);
 

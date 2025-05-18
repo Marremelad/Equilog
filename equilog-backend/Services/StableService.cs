@@ -99,7 +99,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
                 HttpStatusCode.InternalServerError, ex.Message);
         }
     }
-    public async Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto)
+    public async Task<ApiResponse<int>> CreateStableAsync(StableCreateDto stableCreateDto)
    {
       try
       {
@@ -108,13 +108,13 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             context.Stables.Add(stable);
             await context.SaveChangesAsync();
 
-            return ApiResponse<StableDto>.Success(HttpStatusCode.Created,
-            mapper.Map<StableDto>(stable),
+            return ApiResponse<int>.Success(HttpStatusCode.Created,
+            stable.Id,
             "Stable created successfully");
       }
       catch (Exception ex)
       {
-         return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
+         return ApiResponse<int>.Failure(HttpStatusCode.InternalServerError,
             ex.Message);
       }
    }

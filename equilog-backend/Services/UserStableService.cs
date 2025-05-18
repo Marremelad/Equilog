@@ -139,7 +139,7 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
         }
     }
 
-    public async Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId)
+    public async Task<ApiResponse<Unit>> CreateUserStableConnectionAsync(int userId, int stableId)
     {
         try
         {
