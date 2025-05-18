@@ -89,6 +89,32 @@ namespace equilog_backend.Services
             }
         }
 
+        public async Task<ApiResponse<Unit>> LeaveStableAsync(int userId, int stableId)
+        {
+            try
+            {
+                var userStable = await context.UserStables
+                    .Where(us => us.UserIdFk == userId && us.StableIdFk == stableId)
+                    .FirstOrDefaultAsync();
+                
+                if (userStable == null)
+                    return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                        "Error: User not connected to any stables");
+
+                context.UserStables.Remove(userStable);
+                await context.SaveChangesAsync();
+                
+                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                    Unit.Value,
+                    null);
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                    ex.Message);
+            }
+        }
+
         public async Task<ApiResponse<Unit>> RemoveUserFromStableAsync(int userStableId)
         {
             try
@@ -98,14 +124,15 @@ namespace equilog_backend.Services
                 .FirstOrDefaultAsync();
 
                 if (userStable == null)
-                {
-                    return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound, $"userStable with ID: {userStableId} not found.");
-                }
+                    return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                        $"userStable with ID: {userStableId} not found.");
+                    
 
                 context.Remove(userStable);
                 await context.SaveChangesAsync();
 
-                return ApiResponse<Unit>.Success(HttpStatusCode.NoContent, Unit.Value, "User successfully removed from stable.");
+                return ApiResponse<Unit>.Success(HttpStatusCode.NoContent, Unit.Value,
+                    "User successfully removed from stable.");
             }
             catch (Exception ex)
             {

@@ -11,6 +11,8 @@ namespace equilog_backend.Interfaces
 
         Task<ApiResponse<Unit>> UpdateStableUserRoleAsync(int userStableId, int userStableRole);
 
+        Task<ApiResponse<Unit>> LeaveStableAsync(int userId, int stableId);
+
         Task<ApiResponse<Unit>> RemoveUserFromStableAsync(int userStableId);
 
         Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId);
