@@ -11,29 +11,37 @@ public class StableComposition(
 {
     public async Task<ApiResponse<Unit>> CreateStableCompositionAsync(StableCompositionCreateDto stableCompositionCreateDto)
     {
-        var createStable = await stableService.CreateStableAsync(stableCompositionCreateDto.Stable);
-
-        if (!createStable.IsSuccess)
+        try
         {
-            return ApiResponse<Unit>.Failure(
-                createStable.StatusCode,
-                $"Failed to create stable: {createStable.Message}");
-        }
+            var createStable = await stableService.CreateStableAsync(stableCompositionCreateDto.Stable);
 
-        var stableId = createStable.Value;
-        var userId = stableCompositionCreateDto.UserId;
+            if (!createStable.IsSuccess)
+            {
+                return ApiResponse<Unit>.Failure(
+                    createStable.StatusCode,
+                    $"Failed to create stable: {createStable.Message}");
+            }
 
-        var createUserStable = await userStableService.CreateUserStableConnectionAsync(userId, stableId);
+            var stableId = createStable.Value;
+            var userId = stableCompositionCreateDto.UserId;
 
-        if (!createUserStable.IsSuccess)
-        {
-            await stableService.DeleteStableAsync(stableId);
-            return createUserStable;
-        }
+            var createUserStable = await userStableService.CreateUserStableConnectionAsync(userId, stableId);
+
+            if (!createUserStable.IsSuccess)
+            {
+                await stableService.DeleteStableAsync(stableId);
+                return createUserStable;
+            }
         
-        return ApiResponse<Unit>.Success(
-            HttpStatusCode.Created,
-            Unit.Value,
-            "Stable created successfully.");
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.Created,
+                Unit.Value,
+                "Stable created successfully.");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
     }
 }
