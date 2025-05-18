@@ -1,38 +1,40 @@
 ﻿using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace equilog_backend.Data;
-
-public class EquilogDbContext(DbContextOptions<EquilogDbContext> options)
-    : DbContext(options)
+namespace equilog_backend.Data
 {
-    public DbSet<User> Users { get; set; }
+    public class EquilogDbContext : DbContext
+    {
+        public EquilogDbContext(DbContextOptions<EquilogDbContext> options)
+            : base(options)
+        {
+        }
 
-    public DbSet<Horse> Horses { get; set; }
+        // … your existing DbSets …
+        public DbSet<User> Users { get; set; }
+        public DbSet<Horse> Horses { get; set; }
+        public DbSet<Stable> Stables { get; set; }
+        public DbSet<CalendarEvent> CalendarEvents { get; set; }
+        public DbSet<UserStable> UserStables { get; set; }
+        public DbSet<UserHorse> UserHorses { get; set; }
+        public DbSet<StableHorse> StableHorses { get; set; }
+        public DbSet<UserCalendarEvent> UserCalendarEvents { get; set; }
+        public DbSet<StablePost> StablePosts { get; set; }
+        public DbSet<WallPost> WallPosts { get; set; }
+        public DbSet<PasswordResetRequest> PasswordResetRequests { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<StableJoinRequest> StableJoinRequests { get; set; }
+        public DbSet<StableInvite> StableInvites { get; set; }
+        public DbSet<StableLocation> StableLocation { get; set; }
+        public DbSet<MediaObject> MediaObjects { get; set; }
 
-    public DbSet<Stable> Stables { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-    public DbSet<CalendarEvent> CalendarEvents { get; set; }
-
-    public DbSet<UserStable> UserStables { get; set; }
-
-    public DbSet<UserHorse> UserHorses { get; set; }
-
-    public DbSet<StableHorse> StableHorses { get; set; }
-
-    public DbSet<UserCalendarEvent> UserCalendarEvents { get; set; }
-
-    public DbSet<StablePost> StablePosts { get; set; }
-
-    public DbSet<WallPost> WallPosts { get; set; }
-
-    public DbSet<PasswordResetRequest> PasswordResetRequests { get; set; }
-
-    public DbSet<RefreshToken> RefreshTokens { get; set; }
-
-    public DbSet<StableJoinRequest> StableJoinRequests { get; set; }
-
-    public DbSet<StableInvite> StableInvites { get; set; }
-
-    public DbSet<StableLocation> StableLocation { get; set; }
+            // Index for quick lookups by owner
+            builder.Entity<MediaObject>()
+                   .HasIndex(m => new { m.EntityType, m.EntityId });
+        }
+    }
 }

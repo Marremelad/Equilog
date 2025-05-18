@@ -8,19 +8,20 @@ namespace equilog_backend.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public string MediaType { get; set; } = string.Empty;
-
+        // The blob’s key in storage
         [Required, MaxLength(255)]
-        public string BlobName { get; set; } = string.Empty;
+        public string BlobName { get; set; } = null!;
 
-        [MaxLength(1024)]
-        public string? Url { get; set; }
-
-        // Polymorphic linking fields:
-        //   e.g. EntityType = "User Profile Picture", EntityId = 42
+        // Polymorphic link: which table/type owns this media
         [Required, MaxLength(50)]
-        public string EntityType { get; set; } = string.Empty;
+        public string EntityType { get; set; } = null!;
+        [Required]
+        public int EntityId { get; set; }
+
+        // Metadata
+        [MaxLength(200)]
+        public string? Title { get; set; }
+        public string? Description { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
