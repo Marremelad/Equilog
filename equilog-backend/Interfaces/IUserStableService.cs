@@ -1,20 +1,30 @@
 ﻿using equilog_backend.Common;
 using equilog_backend.DTOs.UserStableDTOs;
+using equilog_backend.Models;
 
-namespace equilog_backend.Interfaces
+namespace equilog_backend.Interfaces;
+
+public interface IUserStableService
 {
-    public interface IUserStableService
-    {
-        Task<ApiResponse<List<UserStableDto>?>> GetUserStablesAsync(int userId);
+    Task<ApiResponse<List<UserStableDto>?>> GetUserStablesAsync(int userId);
 
-        Task<ApiResponse<List<StableUserDto>?>> GetStableUsersAsync(int stableId);
+    Task<ApiResponse<List<StableUserDto>?>> GetStableUsersAsync(int stableId);
 
-        Task<ApiResponse<Unit>> UpdateStableUserRoleAsync(int userStableId, int userStableRole);
+    Task<ApiResponse<Unit>> UpdateStableUserRoleAsync(int userStableId, int userStableRole);
+    
+    Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId);
+    
+    Task<ApiResponse<Unit>> LeaveStableAsync(int userId, int stableId);
+    
+    Task<ApiResponse<Unit>> RemoveUserFromStableAsync(int userStableId);
 
-        Task<ApiResponse<Unit>> LeaveStableAsync(int userId, int stableId);
+    Task<List<UserStable>> GetConnectionsWithOwnerRole(int userId);
 
-        Task<ApiResponse<Unit>> RemoveUserFromStableAsync(int userStableId);
+    Task<bool> HasOnlyOneUser(int stableId);
 
-        Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId);
-    }
+    Task<bool> HasMoreThanOneOwner(UserStable connection);
+
+    Task<UserStable> FindAdminOrUser(int stableId, int excludeUserId);
+
+    Task SetRoleToOwner(UserStable connection);
 }
