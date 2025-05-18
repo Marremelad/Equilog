@@ -14,32 +14,32 @@ public class HorseComposition(
     {
         try
         {
-            var horseResponse = await horseService.CreateHorseAsync(horseCompositionCreateDto.Horse);
+            var createHorse = await horseService.CreateHorseAsync(horseCompositionCreateDto.Horse);
 
-            if (!horseResponse.IsSuccess)
-                return ApiResponse<Unit>.Failure(horseResponse.StatusCode,
-                    $"Failed to create horse: {horseResponse.Message}");
+            if (!createHorse.IsSuccess)
+                return ApiResponse<Unit>.Failure(createHorse.StatusCode,
+                    $"Failed to create horse: {createHorse.Message}");
 
-            var horseId = horseResponse.Value;
+            var horseId = createHorse.Value;
             var stableId = horseCompositionCreateDto.StableId;
             var userId = horseCompositionCreateDto.UserId;
 
-            var stableHorseResponse = await stableHorseService.CreateStableHorseConnectionAsync(stableId, horseId);
+            var createStableHorse = await stableHorseService.CreateStableHorseConnectionAsync(stableId, horseId);
 
-            if (!stableHorseResponse.IsSuccess)
+            if (!createStableHorse.IsSuccess)
             {
                 await horseService.DeleteHorseAsync(horseId);
-                return ApiResponse<Unit>.Failure(stableHorseResponse.StatusCode,
-                    $"{stableHorseResponse.Message}: Horse creation was rolled back");
+                return ApiResponse<Unit>.Failure(createStableHorse.StatusCode,
+                    $"{createStableHorse.Message}: Horse creation was rolled back");
             }
         
-            var userHorseResponse = await userHorseService.CreateUserHorseConnectionAsync(userId, horseId);
+            var createUserHorse = await userHorseService.CreateUserHorseConnectionAsync(userId, horseId);
 
-            if (!userHorseResponse.IsSuccess)
+            if (!createUserHorse.IsSuccess)
             {
                 await horseService.DeleteHorseAsync(horseId);
-                return ApiResponse<Unit>.Failure(userHorseResponse.StatusCode,
-                    $"{userHorseResponse.Message}: Horse creation and connection between stable and horse was rolled back.");
+                return ApiResponse<Unit>.Failure(createUserHorse.StatusCode,
+                    $"{createUserHorse.Message}: Horse creation and connection between stable and horse was rolled back.");
             }
 
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
