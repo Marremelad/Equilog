@@ -9,7 +9,7 @@ namespace equilog_backend.Services;
 
 public class UserCommentService(EquilogDbContext context) : IUserCommentService
 {
-    public async Task<ApiResponse<int>> CreateUserCommentConnectionAsync(int userId, int commentId)
+    public async Task<ApiResponse<Unit>> CreateUserCommentConnectionAsync(int userId, int commentId)
     {
         try
         {
@@ -22,13 +22,13 @@ public class UserCommentService(EquilogDbContext context) : IUserCommentService
             context.UserComments.Add(userComment);
             await context.SaveChangesAsync();
             
-            return ApiResponse<int>.Success(HttpStatusCode.Created,
-                userComment.Id,
+            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+                Unit.Value,
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<int>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
