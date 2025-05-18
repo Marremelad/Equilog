@@ -2,9 +2,9 @@
 
 public class CommentDto
 {
-    public required int Id { get; set; }
+    public required int Id { get; init; }
     
-    public required DateTime CommentDate { get; set; }
+    public required DateTime CommentDate { get; init; }
     
-    public required string Content { get; set; }
+    public required string Content { get; init; }
 }
