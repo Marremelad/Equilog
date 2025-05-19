@@ -6,17 +6,12 @@ using System.Net;
 
 namespace equilog_backend.Services
 {
-    public class BlobService : IBlobService
+    public class BlobService(BlobServiceClient client) : IBlobService
     {
         private const string ContainerName = "equilog-media";
         private static readonly TimeSpan Validity = TimeSpan.FromMinutes(5);
 
-        private readonly BlobContainerClient _container;
-
-        public BlobService(BlobServiceClient client)
-        {
-            _container = client.GetBlobContainerClient(ContainerName);
-        }
+        private readonly BlobContainerClient _container = client.GetBlobContainerClient(ContainerName);
 
         public async Task<Uri> GetReadUriAsync(string blobName)
         {
