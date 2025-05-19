@@ -12,5 +12,6 @@
         public required string Email { get; init; }
         
         public string? PhoneNumber { get; init; }
+        public string? ProfilePictureUrl { get; set; }
     }
 }

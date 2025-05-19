@@ -9,8 +9,6 @@ namespace equilog_backend.Data
             : base(options)
         {
         }
-
-        // … your existing DbSets …
         public DbSet<User> Users { get; set; }
         public DbSet<Horse> Horses { get; set; }
         public DbSet<Stable> Stables { get; set; }
@@ -26,15 +24,5 @@ namespace equilog_backend.Data
         public DbSet<StableJoinRequest> StableJoinRequests { get; set; }
         public DbSet<StableInvite> StableInvites { get; set; }
         public DbSet<StableLocation> StableLocation { get; set; }
-        public DbSet<MediaObject> MediaObjects { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            // Index for quick lookups by owner
-            builder.Entity<MediaObject>()
-                   .HasIndex(m => new { m.EntityType, m.EntityId });
-        }
     }
 }

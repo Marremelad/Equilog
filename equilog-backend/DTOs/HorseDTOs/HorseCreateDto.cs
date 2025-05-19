@@ -9,4 +9,6 @@ public class HorseCreateDto
     public string? Color { get; init; }
 
     public string? Breed { get; init; }
+
+    public string? ProfilePicture { get; set; }
 }

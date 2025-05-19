@@ -269,6 +269,6 @@ public static class AppConfiguration
             azureBuilder.AddBlobServiceClient(configuration.GetConnectionString("LocalEquilogStorage"));
         });
 
-        services.AddSingleton<IBlobStorageService, BlobStorageService>();
+        services.AddSingleton<IBlobService, BlobService>();
     }
 }

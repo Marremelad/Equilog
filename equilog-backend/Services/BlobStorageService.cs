@@ -1,133 +1,61 @@
-﻿using System.Net;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
+﻿using Azure.Storage.Blobs;
 using Azure.Storage.Sas;
 using equilog_backend.Common;
-using equilog_backend.DTOs.BlobDTOs;
 using equilog_backend.Interfaces;
+using System.Net;
 
 namespace equilog_backend.Services
 {
-    public class BlobStorageService(BlobServiceClient blobServiceClient) : IBlobStorageService
+    public class BlobService : IBlobService
     {
         private const string ContainerName = "equilog-media";
-        private static readonly TimeSpan SasValidity = TimeSpan.FromMinutes(5);
+        private static readonly TimeSpan Validity = TimeSpan.FromMinutes(5);
 
-        private readonly BlobContainerClient _containerClient = blobServiceClient.GetBlobContainerClient(ContainerName);
+        private readonly BlobContainerClient _container;
 
-        private bool _containerInitialized;
-
-        // Ensures the blob container exists, creating it if necessary.
-        private async Task EnsureContainerExistsAsync()
+        public BlobService(BlobServiceClient client)
         {
-            if (!_containerInitialized)
-            {
-                await _containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
-                _containerInitialized = true;
-            }
+            _container = client.GetBlobContainerClient(ContainerName);
         }
 
-        // Generates SAS URIs for the specified blob names with the given permissions.
-        private async Task<ApiResponse<List<BlobSasInfoDto>?>> GenerateSasUrisAsync(
-            List<string> blobNames,
-            BlobSasPermissions permissions,
-            string successMessage)
+        public async Task<Uri> GetReadUriAsync(string blobName)
         {
-            var result = new List<BlobSasInfoDto>();
-
-            try
-            {
-                await EnsureContainerExistsAsync();
-
-                foreach (var name in blobNames)
-                {
-                    var blobClient = _containerClient.GetBlobClient(name);
-                    var sasUri = blobClient.GenerateSasUri(
-                        permissions,
-                        DateTimeOffset.UtcNow.Add(SasValidity));
-
-                    result.Add(new BlobSasInfoDto
-                    {
-                        BlobName = name,
-                        SasUri = sasUri
-                    });
-                }
-
-                return ApiResponse<List<BlobSasInfoDto>>.Success(
-                    HttpStatusCode.OK,
-                    result,
-                    successMessage);
-            }
-            catch (Exception ex)
-            {
-                return ApiResponse<List<BlobSasInfoDto>>.Failure(
-                    HttpStatusCode.InternalServerError,
-                    $"Failed to generate SAS URLs: {ex.Message}");
-            }
+            var uris = await GetReadUrisAsync(new[] { blobName });
+            return uris[0];
         }
 
-        // Generates upload SAS URIs for the specified blob names.
-        public Task<ApiResponse<List<BlobSasInfoDto>?>> GetUploadSasUrisAsync(List<string> blobNames) =>
-            GenerateSasUrisAsync(
-                blobNames,
-                BlobSasPermissions.Write | BlobSasPermissions.Create,
-                "Upload SAS URL(s) generated successfully.");
-
-        // Generates download SAS URIs for the specified blob names.
-        public Task<ApiResponse<List<BlobSasInfoDto>?>> GetDownloadSasUrisAsync(List<string> blobNames) =>
-            GenerateSasUrisAsync(
-                blobNames,
-                BlobSasPermissions.Read,
-                "Download SAS URL(s) generated successfully.");
-
-        // Generates delete SAS URIs for the specified blob names.
-        public async Task<ApiResponse<bool>> DeleteBlobAsync(string blobName)
+        public async Task<List<Uri>> GetReadUrisAsync(IEnumerable<string> blobNames)
         {
-            try
-            {
-                await EnsureContainerExistsAsync();
-                var deleted = (await _containerClient
-                    .GetBlobClient(blobName)
-                    .DeleteIfExistsAsync())
-                    .Value;
+            var expiresOn = DateTimeOffset.UtcNow.Add(Validity);
+            var uris = new List<Uri>();
 
-                return ApiResponse<bool>.Success(
-                    HttpStatusCode.OK,
-                    deleted,
-                    deleted ? "Blob deleted." : "Blob not found.");
-            }
-            catch (Exception ex)
+            foreach (var name in blobNames)
             {
-                return ApiResponse<bool>.Failure(
-                    HttpStatusCode.InternalServerError,
-                    $"Failed to delete blob: {ex.Message}");
+                var blobClient = _container.GetBlobClient(name);
+                uris.Add(blobClient.GenerateSasUri(BlobSasPermissions.Read, expiresOn));
             }
+
+            return uris;
         }
 
-        // Lists all blobs in the container.
-        public async Task<ApiResponse<List<string>?>> ListBlobsAsync()
+        public Task<Uri> GetUploadUriAsync(string blobName)
         {
-            try
-            {
-                await EnsureContainerExistsAsync();
+            var expiresOn = DateTimeOffset.UtcNow.Add(Validity);
+            var blobClient = _container.GetBlobClient(blobName);
+            var sas = blobClient.GenerateSasUri(
+                BlobSasPermissions.Create | BlobSasPermissions.Write,
+                expiresOn);
+            return Task.FromResult(sas);
+        }
 
-                var names = new List<string>();
-                await foreach (var item in _containerClient.GetBlobsAsync())
-                {
-                    names.Add(item.Name);
-                }
+        public async Task<ApiResponse<Unit>> DeleteBlobAsync(string blobName)
+        {
+            var blobClient = _container.GetBlobClient(blobName);
+            await blobClient.DeleteIfExistsAsync();
 
-                return ApiResponse<List<string>>.Success(
-                    HttpStatusCode.OK,
-                    names,
-                    "Blobs retrieved successfully.");
-            }
-            catch (Exception ex)
-            {
-                return ApiResponse<List<string>>.Failure(
-                    HttpStatusCode.InternalServerError,
-                    $"Failed to list blobs: {ex.Message}");
-            }
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                   Unit.Value,
+                   "Blob deleted successfully");
         }
     }
 }
