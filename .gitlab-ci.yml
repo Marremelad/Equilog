@@ -7,146 +7,109 @@ stages:
 variables:
   CI_DEBUG_TRACE: "true"  # Aktiverar felsökningsläge för pipelinekörningar
 
-# Grundmall för docker-byggen
 .imagebyggare: &imagebyggare
   stage: bygga
-  image: docker:latest
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
   variables:
     IMAGE_REPO: "$CI_REGISTRY/cc25group-10/equilog-backend"
+    DOCKER_TLS_CERTDIR: "/certs"
   before_script:
+    - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
-    - export CI_COMMIT_REF_NAME=$(echo "$CI_COMMIT_REF_NAME" | tr '[:upper:]' '[:lower:]')
-    - if [[ $CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH ]]; then DOCKER_TAG=latest; else DOCKER_TAG=$CI_COMMIT_REF_NAME; fi
+    - export CI_DEFAULT_BRANCH=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
+    - if [[ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME = $CI_DEFAULT_BRANCH ]]; then DOCKER_TAG=latest; else DOCKER_TAG=latest; fi
 
-image-checker:
-  <<: *imagebyggare
-  script:
-    - echo "Letar efter befintliga Docker-images för mssql-db och databas"
-    - |
-      if docker manifest inspect "$IMAGE_REPO/blob:$DOCKER_TAG" > /dev/null 2>&1; then
-        echo "mssql-db image finns redan"
-        BLOB_EXISTS=true
-      else
-        BLOB_EXISTS=false
-      fi
-    - |
-      if docker manifest inspect "$IMAGE_REPO/mssql-db:$DOCKER_TAG" > /dev/null 2>&1; then
-        echo "databas image finns redan"
-        DATABASE_EXISTS=true
-      else
-        DATABASE_EXISTS=false
-      fi
-    - |
-      if $BLOB_EXISTS && $DATABASE_EXISTS; then
-        echo "Båda images finns redan, hoppar över build"
-        exit 0
-      else
-        echo "En eller båda images hittades inte, aktiverar byggsteg"
-        exit 1
-      fi
-
-# Bygger Docker-image från Dockerfile-blob och pushar till registret
 blob-image-build:
   <<: *imagebyggare
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/blob:$DOCKER_TAG"
     - echo "Startar build för $IMAGE_NAME"
-    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-blob .
-  needs: ["image-checker"]
+    - docker buildx build \
+        --cache-from=type=registry,ref="$IMAGE_NAME" \
+        --cache-to=type=inline \
+        -t "$IMAGE_NAME" \
+        --push \
+        -f Dockerfile-blob .
   rules:
-    - when: on_failure
+    - if: '$CI_MERGE_REQUEST_ID'
 
-# Skapar en MSSQL-image med inläst databasfil
 databas-bygge:
   <<: *imagebyggare
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/mssql-db:$DOCKER_TAG"
-    - if [[ $CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH ]]; then mv prod-db-init.sql db-init.sql; else mv prod-db-init.sql db-init.sql; fi
+    - if [[ $CI_DEFAULT_BRANCH = $CI_DEFAULT_BRANCH ]]; then mv prod-db-init.sql db-init.sql; else mv prod-db-init.sql db-init.sql; fi
     - echo "Bygger $IMAGE_NAME"
-    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-databas .
-  needs: ["image-checker"]
+    - docker buildx build \
+        --cache-from=type=registry,ref="$IMAGE_NAME" \
+        --cache-to=type=inline \
+        -t "$IMAGE_NAME" \
+        --push \
+        -f Dockerfile-databas .
   rules:
-    - when: on_failure
+    - if: '$CI_MERGE_REQUEST_ID'
 
-# Bygger och publicerar Dockerimage för .NET-applikationen
 dotnet-bygge:
   <<: *imagebyggare
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/dotnet:$DOCKER_TAG"
     - echo "Startar bygge för $IMAGE_NAME"
-    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-backend .
+    - docker buildx build \
+        --cache-from=type=registry,ref="$IMAGE_NAME" \
+        --cache-to=type=inline \
+        -t "$IMAGE_NAME" \
+        --push \
+        -f Dockerfile-backend .
   rules:
-    # - if: '$CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH'
-    #   changes:
-    #     - ./**/*
-    #     - '!./.gitlab-ci.yml'  # Exkludera .gitlab-ci.yml
-    #     - '!./README.md'       # Exkludera README.md (om det finns)
-    #     - '!./.gitignore'     # Exkludera .gitignore (om det finns)
     - if: '$CI_MERGE_REQUEST_ID'
-      changes:
-        - ./**/*
-        - '!./.gitlab-ci.yml'  # Exkludera .gitlab-ci.yml
-        - '!./README.md'       # Exkludera README.md (om det finns)
-        - '!./.gitignore'     # Exkludera .gitignore (om det finns)
 
-
-# Bygger verktygsimage med pythonskript och beroenden
 bygga-verktyg:
   <<: *imagebyggare
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/utils:latest"
     - echo "Skapar $IMAGE_NAME"
-    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-utils .
+    - docker buildx build \
+        --cache-from=type=registry,ref="$IMAGE_NAME" \
+        --cache-to=type=inline \
+        -t "$IMAGE_NAME" \
+        --push \
+        -f Dockerfile-utils .
   rules:
-    # - if: '$CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH'
-    #   changes:
-    #     - Dockerfile-utils
-    #     - requirements-api-handler.txt
-    #     - portainer.py
     - if: '$CI_MERGE_REQUEST_ID'
-      changes:
-        - Dockerfile-utils
-        - requirements-api-handler.txt
-        - portainer.py
 
-# Fiktiva tester, körs endast vid merge requests
 kora-tester:
   stage: testa
   script:
     - echo "TOTAL                  353     20    94%"
   coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
 
-# Grundinställningar för deploy och teardown
 .deploy_verktyg_bas: &deploy_verktyg_bas
   image: $CI_REGISTRY_IMAGE/utils:latest
   before_script:
     - export ENDPOINT_ALIAS="primary"
     - export CI_PROJECT_NAME=$(echo "$CI_PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
-    - export CI_COMMIT_REF_NAME=$(echo "$CI_COMMIT_REF_NAME" | tr '[:upper:]' '[:lower:]')
-    - export STACK_NAMN="g10-$CI_COMMIT_REF_SLUG"
+    - export CI_DEFAULT_BRANCH=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
+    - export STACK_NAMN="g10-$CI_DEFAULT_BRANCH"
     - set -e
 
-# Miljödefinition
 .miljo_installning: &miljo_installning
-  name: review/$CI_COMMIT_REF_NAME
+  name: review/$CI_DEFAULT_BRANCH
 
-# Distribuera till korrekt miljö
 leverera-till-miljo:
   extends: .deploy_verktyg_bas
   stage: leverera
   environment:
     <<: *miljo_installning
-    url: https://g10-$CI_COMMIT_REF_SLUG.cc25.chasacademy.dev
+    # url: https://g10-$CI_DEFAULT_BRANCH.cc25.chasacademy.dev
     on_stop: avsluta-miljo
   script:
     - echo "Levererar till miljö"
-    - if [[ $CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH ]]; then DOCKER_COMPOSE=docker-compose.yml; else DOCKER_COMPOSE=docker-compose-test.yml; fi
+    - if [[ $CI_DEFAULT_BRANCH = $CI_DEFAULT_BRANCH ]]; then DOCKER_COMPOSE=docker-compose.yml; else DOCKER_COMPOSE=docker-compose-test.yml; fi
     - python portainer.py $CI_JOB_STAGE -dc $DOCKER_COMPOSE
   rules:
-    # - if: '$CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH'
     - if: '$CI_MERGE_REQUEST_ID'
 
-# Stäng av miljö manuellt
 avsluta-miljo:
   extends: .deploy_verktyg_bas
   stage: rensa
@@ -159,7 +122,5 @@ avsluta-miljo:
     - python portainer.py $CI_JOB_STAGE
   rules:
     - when: manual
-    # - if: '$CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH'
-    #   when: manual
     - if: '$CI_MERGE_REQUEST_ID'
       when: manual
