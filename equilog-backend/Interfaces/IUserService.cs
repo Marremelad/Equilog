@@ -14,4 +14,6 @@ public interface IUserService
     Task<ApiResponse<Unit>> UpdateUserAsync(UserUpdateDto userUpdateDto);
 
     Task<ApiResponse<Unit>> DeleteUserAsync(int userId);
+
+    Task<ApiResponse<Unit>> SetProfilePictureAsync(int userId, string uri);
 }

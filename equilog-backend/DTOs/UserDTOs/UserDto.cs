@@ -13,7 +13,7 @@
         
         public string? PhoneNumber { get; init; }
         
-        public string? ProfilePictureUrl { get; set; }
+        public string? ProfilePicture { get; set; }
 
         public string? EmergencyContact { get; init; }
 

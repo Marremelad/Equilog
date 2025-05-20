@@ -65,6 +65,14 @@ public static class AppConfiguration
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
     }
+    
+    private static void ConfigureAzuriteEmulator(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAzureClients(azureBuilder =>
+        {
+            azureBuilder.AddBlobServiceClient(configuration.GetConnectionString("LocalEquilogStorage"));
+        });
+    }
 
     private static void ConfigureJsonOptions(IServiceCollection services)
     {
@@ -186,6 +194,9 @@ public static class AppConfiguration
 
     private static void AddApplicationServices(IServiceCollection services)
     {
+        // Azurite container.
+        services.AddSingleton<IBlobStorageService, BlobStorageService>();
+        
         // Authentication services.
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPasswordService, PasswordService>();
@@ -223,6 +234,7 @@ public static class AppConfiguration
         services.AddScoped<IHorseComposition, HorseComposition>();
         services.AddScoped<ICommentComposition, CommentComposition>();
         services.AddScoped<IUserComposition, UserComposition>();
+        services.AddScoped<IBlobStorageComposition, BlobStorageComposition>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();
@@ -265,15 +277,5 @@ public static class AppConfiguration
                 }
             });
         });
-    }
-
-    private static void ConfigureAzuriteEmulator(IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddAzureClients(azureBuilder =>
-        {
-            azureBuilder.AddBlobServiceClient(configuration.GetConnectionString("LocalEquilogStorage"));
-        });
-
-        services.AddSingleton<IBlobService, BlobService>();
     }
 }

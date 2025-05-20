@@ -11,7 +11,7 @@ using System.Net;
 
 namespace equilog_backend.Services
 {
-    public class UserService(EquilogDbContext context, IMapper mapper, IBlobService blobService) : IUserService
+    public class UserService(EquilogDbContext context, IMapper mapper) : IUserService
     {
         public async Task<ApiResponse<List<UserDto>?>> GetUsersAsync()
         {
@@ -40,14 +40,8 @@ namespace equilog_backend.Services
                         HttpStatusCode.NotFound,
                         "Error: User not found");
 
-                var dto = mapper.Map<UserDto>(user);
-
-                if (!string.IsNullOrWhiteSpace(user.ProfilePicture))
-                    dto.ProfilePictureUrl = (await blobService.GetReadUriAsync(user.ProfilePicture)).ToString();
-
-                return ApiResponse<UserDto>.Success(
-                    HttpStatusCode.OK,
-                    dto,
+                return ApiResponse<UserDto>.Success(HttpStatusCode.OK,
+                    mapper.Map<UserDto>(user),
                     null);
             }
             catch (Exception ex)
@@ -148,6 +142,32 @@ namespace equilog_backend.Services
                 return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
                     Unit.Value,
                     $"User with id '{userId}' was deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                    ex.Message);
+            }
+        }
+
+        public async Task<ApiResponse<Unit>> SetProfilePictureAsync(int userId, string uri)
+        {
+            try
+            {
+                var user = await context.Users
+                    .Where(u => u.Id == userId)
+                    .FirstOrDefaultAsync();
+                
+                if (user == null)
+                    return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                        "Error: User not found.");
+
+                user.ProfilePicture = uri;
+                await context.SaveChangesAsync();
+                
+                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                    Unit.Value,
+                    $"profile picture for user '{userId}' was set successfully.");
             }
             catch (Exception ex)
             {
