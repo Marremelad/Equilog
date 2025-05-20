@@ -239,7 +239,6 @@ public static class AppConfiguration
         services.AddScoped<IHorseComposition, HorseComposition>();
         services.AddScoped<ICommentComposition, CommentComposition>();
         services.AddScoped<IUserComposition, UserComposition>();
-        services.AddScoped<IBlobStorageComposition, BlobStorageComposition>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();

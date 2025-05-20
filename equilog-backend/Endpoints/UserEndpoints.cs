@@ -1,4 +1,5 @@
 ﻿using equilog_backend.Common;
+using equilog_backend.DTOs.BlobStorageDTOs;
 using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.Interfaces;
 
@@ -29,6 +30,9 @@ public class UserEndpoints
         // Delete user.
         app.MapDelete("/api/user/delete/{id:int}", DeleteUser)
             .WithName("DeleteUser");
+
+        app.MapPost("/api/user/set-profile-picture", SetProfilePicture)
+            .WithName("SetProfilePicture");
             
         // -- Endpoints for compositions --
         app.MapDelete("/api/user/delete/composition", DeleteUserComposition)
@@ -74,5 +78,13 @@ public class UserEndpoints
         int userId)
     {
         return Result.Generate(await userComposition.DeleteUserCompositionAsync(userId));
+    }
+
+    private static async Task<IResult> SetProfilePicture(
+        IUserService userService,
+        BlobStorageDto blobStorageDto)
+    {
+        return Result.Generate(
+            await userService.SetProfilePictureAsync(blobStorageDto.UserId, blobStorageDto.BlobName));
     }
 }

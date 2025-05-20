@@ -73,7 +73,6 @@ public class BlobStorageService(BlobServiceClient client) : IBlobStorageService
     {
         try
         {
-            // Make sure the container exists
             _container.CreateIfNotExists(PublicAccessType.Blob);
         
             var expiresOn = DateTimeOffset.UtcNow.Add(Validity);

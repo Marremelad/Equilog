@@ -1,4 +1,5 @@
 ﻿using equilog_backend.Common;
+using equilog_backend.DTOs.BlobStorageDTOs;
 using equilog_backend.Interfaces;
 
 namespace equilog_backend.Endpoints;
@@ -9,9 +10,9 @@ public class BlobStorageEndpoints
     {
         app.MapGet("/api/blob-storage/get-upload-uri", GetUploadUri)
             .WithName("GetUploadUri");
-        
-        app.MapPost("/api/blob-storage/set-profile-picture", SetProfilePictureComposition)
-            .WithName("SetProfilePicture");
+
+        app.MapGet("/api/blob-storage/get-read-uri", GetReadUri)
+            .WithName("GetReadUri");
     }
 
     private static async Task<IResult> GetUploadUri(
@@ -21,11 +22,10 @@ public class BlobStorageEndpoints
         return Result.Generate(await blobStorageService.GetUploadUriAsync(blobName));
     }
 
-    private static async Task<IResult> SetProfilePictureComposition(
-        IBlobStorageComposition blobStorageComposition,
-        int userId,
+    private static async Task<IResult> GetReadUri(
+        IBlobStorageService blobStorageService,
         string blobName)
     {
-        return Result.Generate(await blobStorageComposition.SetProfilePictureCompositionAsync(userId, blobName));
+        return Result.Generate(await blobStorageService.GetReadUriAsync(blobName));
     }
 }

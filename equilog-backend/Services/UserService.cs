@@ -150,7 +150,7 @@ namespace equilog_backend.Services
             }
         }
 
-        public async Task<ApiResponse<Unit>> SetProfilePictureAsync(int userId, string uri)
+        public async Task<ApiResponse<Unit>> SetProfilePictureAsync(int userId, string blobName)
         {
             try
             {
@@ -162,7 +162,7 @@ namespace equilog_backend.Services
                     return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
                         "Error: User not found.");
 
-                user.ProfilePicture = uri;
+                user.ProfilePicture = blobName;
                 await context.SaveChangesAsync();
                 
                 return ApiResponse<Unit>.Success(HttpStatusCode.OK,
