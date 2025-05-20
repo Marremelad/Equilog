@@ -29,8 +29,7 @@ namespace equilog_backend.Models
         public int? Height { get; set; }
 
         public int? CurrentBox { get; set; } 
-
-
+        
         [StringLength(50)]
         public string? ProfilePicture { get; set; }
 
