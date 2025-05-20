@@ -3,6 +3,7 @@ using Azure.Storage.Sas;
 using equilog_backend.Common;
 using equilog_backend.Interfaces;
 using System.Net;
+using Azure.Storage.Blobs.Models;
 
 namespace equilog_backend.Services;
 
@@ -72,19 +73,25 @@ public class BlobStorageService(BlobServiceClient client) : IBlobStorageService
     {
         try
         {
+            // Make sure the container exists
+            _container.CreateIfNotExists(PublicAccessType.Blob);
+        
             var expiresOn = DateTimeOffset.UtcNow.Add(Validity);
             var blobClient = _container.GetBlobClient(blobName);
-            
+        
             var sasUri = blobClient.GenerateSasUri(
                 BlobSasPermissions.Create | BlobSasPermissions.Write,
                 expiresOn);
         
+            Console.WriteLine($"Generated SAS URI: {sasUri}");
+        
             return Task.FromResult(ApiResponse<Uri>.Success(HttpStatusCode.OK,
                 sasUri,
-                null)); 
+                "Upload SAS URI generated successfully")); 
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Error generating SAS URI: {ex.Message}");
             return Task.FromResult(ApiResponse<Uri>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message));
         }

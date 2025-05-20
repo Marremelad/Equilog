@@ -22,7 +22,7 @@ public class AzuriteStartupFilter : IStartupFilter
                     // Create CORS rule
                     var corsRule = new BlobCorsRule
                     {
-                        AllowedOrigins = "*",  // For production, restrict to specific origins
+                        AllowedOrigins = "*",
                         AllowedMethods = "GET,PUT,POST,DELETE,HEAD,OPTIONS",
                         AllowedHeaders = "Authorization,Content-Type,Accept,Origin,User-Agent,x-ms-*",
                         ExposedHeaders = "x-ms-*",
@@ -43,9 +43,17 @@ public class AzuriteStartupFilter : IStartupFilter
                     Console.WriteLine($"Failed to configure CORS for Azure Blob Storage: {ex.Message}");
                 }
                 
-                // Ensure the container exists
-                var containerClient = blobServiceClient.GetBlobContainerClient("equilog-media");
-                containerClient.CreateIfNotExists();
+                // Ensure the container exists with proper access
+                try
+                {
+                    var containerClient = blobServiceClient.GetBlobContainerClient("equilog-media");
+                    containerClient.CreateIfNotExists(PublicAccessType.Blob);
+                    Console.WriteLine("Container 'equilog-media' is ready");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to create container: {ex.Message}");
+                }
             }
             
             next(app);
