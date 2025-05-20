@@ -13,6 +13,9 @@ public class BlobStorageEndpoints
 
         app.MapGet("/api/blob-storage/get-read-uri", GetReadUri)
             .WithName("GetReadUri");
+
+        app.MapDelete("/api/blob-storage/delete-blob", DeleteBlob)
+            .WithName("DeleteBlob");
     }
 
     private static async Task<IResult> GetUploadUri(
@@ -27,5 +30,12 @@ public class BlobStorageEndpoints
         string blobName)
     {
         return Result.Generate(await blobStorageService.GetReadUriAsync(blobName));
+    }
+
+    private static async Task<IResult> DeleteBlob(
+        IBlobStorageService blobStorageService,
+        string blobName)
+    {
+        return Result.Generate(await blobStorageService.DeleteBlobAsync(blobName));
     }
 }
