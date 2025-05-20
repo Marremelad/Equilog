@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SendGrid;
 using System.Text;
+using Azure.Identity;
 using Twilio;
 
 namespace equilog_backend.Startup;
@@ -68,10 +69,14 @@ public static class AppConfiguration
     
     private static void ConfigureAzuriteEmulator(IServiceCollection services, IConfiguration configuration)
     {
+        // Register BlobServiceClient without specifying a name (it will use "Default")
         services.AddAzureClients(azureBuilder =>
         {
             azureBuilder.AddBlobServiceClient(configuration.GetConnectionString("LocalEquilogStorage"));
         });
+
+        // Register our startup filter
+        services.AddSingleton<IStartupFilter, AzuriteStartupFilter>();
     }
 
     private static void ConfigureJsonOptions(IServiceCollection services)
