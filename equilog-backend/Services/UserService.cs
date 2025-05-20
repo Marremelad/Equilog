@@ -11,7 +11,7 @@ using System.Net;
 
 namespace equilog_backend.Services
 {
-    public class UserService(EquilogDbContext context, IMapper mapper) : IUserService
+    public class UserService(EquilogDbContext context, IMapper mapper, IBlobService blobService) : IUserService
     {
         public async Task<ApiResponse<List<UserDto>?>> GetUsersAsync()
         {
@@ -32,24 +32,32 @@ namespace equilog_backend.Services
             try
             {
                 var user = await context.Users
-                    .Where(u => u.Id == userId)
-                    .FirstOrDefaultAsync();
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
                 if (user == null)
-                    return ApiResponse<UserDto>.Failure(HttpStatusCode.NotFound,
-                    "Error: User not found");
+                    return ApiResponse<UserDto>.Failure(
+                        HttpStatusCode.NotFound,
+                        "Error: User not found");
 
-                return ApiResponse<UserDto>.Success(HttpStatusCode.OK,
-                    mapper.Map<UserDto>(user),
+                var dto = mapper.Map<UserDto>(user);
+
+                if (!string.IsNullOrWhiteSpace(user.ProfilePicture))
+                    dto.ProfilePictureUrl = (await blobService.GetReadUriAsync(user.ProfilePicture)).ToString();
+
+                return ApiResponse<UserDto>.Success(
+                    HttpStatusCode.OK,
+                    dto,
                     null);
             }
             catch (Exception ex)
             {
-                return ApiResponse<UserDto>.Failure(HttpStatusCode.InternalServerError,
+                return ApiResponse<UserDto>.Failure(
+                    HttpStatusCode.InternalServerError,
                     ex.Message);
             }
         }
-
+        
         public async Task<ApiResponse<UserProfileDto?>> GetUserProfileAsync(int userId, int stableId)
         {
             try

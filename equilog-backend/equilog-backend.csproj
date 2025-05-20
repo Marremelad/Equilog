@@ -6,11 +6,16 @@
         <ImplicitUsings>enable</ImplicitUsings>
 		<InternalsVisibleTo>equilog-backend.IntegrationTests</InternalsVisibleTo>
         <RootNamespace>equilog_backend</RootNamespace>
+        <UserSecretsId>421e1e71-b721-4d05-a0ff-2a2df1db0fc9</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="12.0.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="Azure.Data.Tables" Version="12.9.1" />
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.22.2" />
+        <PackageReference Include="Azure.Storage.Files.Shares" Version="12.20.1" />
+        <PackageReference Include="Azure.Storage.Queues" Version="12.20.1" />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
         <PackageReference Include="FluentValidation" Version="11.11.0" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
@@ -26,6 +31,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Azure" Version="1.7.6" />
         <PackageReference Include="SendGrid" Version="9.29.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.8.0" />

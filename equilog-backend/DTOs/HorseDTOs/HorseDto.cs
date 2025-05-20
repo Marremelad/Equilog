@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace equilog_backend.DTOs.HorseDTOs;
+﻿namespace equilog_backend.DTOs.HorseDTOs;
 
 public class HorseDto
 {
@@ -23,4 +21,6 @@ public class HorseDto
     public int? Height { get; init; }
 
     public int? CurrentBox { get; init; }
+
+    public string? ProfilePicture { get; set; }
 }

@@ -9,6 +9,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SendGrid;
@@ -46,6 +47,9 @@ public static class AppConfiguration
 
         // API documentation.
         ConfigureSwagger(services);
+
+        // Azurite emulator for local development.
+        ConfigureAzuriteEmulator(services, configuration);
     }
 
     private static void AddCoreServices(IServiceCollection services)
@@ -261,5 +265,15 @@ public static class AppConfiguration
                 }
             });
         });
+    }
+
+    private static void ConfigureAzuriteEmulator(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAzureClients(azureBuilder =>
+        {
+            azureBuilder.AddBlobServiceClient(configuration.GetConnectionString("LocalEquilogStorage"));
+        });
+
+        services.AddSingleton<IBlobService, BlobService>();
     }
 }
