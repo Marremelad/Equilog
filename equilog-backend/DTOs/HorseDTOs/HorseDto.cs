@@ -12,5 +12,15 @@ public class HorseDto
 
     public string? Breed { get; init; }
 
+    public string? CoreInformation { get; init; }
+
+    public string? Description { get; init; }
+
+    public int? Weight { get; init; }
+
+    public int? Height { get; init; }
+
+    public int? CurrentBox { get; init; }
+
     public string? ProfilePicture { get; set; }
 }

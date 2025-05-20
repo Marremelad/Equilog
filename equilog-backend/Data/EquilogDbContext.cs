@@ -1,28 +1,44 @@
 ﻿using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace equilog_backend.Data
+namespace equilog_backend.Data;
+
+public class EquilogDbContext(DbContextOptions<EquilogDbContext> options)
+    : DbContext(options)
 {
-    public class EquilogDbContext : DbContext
-    {
-        public EquilogDbContext(DbContextOptions<EquilogDbContext> options)
-            : base(options)
-        {
-        }
-        public DbSet<User> Users { get; set; }
-        public DbSet<Horse> Horses { get; set; }
-        public DbSet<Stable> Stables { get; set; }
-        public DbSet<CalendarEvent> CalendarEvents { get; set; }
-        public DbSet<UserStable> UserStables { get; set; }
-        public DbSet<UserHorse> UserHorses { get; set; }
-        public DbSet<StableHorse> StableHorses { get; set; }
-        public DbSet<UserCalendarEvent> UserCalendarEvents { get; set; }
-        public DbSet<StablePost> StablePosts { get; set; }
-        public DbSet<WallPost> WallPosts { get; set; }
-        public DbSet<PasswordResetRequest> PasswordResetRequests { get; set; }
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
-        public DbSet<StableJoinRequest> StableJoinRequests { get; set; }
-        public DbSet<StableInvite> StableInvites { get; set; }
-        public DbSet<StableLocation> StableLocation { get; set; }
-    }
+    public DbSet<User> Users { get; set; }
+
+    public DbSet<Horse> Horses { get; set; }
+
+    public DbSet<Stable> Stables { get; set; }
+
+    public DbSet<CalendarEvent> CalendarEvents { get; set; }
+
+    public DbSet<UserStable> UserStables { get; set; }
+
+    public DbSet<UserHorse> UserHorses { get; set; }
+
+    public DbSet<StableHorse> StableHorses { get; set; }
+
+    public DbSet<UserCalendarEvent> UserCalendarEvents { get; set; }
+
+    public DbSet<StablePost> StablePosts { get; set; }
+
+    public DbSet<WallPost> WallPosts { get; set; }
+
+    public DbSet<PasswordResetRequest> PasswordResetRequests { get; set; }
+
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+    public DbSet<StableJoinRequest> StableJoinRequests { get; set; }
+
+    public DbSet<StableInvite> StableInvites { get; set; }
+
+    public DbSet<StableLocation> StableLocation { get; set; }
+    
+    public DbSet<Comment> Comments { get; set; }
+    
+    public DbSet<UserComment> UserComments { get; set; }
+    
+    public DbSet<StablePostComment> StablePostComments { get; set; }
 }

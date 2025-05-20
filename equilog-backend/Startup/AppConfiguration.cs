@@ -28,7 +28,7 @@ public static class AppConfiguration
         // Core services.
         AddCoreServices(services);
         ConfigureDatabase(services, configuration);
-        ConfigureJsonOptions(services, configuration);
+        ConfigureJsonOptions(services);
 
         // Authentication and security.
         ConfigureAuthentication(services, configuration);
@@ -66,7 +66,7 @@ public static class AppConfiguration
         });
     }
 
-    private static void ConfigureJsonOptions(IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureJsonOptions(IServiceCollection services)
     {
         services.Configure<JsonOptions>(options =>
         {
@@ -202,6 +202,8 @@ public static class AppConfiguration
         services.AddScoped<IUserStableService, UserStableService>();
         services.AddScoped<IStableHorseService, StableHorseService>();
         services.AddScoped<IUserHorseService, UserHorseService>();
+        services.AddScoped<IUserCommentService, UserCommentService>();
+        services.AddScoped<IStablePostCommentService, StablePostCommentService>();
 
         // Email service.
         services.AddScoped<IEmailService, EmailService>();
@@ -213,11 +215,14 @@ public static class AppConfiguration
         services.AddScoped<IStableJoinRequestService, StableJoinRequestService>();
         services.AddScoped<IStableInviteService, StableInviteService>();
         services.AddScoped<IStableLocationService, StableLocationService>();
-
+        services.AddScoped<ICommentService, CommentService>();
+        
         // Composition services
         services.AddScoped<IStableComposition, StableComposition>();
         services.AddScoped<IPasswordResetComposition, PasswordResetComposition>();
         services.AddScoped<IHorseComposition, HorseComposition>();
+        services.AddScoped<ICommentComposition, CommentComposition>();
+        services.AddScoped<IUserComposition, UserComposition>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();

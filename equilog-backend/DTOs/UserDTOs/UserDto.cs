@@ -12,6 +12,13 @@
         public required string Email { get; init; }
         
         public string? PhoneNumber { get; init; }
+        
         public string? ProfilePictureUrl { get; set; }
+
+        public string? EmergencyContact { get; init; }
+
+        public string? CoreInformation { get; init; }
+
+        public string? Description { get; init; }
     }
 }
