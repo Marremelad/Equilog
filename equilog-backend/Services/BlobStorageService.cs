@@ -68,29 +68,25 @@ public class BlobStorageService(BlobServiceClient client) : IBlobStorageService
         }
     }
 
-    public async Task<ApiResponse<Uri?>> GetUploadUriAsync(string blobName)
+    public Task<ApiResponse<Uri?>> GetUploadUriAsync(string blobName)
     {
         try
         {
             var expiresOn = DateTimeOffset.UtcNow.Add(Validity);
             var blobClient = _container.GetBlobClient(blobName);
-            bool exists = await blobClient.ExistsAsync();
-            
-            if (!exists) 
-                throw new FileNotFoundException($"Blob {blobName} does not exist.");
             
             var sasUri = blobClient.GenerateSasUri(
                 BlobSasPermissions.Create | BlobSasPermissions.Write,
                 expiresOn);
         
-            return ApiResponse<Uri>.Success(HttpStatusCode.OK,
+            return Task.FromResult(ApiResponse<Uri>.Success(HttpStatusCode.OK,
                 sasUri,
-                null); 
+                null)); 
         }
         catch (Exception ex)
         {
-            return ApiResponse<Uri>.Failure(HttpStatusCode.InternalServerError,
-                ex.Message);
+            return Task.FromResult(ApiResponse<Uri>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message));
         }
     }
         

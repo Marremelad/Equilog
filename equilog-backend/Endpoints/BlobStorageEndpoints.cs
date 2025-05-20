@@ -7,6 +7,9 @@ public class BlobStorageEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
+        app.MapGet("/api/blob-storage/get-upload-uri", GetUploadUri)
+            .WithName("GetUploadUri");
+        
         app.MapPost("/api/blob-storage/set-profile-picture", SetProfilePictureComposition)
             .WithName("SetProfilePicture");
     }
