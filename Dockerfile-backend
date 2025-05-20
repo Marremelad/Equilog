@@ -1,0 +1,47 @@
+# === Steg 1: Bygg applikationen ===
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+WORKDIR /App
+
+# Installera dotnet-ef globalt
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+# Kopiera lösning och projektfiler
+COPY . .
+
+# Återställ beroenden
+RUN dotnet restore
+
+# Skapa migrationsbundle (för EF Core migrering vid uppstart)
+RUN dotnet ef migrations bundle \
+    --self-contained -r linux-x64 \
+    -o migrations \
+    --project equilog-backend/equilog-backend.csproj \
+    --startup-project equilog-backend/equilog-backend.csproj
+
+# Publicera applikationen
+RUN dotnet publish equilog-backend/equilog-backend.csproj \
+    -c Release -o out
+
+# === Steg 2: Produktionscontainer ===
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+
+WORKDIR /App
+
+# Kopiera publicerad app
+COPY --from=build /App/out .
+
+# Kopiera migrationsbundle och gör den körbar
+COPY --from=build /App/migrations ./migrations
+RUN chmod +x migrations
+
+# Kopiera startscript och gör det körbart
+COPY --from=build /App/entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
+# Exponera port (ändra vid behov)
+EXPOSE 80
+
+# Starta scriptet (som kör migration + app)
+ENTRYPOINT ["./entrypoint.sh"]
