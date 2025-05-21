@@ -9,12 +9,12 @@ public abstract class CalendarEventEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         // Get calendar events by stable id.
-        app.MapGet("/api/calendar-events/{id:int}", GetCalendarEventsByStableId)
+        app.MapGet("/api/calendar-events/{stableId:int}", GetCalendarEventsByStableId)
             .WithName("GetCalendarEventsByStableId")
             .RequireAuthorization();
         
         // Get calendar event by id.
-        app.MapGet("/api/calendar-event/{id:int}", GetCalendarEvent)
+        app.MapGet("/api/calendar-event/{calendarEventId:int}", GetCalendarEvent)
             .WithName("GetCalendarEvent")
             .RequireAuthorization();
 
@@ -31,7 +31,7 @@ public abstract class CalendarEventEndpoints
             .RequireAuthorization();
 
         // Delete calendar event.
-        app.MapDelete("/api/calendar-event/delete/{id:int}", DeleteCalendarEvent)
+        app.MapDelete("/api/calendar-event/delete/{calendarEventId:int}", DeleteCalendarEvent)
             .WithName("DeleteCalendarEvent")
             .RequireAuthorization();
         
@@ -43,16 +43,16 @@ public abstract class CalendarEventEndpoints
     
     private static async Task<IResult> GetCalendarEventsByStableId(
         ICalendarEventService calendarEventService,
-        int id)
+        int stableId)
     {
-        return Result.Generate(await calendarEventService.GetCalendarEventsByStableIdAsync(id));
+        return Result.Generate(await calendarEventService.GetCalendarEventsByStableIdAsync(stableId));
     }
     
     private static async Task<IResult> GetCalendarEvent(
         ICalendarEventService calendarEventService,
-        int id)
+        int calendarEventId)
     {
-        return Result.Generate(await calendarEventService.GetCalendarEventAsync(id));
+        return Result.Generate(await calendarEventService.GetCalendarEventAsync(calendarEventId));
     }
 
     private static async Task<IResult> CreateCalendarEvent(
@@ -71,9 +71,9 @@ public abstract class CalendarEventEndpoints
 
     private static async Task<IResult> DeleteCalendarEvent(
         ICalendarEventService calendarEventService,
-        int id)
+        int calendarEventId)
     {
-        return Result.Generate(await calendarEventService.DeleteCalendarEventAsync(id));
+        return Result.Generate(await calendarEventService.DeleteCalendarEventAsync(calendarEventId));
     }
     
     private static async Task<IResult> GetCalendarEvents(
