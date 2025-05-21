@@ -4,10 +4,10 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.Compositions;
 
-public class UserCompositions(
+public class UserStableStableCompositions(
     IUserStableService userStableService,
     IUserService userService,
-    IStableService stableService) : IUserComposition
+    IStableService stableService) : IUserStableComposition
 {
     public async Task<ApiResponse<Unit>> DeleteUserCompositionAsync(int userId)
     {
@@ -26,6 +26,31 @@ public class UserCompositions(
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
                 "User deleted successfully");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
+    }
+
+    public async Task<ApiResponse<Unit>> LeaveStableComposition(int userId, int stableId)
+    {
+        try
+        {
+            var transferResponse = await TransferStableOwnership(userId);
+
+            if (!transferResponse.IsSuccess)
+                return transferResponse;
+
+            var userStableResponse = await userStableService.LeaveStableAsync(userId, stableId);
+
+            if (!userStableResponse.IsSuccess)
+                return transferResponse;
+            
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                "User left stable successfully.");
         }
         catch (Exception ex)
         {
