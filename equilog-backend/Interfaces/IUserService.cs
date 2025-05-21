@@ -13,7 +13,7 @@ public interface IUserService
 
     Task<ApiResponse<Unit>> DeleteUserAsync(int userId);
     
-    Task<ApiResponse<Unit>> SetProfilePictureAsync(int userId, string uri);
+    Task<ApiResponse<Unit>> SetProfilePictureAsync(int userId, string blobName);
     
     Task<ApiResponse<List<UserDto>?>> GetUsersAsync();
 }

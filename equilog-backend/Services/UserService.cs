@@ -148,8 +148,29 @@ public class UserService(EquilogDbContext context, IMapper mapper) : IUserServic
         }
     }
     
-    public Task<ApiResponse<Unit>> SetProfilePictureAsync(int userId, string uri)
+    public async Task<ApiResponse<Unit>> SetProfilePictureAsync(int userId, string blobName)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var user = await context.Users
+                .Where(u => u.Id == userId)
+                .FirstOrDefaultAsync();
+                
+            if (user == null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Error: User not found.");
+
+            user.ProfilePicture = blobName;
+            await context.SaveChangesAsync();
+                
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                Unit.Value,
+                $"profile picture for user '{userId}' was set successfully.");
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
     }
 }
