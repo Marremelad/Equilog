@@ -7,4 +7,10 @@ public class CommentDto
     public required DateTime CommentDate { get; init; }
     
     public required string Content { get; init; }
+    
+    public required string FirstName { get; init; }
+    
+    public required string LastName { get; init; }
+    
+    public required string ProfilePicture { get; init; }
 }

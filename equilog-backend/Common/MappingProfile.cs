@@ -88,38 +88,54 @@ public class MappingProfile : Profile
                     .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
                     .ToList() : new List<string>()));
 
-        CreateMap<Comment, CommentDto>().ReverseMap();
-            CreateMap<StableHorse, StableHorseOwnersDto>()
-                .ForMember(dest => dest.HorseId, opt
-                    => opt.MapFrom(src => src.Horse!.Id))
-                .ForMember(dest => dest.HorseName, opt
-                    => opt.MapFrom(src => src.Horse!.Name))
-                .ForMember(dest => dest.HorseColor, opt
-                    => opt.MapFrom(src => src.Horse!.Color))
-                .ForMember(dest => dest.HorseOwners, opt => opt.MapFrom(src
-                    => src.Horse!.UserHorses != null ? src.Horse.UserHorses
-                        .Where(uh => uh.User != null && uh.UserRole == 0)
-                        .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
-                        .ToList() : new List<string>()));
+        CreateMap<Comment, CommentDto>()
+            .ForMember(dest => dest.ProfilePicture, opt => 
+                opt.MapFrom(src => 
+                    src.UserComments != null && src.UserComments.Count != 0
+                        ? src.UserComments.First().User!.ProfilePicture 
+                        : null))
+            .ForMember(dest => dest.FirstName, opt => 
+                opt.MapFrom(src => 
+                    src.UserComments != null && src.UserComments.Count != 0
+                        ? src.UserComments.First().User!.FirstName 
+                        : null))
+            .ForMember(dest => dest.LastName, opt => 
+                opt.MapFrom(src => 
+                    src.UserComments != null && src.UserComments.Count != 0
+                        ? src.UserComments.First().User!.LastName 
+                        : null));
+        
+        CreateMap<StableHorse, StableHorseOwnersDto>()
+            .ForMember(dest => dest.HorseId, opt
+                => opt.MapFrom(src => src.Horse!.Id))
+            .ForMember(dest => dest.HorseName, opt
+                => opt.MapFrom(src => src.Horse!.Name))
+            .ForMember(dest => dest.HorseColor, opt
+                => opt.MapFrom(src => src.Horse!.Color))
+            .ForMember(dest => dest.HorseOwners, opt => opt.MapFrom(src
+                => src.Horse!.UserHorses != null ? src.Horse.UserHorses
+                    .Where(uh => uh.User != null && uh.UserRole == 0)
+                    .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
+                    .ToList() : new List<string>()));
+        
+        CreateMap<UserStable, UserStableRoleDto>();
 
-            CreateMap<UserStable, UserStableRoleDto>();
+        CreateMap<UserHorse, HorseWithUserHorseRoleDto>();
 
-            CreateMap<UserHorse, HorseWithUserHorseRoleDto>();
+        CreateMap<UserHorse, UserWithUserHorseRoleDto>();
+        CreateMap<StableHorse, StableHorseOwnersDto>()
+            .ForMember(dest => dest.HorseId, opt
+                => opt.MapFrom(src => src.Horse!.Id))
+            .ForMember(dest => dest.HorseName, opt
+                => opt.MapFrom(src => src.Horse!.Name))
+            .ForMember(dest => dest.HorseColor, opt
+                => opt.MapFrom(src => src.Horse!.Color))
+            .ForMember(dest => dest.HorseOwners, opt => opt.MapFrom(src
+                => src.Horse!.UserHorses != null ? src.Horse.UserHorses
+                    .Where(uh => uh.User != null && uh.UserRole == 0)
+                    .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
+                    .ToList() : new List<string>()));
 
-            CreateMap<UserHorse, UserWithUserHorseRoleDto>();
-            CreateMap<StableHorse, StableHorseOwnersDto>()
-                .ForMember(dest => dest.HorseId, opt
-                    => opt.MapFrom(src => src.Horse!.Id))
-                .ForMember(dest => dest.HorseName, opt
-                    => opt.MapFrom(src => src.Horse!.Name))
-                .ForMember(dest => dest.HorseColor, opt
-                    => opt.MapFrom(src => src.Horse!.Color))
-                .ForMember(dest => dest.HorseOwners, opt => opt.MapFrom(src
-                    => src.Horse!.UserHorses != null ? src.Horse.UserHorses
-                        .Where(uh => uh.User != null && uh.UserRole == 0)
-                        .Select(uh => uh.User!.FirstName + " " + uh.User.LastName)
-                        .ToList() : new List<string>()));
-
-            CreateMap<StableLocation, StableLocationDto>().ReverseMap();
+        CreateMap<StableLocation, StableLocationDto>().ReverseMap();
     }
 }

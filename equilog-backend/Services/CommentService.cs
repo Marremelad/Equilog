@@ -11,23 +11,28 @@ namespace equilog_backend.Services;
 
 public class CommentService(EquilogDbContext context, IMapper mapper) : ICommentService
 {
-    // Fix this!
     public async Task<ApiResponse<List<CommentDto>?>> GetCommentByStablePostId(int stablePostId)
     {
         try
         {
-            var commentDtos = mapper.Map<List<CommentDto>>(await context.Comments
-                .Include(c => c.StablePostComments)
+            var comments = await context.Comments
+                .Include(c => c.UserComments)!
+                .ThenInclude(uc => uc.User)
                 .Where(c => c.StablePostComments != null &&
                             c.StablePostComments.Any(spc => spc.StablePostIdFk == stablePostId))
-                .ToListAsync());
-            // Fix bug.
+                .ToListAsync(); 
+                
+            if (comments.Count == 0)
+                return ApiResponse<List<CommentDto>?>.Failure(HttpStatusCode.NotFound,
+                    "Error: Post not found.");
             
-            if (commentDtos.Count == 0)
+            var commentDtos = mapper.Map<List<CommentDto>>(comments);
+        
+            if (comments.Count == 0)
                 return ApiResponse<List<CommentDto>?>.Success(HttpStatusCode.OK,
                     commentDtos,
                     "Operation was successful but the post has no comments.");
-            
+        
             return ApiResponse<List<CommentDto>?>.Success(HttpStatusCode.OK,
                 commentDtos,
                 "Comments fetched successfully.");
