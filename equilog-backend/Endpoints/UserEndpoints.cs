@@ -34,7 +34,7 @@ public class UserEndpoints
             .WithName("GetUsers");
             
         // -- Endpoints for compositions --
-        app.MapDelete("/api/user/delete/composition", DeleteUserComposition)
+        app.MapDelete("/api/user/delete/composition/{userId:int}", DeleteUserComposition)
             .WithName("DeleteUserComposition");
     }
     
