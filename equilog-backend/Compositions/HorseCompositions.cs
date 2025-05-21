@@ -5,7 +5,7 @@ using System.Net;
 
 namespace equilog_backend.Compositions;
 
-public class HorseComposition(
+public class HorseCompositions(
     IHorseService horseService,
     IStableHorseService stableHorseService,
     IUserHorseService userHorseService) : IHorseComposition

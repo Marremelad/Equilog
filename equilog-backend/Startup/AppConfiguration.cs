@@ -233,11 +233,11 @@ public static class AppConfiguration
         services.AddScoped<ICommentService, CommentService>();
         
         // Composition services
-        services.AddScoped<IStableComposition, StableComposition>();
-        services.AddScoped<IPasswordResetComposition, PasswordResetComposition>();
-        services.AddScoped<IHorseComposition, HorseComposition>();
-        services.AddScoped<ICommentComposition, CommentComposition>();
-        services.AddScoped<IUserComposition, UserComposition>();
+        services.AddScoped<IStableComposition, StableCompositions>();
+        services.AddScoped<IPasswordResetComposition, PasswordResetCompositions>();
+        services.AddScoped<IHorseComposition, HorseCompositions>();
+        services.AddScoped<ICommentComposition, CommentCompositions>();
+        services.AddScoped<IUserComposition, UserCompositions>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();

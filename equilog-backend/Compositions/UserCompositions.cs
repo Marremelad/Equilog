@@ -4,7 +4,7 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.Compositions;
 
-public class UserComposition(
+public class UserCompositions(
     IUserStableService userStableService,
     IUserService userService,
     IStableService stableService) : IUserComposition

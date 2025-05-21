@@ -5,7 +5,7 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.Compositions;
 
-public class CommentComposition(
+public class CommentCompositions(
     ICommentService commentService,
     IUserCommentService userCommentService,
     IStablePostCommentService stablePostCommentService) : ICommentComposition

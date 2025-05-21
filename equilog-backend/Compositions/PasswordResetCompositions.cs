@@ -6,7 +6,7 @@ using equilog_backend.Security;
 
 namespace equilog_backend.Compositions;
 
-public class PasswordResetComposition(
+public class PasswordResetCompositions(
     IPasswordService passwordService,
     IEmailService emailService,
     PasswordResetSettings passwordResetSettings) 

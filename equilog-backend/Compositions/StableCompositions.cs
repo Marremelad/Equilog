@@ -5,7 +5,7 @@ using System.Net;
 
 namespace equilog_backend.Compositions;
 
-public class StableComposition(
+public class StableCompositions(
     IStableService stableService,
     IUserStableService userStableService) : IStableComposition
 {
