@@ -19,7 +19,7 @@ namespace equilog_backend.Endpoints
             app.MapDelete("/api/user-stables/leave", LeaveStable)
                 .WithName("LeaveStable");
 
-            app.MapDelete("/api/userstables/{userStableId:int}", RemoveUserFromStable)
+            app.MapDelete("/api/user-stables/{userStableId:int}", RemoveUserFromStable)
                 .WithName("RemoveUserFromStable");
         }
         
