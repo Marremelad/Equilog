@@ -65,7 +65,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.FirstName, opt
                 => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
             .ForMember(dest => dest.LastName, opt
-                => opt.MapFrom(src => src.User != null ? src.User.LastName : null));
+                => opt.MapFrom(src => src.User != null ? src.User.LastName : null))
+            .ForMember(dest => dest.ProfilePicture, opt
+                => opt.MapFrom(src => src.User != null ? src.User.ProfilePicture : null));
 
         CreateMap<StableHorse, StableHorseDto>()
             .ForMember(dest => dest.StableHorseId, opt
