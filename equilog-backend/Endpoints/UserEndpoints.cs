@@ -7,12 +7,7 @@ namespace equilog_backend.Endpoints;
 public class UserEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
-    {
-
-        // Get all users.
-        app.MapGet("/api/user", GetUsers)
-            .WithName("GetUsers");
-
+    { 
         // Get user.
         app.MapGet("/api/user/{id:int}", GetUser)
             .WithName("GetUser");
@@ -29,18 +24,16 @@ public class UserEndpoints
         // Delete user.
         app.MapDelete("/api/user/delete/{id:int}", DeleteUser)
             .WithName("DeleteUser");
+        
+        // Get all users.
+        app.MapGet("/api/user", GetUsers)
+            .WithName("GetUsers");
             
         // -- Endpoints for compositions --
         app.MapDelete("/api/user/delete/composition", DeleteUserComposition)
             .WithName("DeleteUserComposition");
     }
-
-    private static async Task<IResult> GetUsers(
-        IUserService userService)
-    {
-        return Result.Generate(await userService.GetUsersAsync());
-    }
-
+    
     private static async Task<IResult> GetUser(
         IUserService userService,
         int id)
@@ -74,5 +67,11 @@ public class UserEndpoints
         int userId)
     {
         return Result.Generate(await userComposition.DeleteUserCompositionAsync(userId));
+    }
+    
+    private static async Task<IResult> GetUsers(
+        IUserService userService)
+    {
+        return Result.Generate(await userService.GetUsersAsync());
     }
 }

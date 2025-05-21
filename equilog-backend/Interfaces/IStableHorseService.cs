@@ -11,5 +11,5 @@ public interface IStableHorseService
 
     Task<ApiResponse<List<StableHorseDto>?>> GetStableHorsesAsync(int stableId);
 
-    Task<ApiResponse<List<StableHorseOwnersDto>?>> GetHorsesWithOwnersByStableAsync(int stableId);
+    Task<ApiResponse<List<StableHorseOwnersDto>?>> GetHorsesWithOwnersByStableIdAsync(int stableId);
 }

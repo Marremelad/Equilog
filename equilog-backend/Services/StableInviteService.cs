@@ -12,18 +12,18 @@ namespace equilog_backend.Services;
 
 public class StableInviteService(EquilogDbContext context, IMapper mapper) : IStableInviteService
 {
-    public async Task<ApiResponse<List<UserDto>?>> GetStableInviteByStableIdAsync(int stableId)
+    public async Task<ApiResponse<List<UserDto>?>> GetStableInvitesByStableIdAsync(int stableId)
     {
         try
         {
             var stableInvites = await context.StableInvites
-                .Where(sjr => sjr.StableIdFk == stableId)
-                .Select(srj => srj.User)
+                .Where(si => si.StableIdFk == stableId)
+                .Select(si => si.User)
                 .ToListAsync();
 
             return ApiResponse<List<UserDto>>.Success(HttpStatusCode.OK,
                 mapper.Map<List<UserDto>>(stableInvites),
-                null);
+                "Stable invites fetched successfully.");
         }
         catch (Exception ex)
         {
@@ -42,10 +42,8 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
                 .FirstOrDefaultAsync();
 
             if (userStable != null)
-            {
                 return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
-                    "Error: User is already a member of this stable");
-            }
+                    "Error: User is already a member of this stable.");
             
             var stableInvite = new StableInvite
             {
@@ -58,7 +56,7 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
 
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                 Unit.Value,
-                "Stable invite created successfully");
+                "Stable invite created successfully.");
         }
         catch (Exception ex)
         {
@@ -72,14 +70,14 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
         try
         {
             var stableInvite = await context.StableInvites
-                .Where(sjr =>
-                    sjr.UserIdFk == stableInviteDto.UserId && 
-                    sjr.StableIdFk == stableInviteDto.StableId)
+                .Where(si =>
+                    si.UserIdFk == stableInviteDto.UserId && 
+                    si.StableIdFk == stableInviteDto.StableId)
                 .FirstOrDefaultAsync();
             
             if (stableInvite == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    "Error: Stable invite not found");
+                    "Error: Stable invite not found.");
 
             context.StableInvites.Remove(stableInvite);
             await context.SaveChangesAsync();
@@ -96,7 +94,7 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
             
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                "User was accepted into stable successfully");
+                "User was accepted into stable successfully.");
         }
         catch (Exception ex)
         {
@@ -110,21 +108,21 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
         try
         {
             var stableInvite = await context.StableInvites
-                .Where(sjr =>
-                    sjr.UserIdFk == stableInviteDto.UserId && 
-                    sjr.StableIdFk == stableInviteDto.StableId)
+                .Where(si =>
+                    si.UserIdFk == stableInviteDto.UserId && 
+                    si.StableIdFk == stableInviteDto.StableId)
                 .FirstOrDefaultAsync();
             
             if (stableInvite == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    "Error: Stable invite not found");
+                    "Error: Stable invite not found.");
 
             context.StableInvites.Remove(stableInvite);
             await context.SaveChangesAsync();
             
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                "User was not accepted into stable successfully");
+                "User was not accepted into stable successfully.");
         }
         catch (Exception ex)
         {

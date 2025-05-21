@@ -7,6 +7,8 @@ public class User
     [Key]
     public int Id { get; set; }
     
+    // ProfilePic
+    
     [StringLength(50)]
     public required string FirstName { get; set; }
 

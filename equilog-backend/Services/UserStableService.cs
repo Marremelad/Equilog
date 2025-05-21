@@ -11,7 +11,7 @@ namespace equilog_backend.Services;
 
 public class UserStableService(EquilogDbContext context, IMapper mapper) : IUserStableService
 {
-    public async Task<ApiResponse<List<UserStableDto>?>> GetUserStablesAsync(int userId)
+    public async Task<ApiResponse<List<UserStableDto>?>> GetUserStablesByUserIdAsync(int userId)
     {
         try
         {
@@ -22,11 +22,11 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
 
             if (userStableDtos == null || userStableDtos.Count == 0)
                 return ApiResponse<List<UserStableDto>?>.Failure(HttpStatusCode.NotFound,
-                    "Error: User not connected to any stables");
+                    "Error: User not connected to any stables.");
 
             return ApiResponse<List<UserStableDto>?>.Success(HttpStatusCode.OK,
                 userStableDtos,
-                null);
+                "Connections between user and stables fetched successfully.");
         }
         catch (Exception ex)
         {
@@ -35,7 +35,7 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
         }
     }
 
-    public async Task<ApiResponse<List<StableUserDto>?>> GetStableUsersAsync(int stableId)
+    public async Task<ApiResponse<List<StableUserDto>?>> GetUserStablesByStableIdAsync(int stableId)
     {
         try
         {
@@ -45,20 +45,18 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                 .ToListAsync();
 
             if (userStables.Count == 0)
-            {
-                return ApiResponse<List<StableUserDto>?>.Failure(
-                    HttpStatusCode.NotFound,
-                    $"Error: No users found for stable with ID {stableId}");
-            }
+                return ApiResponse<List<StableUserDto>?>.Failure(HttpStatusCode.NotFound,
+                    $"Error: No users found for stable with ID {stableId}.");
 
             var stableUserDtos = mapper.Map<List<StableUserDto>>(userStables);
 
-            return ApiResponse<List<StableUserDto>?>.Success(HttpStatusCode.OK, stableUserDtos, null);
+            return ApiResponse<List<StableUserDto>?>.Success(HttpStatusCode.OK,
+                stableUserDtos,
+                "Connection between stable and users fetched successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<StableUserDto>?>.Failure(
-                HttpStatusCode.InternalServerError,
+            return ApiResponse<List<StableUserDto>?>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -72,15 +70,15 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                 .FirstOrDefaultAsync();
 
             if (userStable == null)
-            {
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    $"userStable with ID: {userStableId} not found");
-            }
+                    "Connection between user and stable not found.");
 
             userStable.Role = userStableRole;
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK, Unit.Value, "Role updated successfully.");
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK, 
+                Unit.Value,
+                "Role updated successfully.");
         }
         catch (Exception ex)
         {
@@ -99,14 +97,14 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                 
             if (userStable == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    "Error: User not connected to any stables");
+                    "Error: User not connected to stable.");
 
             context.UserStables.Remove(userStable);
             await context.SaveChangesAsync();
                 
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                null);
+                "User left stable successfully.");
         }
         catch (Exception ex)
         {
@@ -124,18 +122,20 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                 .FirstOrDefaultAsync();
 
             if (userStable == null)
-            {
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound, $"userStable with ID: {userStableId} not found.");
-            }
-
+                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                    "Connection between user and stable not found.");
+                
             context.Remove(userStable);
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.NoContent, Unit.Value, "User successfully removed from stable.");
+            return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
+                Unit.Value,
+                "User successfully removed from stable.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError, ex.Message);
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
         }
     }
 
@@ -155,7 +155,7 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
 
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                 Unit.Value,
-                null);
+                "Connection between user and stable was created successfully.");
         }
         catch (Exception ex)
         {

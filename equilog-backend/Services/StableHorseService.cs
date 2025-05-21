@@ -20,13 +20,13 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
                 .Where(sh => sh.StableIdFk == stableId)
                 .ToListAsync()); 
             
-            if (stableHorseDtos == null || stableHorseDtos.Count == 0 )
-                return ApiResponse<List<StableHorseDto>?>.Failure(HttpStatusCode.NotFound,
-                    "Error: Stable does not have any horses connected to it.");
+            if (stableHorseDtos.Count == 0 )
+                return ApiResponse<List<StableHorseDto>?>.Failure(HttpStatusCode.OK,
+                    "Operation was successful but the stable has no horses.");
             
             return ApiResponse<List<StableHorseDto>?>.Success(HttpStatusCode.OK,
                 stableHorseDtos,
-                null);
+                "Horses fetched successfully");
         }
         catch (Exception ex)
         {
@@ -35,7 +35,7 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
         }
     }
 
-    public async Task<ApiResponse<List<StableHorseOwnersDto>?>> GetHorsesWithOwnersByStableAsync(int stableId)
+    public async Task<ApiResponse<List<StableHorseOwnersDto>?>> GetHorsesWithOwnersByStableIdAsync(int stableId)
     {
         try
         {
@@ -47,16 +47,14 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
             .ToListAsync();
 
             if (stableHorses.Count == 0)
-            {
-                return ApiResponse<List<StableHorseOwnersDto>>.Failure(HttpStatusCode.NotFound,
-                    $"No horses found for stable with ID {stableId}");
-            }
+                return ApiResponse<List<StableHorseOwnersDto>>.Failure(HttpStatusCode.OK,
+                    "Operation was successful but the stable has no horses.");
 
             var stableHorseOwnersDtos = mapper.Map<List<StableHorseOwnersDto>>(stableHorses);
 
             return ApiResponse<List<StableHorseOwnersDto>>.Success(HttpStatusCode.OK,
                 stableHorseOwnersDtos,
-                null);
+                "Horses fetched successfully.");
         }
         catch (Exception ex)
         {
@@ -80,7 +78,7 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
         
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                 Unit.Value, 
-                null);
+                "Connection between stable and horse was created successfully.");
         }
         catch (Exception ex)
         {
@@ -99,7 +97,7 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
             
             if (stableHorse == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotAcceptable,
-                    "Error: Relation entity not found.");
+                    "Error: Connection between horse and stable was not found.");
 
             context.StableHorses.Remove(stableHorse);
             await context.SaveChangesAsync();

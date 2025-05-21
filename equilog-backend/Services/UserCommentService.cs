@@ -24,7 +24,7 @@ public class UserCommentService(EquilogDbContext context) : IUserCommentService
             
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                 Unit.Value,
-                null);
+                "Connection between user and comment was created successfully.");
         }
         catch (Exception ex)
         {

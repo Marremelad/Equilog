@@ -24,7 +24,7 @@ public class StablePostCommentService(EquilogDbContext context) : IStablePostCom
 
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value, 
-                null);
+                "Connection between stable-post and comment created successfully.");
         }
         catch (Exception ex)
         {

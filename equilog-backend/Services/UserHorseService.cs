@@ -24,7 +24,7 @@ public class UserHorseService(EquilogDbContext context) : IUserHorseService
             
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                 Unit.Value,
-                null);
+                "Connection between user and horse was created successfully.");
         }
         catch (Exception ex)
         {

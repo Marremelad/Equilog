@@ -19,12 +19,12 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
         {
             var stableJoinRequests = await context.StableJoinRequests
                 .Where(sjr => sjr.StableIdFk == stableId)
-                .Select(srj => srj.User)
+                .Select(sjr => sjr.User)
                 .ToListAsync();
 
             return ApiResponse<List<UserDto>>.Success(HttpStatusCode.OK,
                 mapper.Map<List<UserDto>>(stableJoinRequests),
-                null);
+                "Stable join requests was fetched successfully.");
         }
         catch (Exception ex)
         {
@@ -39,12 +39,12 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
         {
             var stableJoinRequests = await context.StableJoinRequests
                 .Where(sjr => sjr.UserIdFk == userId)
-                .Select(srj => srj.Stable)
+                .Select(sjr => sjr.Stable)
                 .ToListAsync();
 
             return ApiResponse<List<StableDto>>.Success(HttpStatusCode.OK,
                 mapper.Map<List<StableDto>>(stableJoinRequests),
-                null);
+                "Stable join requests fetched successfully.");
         }
         catch (Exception ex)
         {
@@ -63,10 +63,17 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
                 .FirstOrDefaultAsync();
 
             if (userStable != null)
-            {
                 return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
-                    "Error: User is already a member of this stable");
-            }
+                    "User is already a member of this stable.");
+
+            var storedStableJoinRequest = await context.StableJoinRequests
+                .Where(sjr => sjr.UserIdFk == stableJoinRequestDto.UserId &&
+                              sjr.StableIdFk == stableJoinRequestDto.StableId)
+                .FirstOrDefaultAsync();
+            
+            if (storedStableJoinRequest != null)
+                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                    "User har already sent a join request to this stable.");
             
             var stableJoinRequest = new StableJoinRequest
             {
@@ -79,7 +86,7 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
 
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
                 Unit.Value,
-                "Stable join request created successfully");
+                "Stable join request created successfully.");
         }
         catch (Exception ex)
         {
@@ -100,7 +107,7 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
             
             if (stableJoinRequest == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    "Error: Stable join request not found");
+                    "Error: Stable join request not found.");
 
             context.StableJoinRequests.Remove(stableJoinRequest);
             await context.SaveChangesAsync();
@@ -117,7 +124,7 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
             
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                "User was accepted into stable successfully");
+                "User was accepted into stable successfully.");
         }
         catch (Exception ex)
         {
@@ -138,14 +145,14 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
             
             if (stableJoinRequest == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    "Error: Stable join request not found");
+                    "Error: Stable join request not found.");
 
             context.StableJoinRequests.Remove(stableJoinRequest);
             await context.SaveChangesAsync();
             
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                "User was not accepted into stable successfully");
+                "User was not accepted into stable successfully.");
         }
         catch (Exception ex)
         {
