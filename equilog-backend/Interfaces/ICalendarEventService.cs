@@ -7,8 +7,6 @@ public interface ICalendarEventService
 {
     Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsByStableIdAsync(int stableId);
     
-    Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsAsync();
-
     Task<ApiResponse<CalendarEventDto?>> GetCalendarEventAsync(int calendarEventId);
     
     Task<ApiResponse<CalendarEventDto?>> CreateCalendarEventAsync(CalendarEventCreateDto calendarEventCreateDto);
@@ -16,4 +14,6 @@ public interface ICalendarEventService
     Task<ApiResponse<Unit>> UpdateCalendarEventAsync(CalendarEventUpdateDto calendarEventUpdateDto);
 
     Task<ApiResponse<Unit>> DeleteCalendarEventAsync(int calendarEventId);
+    
+    Task<ApiResponse<List<CalendarEventDto>?>> GetCalendarEventsAsync();
 }

@@ -15,15 +15,27 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
     {
         try
         {
-            var commentDtos = mapper.Map<List<CommentDto>>(await context.Comments
-                .Include(c => c.StablePostComments)
+            var comments = await context.Comments
+                .Include(c => c.UserComments)!
+                .ThenInclude(uc => uc.User)
                 .Where(c => c.StablePostComments != null &&
                             c.StablePostComments.Any(spc => spc.StablePostIdFk == stablePostId))
-                .ToListAsync());
+                .ToListAsync(); 
+                
+            if (comments.Count == 0)
+                return ApiResponse<List<CommentDto>?>.Failure(HttpStatusCode.NotFound,
+                    "Error: Post not found.");
             
+            var commentDtos = mapper.Map<List<CommentDto>>(comments);
+        
+            if (comments.Count == 0)
+                return ApiResponse<List<CommentDto>?>.Success(HttpStatusCode.OK,
+                    commentDtos,
+                    "Operation was successful but the post has no comments.");
+        
             return ApiResponse<List<CommentDto>?>.Success(HttpStatusCode.OK,
                 commentDtos,
-                null);
+                "Comments fetched successfully.");
         }
         catch (Exception ex)
         {
@@ -67,14 +79,14 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
             
             if (comment == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    "Error: Comment not found");
+                    "Error: Comment not found.");
 
             context.Comments.Remove(comment);
             await context.SaveChangesAsync();
             
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                "Comment deleted successfully");
+                $"Comment with id {commentId} deleted successfully.");
         }
         catch (Exception ex)
         {

@@ -56,11 +56,11 @@ public static class PipelineInitialization
         StableEndpoints.RegisterEndpoints(app);
         StablePostEndpoints.RegisterEndpoints(app);
         CalendarEventEndpoints.RegisterEndpoints(app);
-        WallPostEndpoints.RegisterEndpoints(app);
         StableJoinRequestEndpoints.RegisterEndpoints(app);
         StableInviteEndpoints.RegisterEndpoints(app);
         StableHorseEndpoints.RegisterEndpoints(app);
         StableLocationEndpoints.RegisterEndpoints(app);
         CommentEndpoints.RegisterEndpoints(app);
+        BlobStorageEndpoints.RegisterEndpoints(app);
     }
 }

@@ -9,15 +9,6 @@ public class HorseEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        // Get all horses.
-        app.MapGet("/api/horse", GetHorses)
-            .WithName("GetHorses");
-        // .RequireAuthorization();
-
-        // Get Horse.
-        app.MapGet("/api/horse/{id:int}", GetHorse)
-            .WithName("GetHorse");
-
         // Get horse profile
         app.MapGet("/api/horse/{horseId:int}/profile", GetHorseProfile)
             .WithName("GetHorseProfile");
@@ -35,6 +26,15 @@ public class HorseEndpoints
         // Delete horse.
         app.MapDelete("/api/horse/delete/{id:int}", DeleteHorse)
             .WithName("DeleteHorse");
+        
+        // // Get all horses.
+        // app.MapGet("/api/horse", GetHorses)
+        //     .WithName("GetHorses")
+        // .RequireAuthorization();
+        
+        // // Get Horse.
+        // app.MapGet("/api/horse/{id:int}", GetHorse)
+        //     .WithName("GetHorse");
 
         // -- Endpoints for compositions --
 
@@ -43,20 +43,7 @@ public class HorseEndpoints
             .AddEndpointFilter<ValidationFilter<HorseCompositionCreateDto>>()
             .WithName("CreateHorseComposition");
     }
-
-    private static async Task<IResult> GetHorses(
-        IHorseService horseService)
-    {
-        return Result.Generate(await horseService.GetHorsesAsync());
-    }
-
-    private static async Task<IResult> GetHorse(
-        IHorseService horseService,
-        int id)
-    {
-        return Result.Generate(await horseService.GetHorseAsync(id));
-    }
-
+    
     private static async Task<IResult> GetHorseProfile(
         IHorseService horseService,
         int horseId)
@@ -91,4 +78,17 @@ public class HorseEndpoints
     {
         return Result.Generate(await horseComposition.CreateHorseCompositionAsync(horseCompositionCreateDto));
     }
+    
+    // private static async Task<IResult> GetHorses(
+    //     IHorseService horseService)
+    // {
+    //     return Result.Generate(await horseService.GetHorsesAsync());
+    // }
+    
+    // private static async Task<IResult> GetHorse(
+    //     IHorseService horseService,
+    //     int id)
+    // {
+    //     return Result.Generate(await horseService.GetHorseAsync(id));
+    // }
 }

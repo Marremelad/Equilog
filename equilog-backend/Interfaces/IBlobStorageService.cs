@@ -2,11 +2,14 @@
 
 namespace equilog_backend.Interfaces
 {
-    public interface IBlobService
+    public interface IBlobStorageService
     {
-        Task<Uri> GetReadUriAsync(string blobName);
-        Task<List<Uri>> GetReadUrisAsync(IEnumerable<string> blobNames);
-        Task<Uri> GetUploadUriAsync(string blobName);
+        Task<ApiResponse<Uri?>> GetReadUriAsync(string blobName);
+
+        Task<ApiResponse<List<Uri>?>> GetReadUrisAsync(IEnumerable<string> blobNames);
+
+        Task<ApiResponse<Uri?>> GetUploadUriAsync(string blobName);
+        
         Task<ApiResponse<Unit>> DeleteBlobAsync(string blobName);
     }
 }

@@ -1,11 +1,8 @@
 ﻿using equilog_backend.Common;
 
-namespace equilog_backend.Interfaces
+namespace equilog_backend.Interfaces;
+
+public interface IEmailService
 {
-    public interface IEmailService
-    {
-        Task<ApiResponse<Unit>> SendEmailAsync (IEmail email, string recipient);
-        Task<bool> SendVerificationCodeAsync(string userEmail);
-        Task<bool> VerifyVerificationCodeAsync(string userEmail, string code);
-    }
+    Task<ApiResponse<Unit>> SendEmailAsync (IEmail email, string recipient);
 }

@@ -18,7 +18,7 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
             if (!await context.Users
                     .AnyAsync(u => u.Email == email))
                 return ApiResponse<PasswordResetRequestDto>.Failure(HttpStatusCode.BadRequest,
-                    $"Account with the email {email} does not exist");
+                    $"Account with the email {email} does not exist.");
             
             var storedPasswordResetRequest = await context.PasswordResetRequests
                 .Where(prr => prr.Email == email)
@@ -42,7 +42,7 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
             
             return ApiResponse<PasswordResetRequestDto>.Success(HttpStatusCode.Created,
                 mapper.Map<PasswordResetRequestDto>(passwordResetRequest),
-                "Password reset request was created successfully");
+                "Password reset request was created successfully.");
         }
         catch (Exception ex)
         {
@@ -128,7 +128,7 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
 
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value, 
-                "Password was reset successfully");
+                "Password was reset successfully.");
         }
         catch (Exception ex)
         {
@@ -147,14 +147,14 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
             
             if (passwordResetRequest == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    "Error: Password reset request not found");
+                    "Error: Password reset request not found.");
 
             context.PasswordResetRequests.Remove(passwordResetRequest);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                "Password reset request deleted successfully");
+                "Password reset request deleted successfully.");
         }
         catch (Exception ex)
         {

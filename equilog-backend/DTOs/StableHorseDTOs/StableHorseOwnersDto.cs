@@ -10,6 +10,6 @@ namespace equilog_backend.DTOs.StableHorseDTOs
 
         public string? HorseColor { get; init; }
 
-        public List<string> HorseOwners { get; init; } = new List<string>();
+        public List<string> HorseOwners { get; init; } = [];
     }
 }

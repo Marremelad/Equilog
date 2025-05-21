@@ -19,7 +19,7 @@ namespace equilog_backend.Endpoints
             app.MapDelete("/api/user-stables/leave", LeaveStable)
                 .WithName("LeaveStable");
 
-            app.MapDelete("/api/userstables/{userStableId:int}", RemoveUserFromStable)
+            app.MapDelete("/api/user-stables/{userStableId:int}", RemoveUserFromStable)
                 .WithName("RemoveUserFromStable");
         }
         
@@ -27,14 +27,14 @@ namespace equilog_backend.Endpoints
             IUserStableService userStableService,
             int id)
         {
-            return Result.Generate(await userStableService.GetUserStablesAsync(id));
+            return Result.Generate(await userStableService.GetUserStablesByUserIdAsync(id));
         }
 
         private static async Task<IResult> GetStableUsers(
             IUserStableService userStableService,
             int id)
         {
-            return Result.Generate(await userStableService.GetStableUsersAsync(id));
+            return Result.Generate(await userStableService.GetUserStablesByStableIdAsync(id));
         }
 
         private static async Task<IResult> UpdateStableUserRole(

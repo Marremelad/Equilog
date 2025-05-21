@@ -27,7 +27,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             
             return ApiResponse<StableDto>.Success(HttpStatusCode.OK,
                 mapper.Map<StableDto>(stable),
-                null);
+                "Stable fetched successfully.");
         }
         catch (Exception ex)
         {
@@ -90,16 +90,18 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-            return ApiResponse<List<StableSearchDto>>.Success(
-                HttpStatusCode.OK, mapper.Map<List<StableSearchDto>>(pagedResults), null);
+            return ApiResponse<List<StableSearchDto>>.Success(HttpStatusCode.OK,
+                mapper.Map<List<StableSearchDto>>(pagedResults),
+                "Stables fetched successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<StableSearchDto>>.Failure(
-                HttpStatusCode.InternalServerError, ex.Message);
+            return ApiResponse<List<StableSearchDto>>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
         }
     }
-    public async Task<ApiResponse<StableDto?>> CreateStableAsync(StableCreateDto stableCreateDto)
+    
+    public async Task<ApiResponse<int>> CreateStableAsync(StableCreateDto stableCreateDto)
    {
       try
       {
@@ -108,13 +110,13 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
             context.Stables.Add(stable);
             await context.SaveChangesAsync();
 
-            return ApiResponse<StableDto>.Success(HttpStatusCode.Created,
-            mapper.Map<StableDto>(stable),
-            "Stable created successfully");
+            return ApiResponse<int>.Success(HttpStatusCode.Created,
+            stable.Id, 
+            "Stable created successfully.");
       }
       catch (Exception ex)
       {
-         return ApiResponse<StableDto>.Failure(HttpStatusCode.InternalServerError,
+         return ApiResponse<int>.Failure(HttpStatusCode.InternalServerError,
             ex.Message);
       }
    }
@@ -129,14 +131,14 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
 
          if (stable == null)
             return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-               "Error: Stable not found");
+               "Error: Stable not found.");
 
          mapper.Map(stableUpdateDto, stable);
          await context.SaveChangesAsync();
 
          return ApiResponse<Unit>.Success(HttpStatusCode.OK,
             Unit.Value,
-            "Stable information updated successfully");
+            "Stable information updated successfully.");
       }
       catch (Exception ex)
       {
@@ -160,7 +162,7 @@ public class StableService(EquilogDbContext context, IMapper mapper) : IStableSe
          context.Stables.Remove(stable);
          await context.SaveChangesAsync();
 
-         return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
+         return ApiResponse<Unit>.Success(HttpStatusCode.OK,
             Unit.Value, 
             $"Stable with id '{stableId}' was deleted successfully");
       }

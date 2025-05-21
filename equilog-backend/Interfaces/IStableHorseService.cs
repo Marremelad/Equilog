@@ -5,11 +5,11 @@ namespace equilog_backend.Interfaces;
 
 public interface IStableHorseService
 {
-    Task<ApiResponse<int>> CreateStableHorseConnectionAsync(int stableId, int horseId);
+    Task<ApiResponse<Unit>> CreateStableHorseConnectionAsync(int stableId, int horseId);
 
     Task<ApiResponse<Unit>> RemoveHorseFromStableAsync(int stableHorseId);
 
     Task<ApiResponse<List<StableHorseDto>?>> GetStableHorsesAsync(int stableId);
 
-    Task<ApiResponse<List<StableHorseOwnersDto>?>> GetHorsesWithOwnersByStableAsync(int stableId);
+    Task<ApiResponse<List<StableHorseOwnersDto>?>> GetHorsesWithOwnersByStableIdAsync(int stableId);
 }

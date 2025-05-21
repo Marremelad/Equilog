@@ -5,8 +5,6 @@ namespace equilog_backend.Interfaces;
 
 public interface IUserService
 {
-    Task<ApiResponse<List<UserDto>?>> GetUsersAsync();
-
     Task<ApiResponse<UserDto?>> GetUserAsync(int userId);
 
     Task<ApiResponse<UserProfileDto?>> GetUserProfileAsync(int userId, int stableId);
@@ -14,4 +12,8 @@ public interface IUserService
     Task<ApiResponse<Unit>> UpdateUserAsync(UserUpdateDto userUpdateDto);
 
     Task<ApiResponse<Unit>> DeleteUserAsync(int userId);
+    
+    Task<ApiResponse<Unit>> SetProfilePictureAsync(int userId, string blobName);
+    
+    Task<ApiResponse<List<UserDto>?>> GetUsersAsync();
 }

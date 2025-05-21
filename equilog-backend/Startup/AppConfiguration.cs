@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SendGrid;
 using System.Text;
+using Azure.Identity;
 using Twilio;
 
 namespace equilog_backend.Startup;
@@ -64,6 +65,18 @@ public static class AppConfiguration
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
+    }
+    
+    private static void ConfigureAzuriteEmulator(IServiceCollection services, IConfiguration configuration)
+    {
+        // Register BlobServiceClient without specifying a name (it will use "Default")
+        services.AddAzureClients(azureBuilder =>
+        {
+            azureBuilder.AddBlobServiceClient(configuration.GetConnectionString("LocalEquilogStorage"));
+        });
+
+        // Register our startup filter
+        services.AddSingleton<IStartupFilter, AzuriteStartupFilter>();
     }
 
     private static void ConfigureJsonOptions(IServiceCollection services)
@@ -186,6 +199,9 @@ public static class AppConfiguration
 
     private static void AddApplicationServices(IServiceCollection services)
     {
+        // Azurite container.
+        services.AddSingleton<IBlobStorageService, BlobStorageService>();
+        
         // Authentication services.
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPasswordService, PasswordService>();
@@ -211,18 +227,17 @@ public static class AppConfiguration
         // Feature specific services.
         services.AddScoped<IStablePostService, StablePostService>();
         services.AddScoped<ICalendarEventService, CalendarEventService>();
-        services.AddScoped<IWallPostService, WallPostService>();
         services.AddScoped<IStableJoinRequestService, StableJoinRequestService>();
         services.AddScoped<IStableInviteService, StableInviteService>();
         services.AddScoped<IStableLocationService, StableLocationService>();
         services.AddScoped<ICommentService, CommentService>();
         
         // Composition services
-        services.AddScoped<IStableComposition, StableComposition>();
-        services.AddScoped<IPasswordResetComposition, PasswordResetComposition>();
-        services.AddScoped<IHorseComposition, HorseComposition>();
-        services.AddScoped<ICommentComposition, CommentComposition>();
-        services.AddScoped<IUserComposition, UserComposition>();
+        services.AddScoped<IStableComposition, StableCompositions>();
+        services.AddScoped<IPasswordResetComposition, PasswordResetCompositions>();
+        services.AddScoped<IHorseComposition, HorseCompositions>();
+        services.AddScoped<ICommentComposition, CommentCompositions>();
+        services.AddScoped<IUserComposition, UserCompositions>();
 
         // Validators
         services.AddValidatorsFromAssemblyContaining<HorseCreateDtoValidator>();
@@ -265,15 +280,5 @@ public static class AppConfiguration
                 }
             });
         });
-    }
-
-    private static void ConfigureAzuriteEmulator(IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddAzureClients(azureBuilder =>
-        {
-            azureBuilder.AddBlobServiceClient(configuration.GetConnectionString("LocalEquilogStorage"));
-        });
-
-        services.AddSingleton<IBlobService, BlobService>();
     }
 }

@@ -8,6 +8,8 @@ public class User
     [Key]
     public int Id { get; set; }
     
+    // ProfilePic
+    
     [StringLength(50)]
     public required string FirstName { get; set; }
 
@@ -39,9 +41,7 @@ public class User
     public virtual List<UserStable>? UserStables { get; set; }
 
     public virtual List<UserHorse>? UserHorses { get; set; }
-
-    public virtual List<UserCalendarEvent>? UserEvents { get; set; }
-
+    
     public virtual List<StablePost>? StablePost { get; set; }
     
     public virtual List<RefreshToken>? RefreshTokens { get; set; }

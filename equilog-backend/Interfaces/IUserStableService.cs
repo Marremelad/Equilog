@@ -6,13 +6,13 @@ namespace equilog_backend.Interfaces;
 
 public interface IUserStableService
 {
-    Task<ApiResponse<List<UserStableDto>?>> GetUserStablesAsync(int userId);
+    Task<ApiResponse<List<UserStableDto>?>> GetUserStablesByUserIdAsync(int userId);
 
-    Task<ApiResponse<List<StableUserDto>?>> GetStableUsersAsync(int stableId);
+    Task<ApiResponse<List<StableUserDto>?>> GetUserStablesByStableIdAsync(int stableId);
 
     Task<ApiResponse<Unit>> UpdateStableUserRoleAsync(int userStableId, int userStableRole);
     
-    Task<ApiResponse<Unit>> CreateUserStableConnectionOnStableCreation(int userId, int stableId);
+    Task<ApiResponse<Unit>> CreateUserStableConnectionAsync(int userId, int stableId);
     
     Task<ApiResponse<Unit>> LeaveStableAsync(int userId, int stableId);
     

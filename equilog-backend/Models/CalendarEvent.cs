@@ -22,6 +22,4 @@ public class CalendarEvent
     [ForeignKey("Stable")]
     public required int StableIdFk { get; set; }
     public virtual Stable? Stable { get; set; }
-    
-    public virtual List<UserCalendarEvent>? UserCalendarEvents { get; set; }
 }

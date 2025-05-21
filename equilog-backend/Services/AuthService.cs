@@ -11,13 +11,12 @@ using equilog_backend.Models;
 using equilog_backend.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Twilio.Rest.Trunking.V1;
 
 namespace equilog_backend.Services;
 
 public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMapper mapper) : IAuthService
 {
-    public string CreateJwt(User user)
+    private string CreateJwt(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
@@ -51,7 +50,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             {
                 return ApiResponse<AuthResponseDto>.Failure(
                     HttpStatusCode.BadRequest,
-                    "Email already exists");
+                    "Email already exists.");
             }
             
             var salt = BCrypt.Net.BCrypt.GenerateSalt();
@@ -68,14 +67,14 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             
             var response = new AuthResponseDto
             {
-                AccessToken = accessToken,
+                AccessToken = accessToken, // JWT.
                 RefreshToken = refreshToken.Token,
             };
             
             return ApiResponse<AuthResponseDto>.Success(
                 HttpStatusCode.Created,
                 response,
-                "User registered successfully");
+                "User registered successfully.");
         }
         catch (Exception ex)
         {
@@ -95,14 +94,14 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             if (user == null)
                 return ApiResponse<AuthResponseDto?>.Failure(
                     HttpStatusCode.Unauthorized, 
-                    "Invalid email or password");
+                    "Invalid email or password.");
             
             var isValidPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash);
             
             if(!isValidPassword)
                 return ApiResponse<AuthResponseDto>.Failure(
                     HttpStatusCode.Unauthorized, 
-                    "Invalid email or password");
+                    "Invalid email or password.");
 
             var accessToken = CreateJwt(user);
             var refreshToken = await CreateRefreshTokenAsync(user.Id);
@@ -116,7 +115,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             return ApiResponse<AuthResponseDto>.Success(
                 HttpStatusCode.OK,
                 response,
-                "Login successful"); 
+                "Login successful."); 
         }
         catch (Exception ex)
         {
@@ -141,7 +140,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             if (BCrypt.Net.BCrypt.Verify(validatePasswordDto.Password, user.PasswordHash))
                 return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                     Unit.Value,
-                    null);
+                    "Password verified successfully.");
             
             return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
                 "Incorrect password.");
@@ -153,7 +152,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         }
     }
     
-    public async Task<RefreshToken> CreateRefreshTokenAsync(int userId)
+    private async Task<RefreshToken> CreateRefreshTokenAsync(int userId)
     {
         var token = Guid.NewGuid().ToString();
     
@@ -173,7 +172,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         return refreshToken;
     }
     
-    public bool ValidateRefreshToken(RefreshToken? token)
+    private bool ValidateRefreshToken(RefreshToken? token)
     {
         if (token == null)
             return false;
