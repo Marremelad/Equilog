@@ -1,0 +1,10 @@
+# Base MSSQL image
+FROM mcr.microsoft.com/mssql/server:2022-latest
+
+# Set dir and copy there
+WORKDIR /usr/src/app
+COPY databas-entry.sh .
+COPY db-init.sql .
+
+# Run entrypoint script to start mssql and then run init script for setup
+CMD ["/bin/bash", "./databas-entry.sh"]

@@ -1,0 +1,8 @@
+# Använd den officiella Azurite-bilden från Microsoft Container Registry
+FROM mcr.microsoft.com/azure-storage/azurite
+
+# Exponera portar för Azurite Blob och Queue Storage
+EXPOSE 10000 10001 10002
+
+# Starta Azurite när containern startar
+# CMD ["azurite", "--blobHost", "0.0.0.0", "--queueHost", "0.0.0.0", "--location", "/data"]
