@@ -3,7 +3,9 @@ using equilog_backend.DTOs.UserDTOs;
 
 namespace equilog_backend.Interfaces;
 
-public interface IUserComposition
+public interface IUserStableComposition
 {
     Task<ApiResponse<Unit>> DeleteUserCompositionAsync(int userId);
+
+    Task<ApiResponse<Unit>> LeaveStableComposition(int userId, int stableId);
 }

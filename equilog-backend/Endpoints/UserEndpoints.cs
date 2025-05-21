@@ -67,10 +67,10 @@ public class UserEndpoints
     }
 
     private static async Task<IResult> DeleteUserComposition(
-        IUserComposition userComposition,
+        IUserStableComposition userStableComposition,
         int userId)
     {
-        return Result.Generate(await userComposition.DeleteUserCompositionAsync(userId));
+        return Result.Generate(await userStableComposition.DeleteUserCompositionAsync(userId));
     }
 
     private static async Task<IResult> SetProfilePicture(
