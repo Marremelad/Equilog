@@ -2,7 +2,7 @@
 
 public class StableHorseDto
 {
-    public required int StableHorseId { get; set; }
+    public required int StableHorseId { get; init; }
     
-    public required int HorseId { get; set; }
+    public required int HorseId { get; init; }
 }

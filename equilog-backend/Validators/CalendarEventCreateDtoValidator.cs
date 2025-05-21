@@ -1,5 +1,4 @@
-﻿
-using equilog_backend.DTOs.CalendarEventDTOs;
+﻿using equilog_backend.DTOs.CalendarEventDTOs;
 using FluentValidation;
 
 namespace equilog_backend.Validators;
@@ -16,7 +15,7 @@ public class CalendarEventCreateDtoValidator : AbstractValidator<CalendarEventCr
 
         RuleFor(e => e.EndDateTime)
             .NotEmpty().WithMessage("End is required.")
-            .GreaterThanOrEqualTo(d => d.StartDateTime).WithMessage("Endtime must be after starttime.");
+            .GreaterThanOrEqualTo(d => d.StartDateTime).WithMessage("End time must be after start time.");
 
         RuleFor(e => e.StableIdFk)
             .NotEmpty().WithMessage("Stable id is required.")

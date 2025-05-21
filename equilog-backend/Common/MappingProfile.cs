@@ -11,7 +11,6 @@ using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.DTOs.UserDTOs;
 using equilog_backend.DTOs.UserHorseDTOs;
 using equilog_backend.DTOs.UserStableDTOs;
-using equilog_backend.DTOs.WallPostDTOs;
 using equilog_backend.Models;
 
 namespace equilog_backend.Common;
@@ -54,12 +53,7 @@ public class MappingProfile : Profile
         CreateMap<CalendarEvent, CalendarEventDto>().ReverseMap();
         CreateMap<CalendarEventCreateDto, CalendarEvent>(MemberList.Source);
         CreateMap<CalendarEventUpdateDto, CalendarEvent>(MemberList.Source);
-
-        CreateMap<WallPost, WallPostDto>().ReverseMap();
-        CreateMap<WallPostReplaceDto, WallPost>(MemberList.Source);
-        CreateMap<WallPostEditDto, WallPost>(MemberList.Source);
-        CreateMap<WallPostClearDto, WallPost>(MemberList.Source);
-
+        
         CreateMap<PasswordResetRequest, PasswordResetRequestDto>().ReverseMap();
 
         CreateMap<UserStable, UserStableDto>();

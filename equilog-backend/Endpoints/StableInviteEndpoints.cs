@@ -25,7 +25,7 @@ public class StableInviteEndpoints
         IStableInviteService stableInviteService,
         int id)
     {
-        return Result.Generate(await stableInviteService.GetStableInviteByStableIdAsync(id));
+        return Result.Generate(await stableInviteService.GetStableInvitesByStableIdAsync(id));
     }
 
     private static async Task<IResult> CreateStableInvite(

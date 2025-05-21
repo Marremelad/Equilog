@@ -6,7 +6,6 @@ using equilog_backend.DTOs.StablePostDTOs;
 using equilog_backend.Interfaces;
 using equilog_backend.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace equilog_backend.Services;
 
@@ -22,10 +21,14 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
                 .ToListAsync();
             
             var stablePostDtos = mapper.Map<List<StablePostDto>>(stablePosts);
+            
+             var message = stablePostDtos.Count == 0
+                ? "Operation successful but stable has no stable-posts."
+                : "Stable-posts fetched successfully.";
 
             return ApiResponse<List<StablePostDto>>.Success(HttpStatusCode.OK,
                 stablePostDtos,
-                null);
+                message);
         }
         catch (Exception ex)
         {
@@ -44,11 +47,11 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
 
             if (stablePost == null)
                 return ApiResponse<StablePostDto>.Failure(HttpStatusCode.NotFound,
-                "Error: Stable post not found");
+                "Error: Stable-post not found.");
 
             return ApiResponse<StablePostDto>.Success(HttpStatusCode.OK,
                 mapper.Map<StablePostDto>(stablePost),
-                null);
+                "Stable-post fetched successfully.");
         }
         catch (Exception ex)
         {
@@ -68,7 +71,7 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
 
             return ApiResponse<StablePostDto>.Success(HttpStatusCode.Created,
                 mapper.Map<StablePostDto>(stablePost),
-                "Stable post created successfully");
+                "Stable-post created successfully.");
         }
         catch (Exception ex)
         {
@@ -88,14 +91,14 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
                 
             if ( stablePost == null) 
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound ,
-                "Error: Stable post not found");
+                "Error: Stable-post not found.");
 
             mapper.Map(stablePostUpdateDto, stablePost);
             await context.SaveChangesAsync();
 
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                "Stable post information updated successfully");
+                "Stable-post information updated successfully.");
         }
         catch (Exception ex)
         {
@@ -114,14 +117,14 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
             
             if (stablePost == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                    "Error: Stable post not found");
+                    "Error: Stable-post not found.");
 
             stablePost.IsPinned = !stablePost.IsPinned;
             await context.SaveChangesAsync();
             
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                null);
+                "IsPinned flag for stable-post was changed successfully.");
         }
         catch (Exception ex)
         {
@@ -140,14 +143,14 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
 
             if (stablePost == null)
                 return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
-                "Error: Stable post not found");
+                "Error: Stable-post not found.");
 
             context.StablePosts.Remove(stablePost);
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
+            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                $"Stable post with id '{stablePostId}' was deleted successfully");
+                $"Stable-post with id '{stablePostId}' was deleted successfully.");
         }
         catch (Exception ex)
         {

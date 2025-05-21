@@ -2,12 +2,18 @@
 {
     public class StableLocationDto
     {
-        public required string PostCode { get; set; }
-        public required string City { get; set; }
-        public required string MunicipalityName { get; set; }
-        public required string CountyName { get; set; }
-        public required double Latitude { get; set; }
-        public required double Longitude { get; set; }
-        public required string GoogleMaps { get; set; }
+        public required string PostCode { get; init; }
+        
+        public required string City { get; init; }
+        
+        public required string MunicipalityName { get; init; }
+        
+        public required string CountyName { get; init; }
+        
+        public required double Latitude { get; init; }
+        
+        public required double Longitude { get; init; }
+        
+        public required string GoogleMaps { get; init; }
     }
 }

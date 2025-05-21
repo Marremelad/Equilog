@@ -227,7 +227,6 @@ public static class AppConfiguration
         // Feature specific services.
         services.AddScoped<IStablePostService, StablePostService>();
         services.AddScoped<ICalendarEventService, CalendarEventService>();
-        services.AddScoped<IWallPostService, WallPostService>();
         services.AddScoped<IStableJoinRequestService, StableJoinRequestService>();
         services.AddScoped<IStableInviteService, StableInviteService>();
         services.AddScoped<IStableLocationService, StableLocationService>();

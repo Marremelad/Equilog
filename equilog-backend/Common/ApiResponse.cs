@@ -5,9 +5,9 @@ namespace equilog_backend.Common;
 
 public class ApiResponse<T> : IApiResponse
 {
-    public bool IsSuccess { get; set; }
+    public bool IsSuccess { get; init; }
     public HttpStatusCode StatusCode { get; set; }
-    public T? Value { get; set; }
+    public T? Value { get; init; }
     public string? Message { get; set; }
 
     [JsonConstructor]

@@ -8,12 +8,7 @@ namespace equilog_backend.Endpoints;
 public class UserEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
-    {
-
-        // Get all users.
-        app.MapGet("/api/user", GetUsers)
-            .WithName("GetUsers");
-
+    { 
         // Get user.
         app.MapGet("/api/user/{id:int}", GetUser)
             .WithName("GetUser");
@@ -33,18 +28,16 @@ public class UserEndpoints
 
         app.MapPost("/api/user/set-profile-picture", SetProfilePicture)
             .WithName("SetProfilePicture");
+        
+        // Get all users.
+        app.MapGet("/api/user", GetUsers)
+            .WithName("GetUsers");
             
         // -- Endpoints for compositions --
         app.MapDelete("/api/user/delete/composition", DeleteUserComposition)
             .WithName("DeleteUserComposition");
     }
-
-    private static async Task<IResult> GetUsers(
-        IUserService userService)
-    {
-        return Result.Generate(await userService.GetUsersAsync());
-    }
-
+    
     private static async Task<IResult> GetUser(
         IUserService userService,
         int id)
@@ -86,5 +79,11 @@ public class UserEndpoints
     {
         return Result.Generate(
             await userService.SetProfilePictureAsync(blobStorageDto.UserId, blobStorageDto.BlobName));
+    }
+    
+    private static async Task<IResult> GetUsers(
+        IUserService userService)
+    {
+        return Result.Generate(await userService.GetUsersAsync());
     }
 }

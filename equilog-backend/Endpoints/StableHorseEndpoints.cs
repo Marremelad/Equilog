@@ -29,7 +29,7 @@ public class StableHorseEndpoints
         IStableHorseService stableHorseService,
         int stableId)
     {
-        return Result.Generate(await stableHorseService.GetHorsesWithOwnersByStableAsync(stableId));
+        return Result.Generate(await stableHorseService.GetHorsesWithOwnersByStableIdAsync(stableId));
     }
 
     private static async Task<IResult> RemoveHorseFromStable(

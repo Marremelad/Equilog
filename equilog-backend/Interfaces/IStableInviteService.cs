@@ -12,5 +12,5 @@ public interface IStableInviteService
 
     Task<ApiResponse<Unit>> RefuseStableInviteAsync(StableInviteDto stableInviteDto);
 
-    Task<ApiResponse<List<UserDto>?>> GetStableInviteByStableIdAsync(int stableId);
+    Task<ApiResponse<List<UserDto>?>> GetStableInvitesByStableIdAsync(int stableId);
 }

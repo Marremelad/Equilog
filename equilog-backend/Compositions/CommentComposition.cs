@@ -13,40 +13,43 @@ public class CommentComposition(
     public async Task<ApiResponse<Unit>> CreateCommentComposition(
         CommentCompositionCreateDto commentCompositionCreateDto)
     {
-        var commentResponse = await commentService.CreateCommentAsync(commentCompositionCreateDto.Comment);
-        
-        if (!commentResponse.IsSuccess)
-            return ApiResponse<Unit>.Failure(commentResponse.StatusCode,
-                $"Failed to create comment: {commentResponse.Message}");
-
-        var commentId = commentResponse.Value;
-        var userId = commentCompositionCreateDto.UserId;
-        var stablePostId = commentCompositionCreateDto.StablePostId;
-
-        var userCommentResponse = await userCommentService.CreateUserCommentConnectionAsync(userId, commentId);
-
-        if (!userCommentResponse.IsSuccess)
+        try
         {
-            await commentService.DeleteCommentAsync(commentId);
-            return ApiResponse<Unit>.Failure(userCommentResponse.StatusCode,
-                $"{userCommentResponse.Message}: Comment creation was rolled back.");
-        }
-
-        var userCommentId = userCommentResponse.Value;
-
-        var stablePostCommentResponse =
-            await stablePostCommentService.CreateStablePostCommentConnectionAsync(stablePostId, commentId);
-
-        if (!stablePostCommentResponse.IsSuccess)
-        {
-            await commentService.DeleteCommentAsync(commentId);
-            await userCommentService.RemoveUserCommentConnection(userCommentId);
-            return ApiResponse<Unit>.Failure(stablePostCommentResponse.StatusCode,
-                $"{stablePostCommentResponse.Message}: Comment creation and connection between user and comment was rolled back.");
-        }
+            var createComment = await commentService.CreateCommentAsync(commentCompositionCreateDto.Comment);
         
-        return ApiResponse<Unit>.Success(HttpStatusCode.Created,
-            Unit.Value,
-            null);
+            if (!createComment.IsSuccess)
+                return ApiResponse<Unit>.Failure(createComment.StatusCode,
+                    $"Failed to create comment: {createComment.Message}");
+
+            var commentId = createComment.Value;
+            var userId = commentCompositionCreateDto.UserId;
+            var stablePostId = commentCompositionCreateDto.StablePostId;
+
+            var createUserComment = await userCommentService.CreateUserCommentConnectionAsync(userId, commentId);
+
+            if (!createUserComment.IsSuccess)
+            {
+                await commentService.DeleteCommentAsync(commentId);
+                return createUserComment;
+            }
+        
+            var createStablePostComment =
+                await stablePostCommentService.CreateStablePostCommentConnectionAsync(stablePostId, commentId);
+
+            if (!createStablePostComment.IsSuccess)
+            {
+                await commentService.DeleteCommentAsync(commentId);
+                return createStablePostComment;
+            }
+        
+            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+                Unit.Value,
+                null);
+        }
+        catch (Exception ex)
+        {
+            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+                ex.Message);
+        }
     }
 }

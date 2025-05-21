@@ -4,8 +4,8 @@ namespace equilog_backend.DTOs.UserStableDTOs
 {
     public class UserStableRoleDto
     {
-        public required UserDto User { get; set; }
+        public required UserDto User { get; init; }
 
-        public required int Role { get; set; }
+        public required int Role { get; init; }
     }
 }

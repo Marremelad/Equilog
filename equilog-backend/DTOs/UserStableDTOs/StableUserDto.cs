@@ -4,7 +4,7 @@ public class StableUserDto
 {
     public required int UserStableId { get; init; }
 
-    public required int UserId { get; init; } // Needed?
+    public required int UserId { get; init; }
 
     public required int Role { get; init; }
 
