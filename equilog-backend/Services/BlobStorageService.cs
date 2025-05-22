@@ -81,16 +81,13 @@ public class BlobStorageService(BlobServiceClient client) : IBlobStorageService
             var sasUri = blobClient.GenerateSasUri(
                 BlobSasPermissions.Create | BlobSasPermissions.Write,
                 expiresOn);
-        
-            Console.WriteLine($"Generated SAS URI: {sasUri}");
-        
+            
             return Task.FromResult(ApiResponse<Uri>.Success(HttpStatusCode.OK,
                 sasUri,
-                "Upload SAS URI generated successfully")); 
+                "Upload uri generated successfully.")); 
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error generating SAS URI: {ex.Message}");
             return Task.FromResult(ApiResponse<Uri>.Failure(HttpStatusCode.InternalServerError,
                 ex.Message));
         }
