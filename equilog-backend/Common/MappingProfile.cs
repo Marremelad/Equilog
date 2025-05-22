@@ -121,9 +121,9 @@ public class MappingProfile : Profile
         
         CreateMap<UserStable, UserStableRoleDto>();
 
-        CreateMap<UserHorse, HorseWithUserHorseRoleDto>();
-
+        CreateMap<UserHorse, HorseWithUserHorseRoleDto>().ReverseMap();
         CreateMap<UserHorse, UserWithUserHorseRoleDto>();
+        
         CreateMap<StableHorse, StableHorseOwnersDto>()
             .ForMember(dest => dest.HorseId, 
                 opt => opt.MapFrom(src => src.Horse!.Id))
