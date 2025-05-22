@@ -18,15 +18,15 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
             var stableHorseDtos = mapper.Map<List<StableHorseDto>>(
                 await context.StableHorses
                 .Where(sh => sh.StableIdFk == stableId)
-                .ToListAsync()); 
-            
-            if (stableHorseDtos.Count == 0 )
-                return ApiResponse<List<StableHorseDto>?>.Failure(HttpStatusCode.OK,
-                    "Operation was successful but the stable has no horses.");
+                .ToListAsync());
+
+            var message = stableHorseDtos.Count == 0
+                ? "Operation was successful but the stable has no horses."
+                : "Horses fetched successfully";
             
             return ApiResponse<List<StableHorseDto>?>.Success(HttpStatusCode.OK,
                 stableHorseDtos,
-                "Horses fetched successfully");
+                message);
         }
         catch (Exception ex)
         {
@@ -39,22 +39,21 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
     {
         try
         {
-            var stableHorses = await context.StableHorses
+            var stableHorseOwnersDtos = mapper.Map<List<StableHorseOwnersDto>>(
+                await context.StableHorses
                 .Where(sh => sh.StableIdFk == stableId)
                 .Include(sh => sh.Horse)
                 .ThenInclude(h => h!.UserHorses)!
-                    .ThenInclude(uh => uh.User)
-            .ToListAsync();
+                .ThenInclude(uh => uh.User)
+                .ToListAsync());
 
-            if (stableHorses.Count == 0)
-                return ApiResponse<List<StableHorseOwnersDto>>.Failure(HttpStatusCode.OK,
-                    "Operation was successful but the stable has no horses.");
-
-            var stableHorseOwnersDtos = mapper.Map<List<StableHorseOwnersDto>>(stableHorses);
-
+            var message = stableHorseOwnersDtos.Count == 0
+                ? "Operation was successful but the stable has no horses."
+                : "Horses fetched successfully.";
+            
             return ApiResponse<List<StableHorseOwnersDto>>.Success(HttpStatusCode.OK,
                 stableHorseOwnersDtos,
-                "Horses fetched successfully.");
+                message);
         }
         catch (Exception ex)
         {

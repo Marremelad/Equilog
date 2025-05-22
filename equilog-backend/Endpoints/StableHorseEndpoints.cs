@@ -11,7 +11,7 @@ public class StableHorseEndpoints
         app.MapGet("/api/stable-horses/{id:int}", GetStableHorses)
             .WithName("GetStableHorses");
 
-        app.MapGet("/api/stable-horses/{stableId:int}/horses/with-owners", GetHorsesWithOwnersByStable)
+        app.MapGet("/api/stable-horses/{stableId:int}/horses/with-owners", GetHorsesWithOwnersByStableId)
             .WithName("GetHorsesWithOwnersByStable");
 
         app.MapGet("/api/stable-horse/remove-horse/{id:int}", RemoveHorseFromStable)
@@ -25,7 +25,7 @@ public class StableHorseEndpoints
         return Result.Generate(await stableHorseService.GetStableHorsesAsync(id));
     }
 
-    private static async Task<IResult> GetHorsesWithOwnersByStable(
+    private static async Task<IResult> GetHorsesWithOwnersByStableId(
         IStableHorseService stableHorseService,
         int stableId)
     {
