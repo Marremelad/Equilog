@@ -20,7 +20,7 @@ public class MailTrapService : IMailTrapService
 
             return ApiResponse<Unit>.Success(HttpStatusCode.OK,
                 Unit.Value,
-                null);
+                "Mail sent successfully.");
         }
         catch (Exception ex)
         {
