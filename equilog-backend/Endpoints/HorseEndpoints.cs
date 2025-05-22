@@ -81,7 +81,6 @@ public class HorseEndpoints
         return Result.Generate(await horseComposition.CreateHorseCompositionAsync(horseCompositionCreateDto));
     }
     
-    
     // Used for testing.
     private static async Task<IResult> GetHorses(
         IHorseService horseService)
