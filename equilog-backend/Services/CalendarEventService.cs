@@ -18,15 +18,14 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
             var calendarEventDtos = mapper.Map<List<CalendarEventDto>>(await context.CalendarEvents
                 .Where(ce => ce.StableIdFk == stableId)
                 .ToListAsync());
-            
-            if (calendarEventDtos.Count == 0)
-                return ApiResponse<List<CalendarEventDto>?>.Success(HttpStatusCode.OK,
-                    calendarEventDtos,
-                    "Operation was successful but stable has no stored calendar events.");
 
+            var message = calendarEventDtos.Count == 0
+                ? "Operation was successful but stable has no stored calendar events."
+                : "Calendar events fetched successfully.";
+            
             return ApiResponse<List<CalendarEventDto>>.Success(HttpStatusCode.OK,
                 calendarEventDtos,
-                "Calendar events fetched successfully.");
+                message);
         }
         catch (Exception ex)
         {
@@ -134,11 +133,12 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
     {
         try
         {
-            var calendarEventDtos = mapper.Map<List<CalendarEventDto>>(await context.CalendarEvents.ToListAsync());
+            var calendarEventDtos = mapper.Map<List<CalendarEventDto>>(await context.CalendarEvents
+                .ToListAsync());
     
             return ApiResponse<List<CalendarEventDto>>.Success(HttpStatusCode.OK,
                 calendarEventDtos,
-                null);
+                "Calendar events fetched successfully.");
         }
         catch (Exception ex)
         {
