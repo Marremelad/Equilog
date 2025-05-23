@@ -32,7 +32,7 @@ public class CommentCompositions(
             {
                 await commentService.DeleteCommentAsync(commentId);
                 userCommentResponse.Message =
-                    $"Failed to create connection between user and comment. Comment creation was rolled back: {userCommentResponse.Message}";
+                    $"Failed to create connection between user and comment: {userCommentResponse.Message}. Comment creation was rolled back.";
                 return userCommentResponse;
             }
         
@@ -43,7 +43,7 @@ public class CommentCompositions(
             {
                 await commentService.DeleteCommentAsync(commentId);
                 stablePostCommentResponse.Message =
-                    $"Failed to create connection between stable-post and comment. Comment creation was rolled back: {userCommentResponse.Message}";
+                    $"Failed to create connection between stable-post and comment: {userCommentResponse.Message}. Comment creation was rolled back.";
                 return stablePostCommentResponse;
             }
         
