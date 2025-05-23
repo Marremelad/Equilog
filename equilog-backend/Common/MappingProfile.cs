@@ -91,6 +91,10 @@ public class MappingProfile : Profile
                     : new List<string>()));
 
         CreateMap<Comment, CommentDto>()
+            .ForMember(dest => dest.UserId,
+                opt => opt.MapFrom(src => src.UserComments != null && src.UserComments.Count != 0
+                ? src.UserComments.First().User!.Id
+                : 0))
             .ForMember(dest => dest.ProfilePicture, 
                 opt => opt.MapFrom(src => src.UserComments != null && src.UserComments.Count != 0
                     ? src.UserComments.First().User!.ProfilePicture 
