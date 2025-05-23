@@ -15,31 +15,35 @@ public class CommentCompositions(
     {
         try
         {
-            var createComment = await commentService.CreateCommentAsync(commentCompositionCreateDto.Comment);
+            var commentResponse = await commentService.CreateCommentAsync(commentCompositionCreateDto.Comment);
         
-            if (!createComment.IsSuccess)
-                return ApiResponse<Unit>.Failure(createComment.StatusCode,
-                    $"Failed to create comment: {createComment.Message}");
+            if (!commentResponse.IsSuccess)
+                return ApiResponse<Unit>.Failure(commentResponse.StatusCode,
+                    $"Failed to create comment: {commentResponse.Message}");
 
-            var commentId = createComment.Value;
+            var commentId = commentResponse.Value;
             var userId = commentCompositionCreateDto.UserId;
             var stablePostId = commentCompositionCreateDto.StablePostId;
 
-            var createUserComment = await userCommentService.CreateUserCommentConnectionAsync(userId, commentId);
+            var userCommentResponse = await userCommentService.CreateUserCommentConnectionAsync(userId, commentId);
 
-            if (!createUserComment.IsSuccess)
+            if (!userCommentResponse.IsSuccess)
             {
                 await commentService.DeleteCommentAsync(commentId);
-                return createUserComment;
+                userCommentResponse.Message =
+                    $"Failed to create connection between user and comment. Comment creation was rolled back: {userCommentResponse.Message}";
+                return userCommentResponse;
             }
         
-            var createStablePostComment =
+            var stablePostCommentResponse =
                 await stablePostCommentService.CreateStablePostCommentConnectionAsync(stablePostId, commentId);
 
-            if (!createStablePostComment.IsSuccess)
+            if (!stablePostCommentResponse.IsSuccess)
             {
                 await commentService.DeleteCommentAsync(commentId);
-                return createStablePostComment;
+                stablePostCommentResponse.Message =
+                    $"Failed to create connection between stable-post and comment. Comment creation was rolled back: {userCommentResponse.Message}";
+                return stablePostCommentResponse;
             }
         
             return ApiResponse<Unit>.Success(HttpStatusCode.Created,
