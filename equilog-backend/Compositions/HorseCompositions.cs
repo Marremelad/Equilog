@@ -32,7 +32,7 @@ public class HorseCompositions(
             {
                 await horseService.DeleteHorseAsync(horseId);
                 stableHorseResponse.Message =
-                    $"Failed to create connection between stable and horse. Horse creation was rolled back: {stableHorseResponse.Message}";
+                    $"Failed to create connection between stable and horse: {stableHorseResponse.Message}. Horse creation was rolled back.";
                 return stableHorseResponse;
             }
         
@@ -42,7 +42,7 @@ public class HorseCompositions(
             {
                 await horseService.DeleteHorseAsync(horseId);
                 userHorseResponse.Message =
-                    $"Failed to create connection between user and horse. Horse creation was rolled back: {userHorseResponse.Message}";
+                    $"Failed to create connection between user and horse: {userHorseResponse.Message}.Horse creation was rolled back.";
             }
 
             return ApiResponse<Unit>.Success(
