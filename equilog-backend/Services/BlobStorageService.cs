@@ -23,17 +23,21 @@ public class BlobStorageService(BlobServiceClient client) : IBlobStorageService
             bool exists = await blobClient.ExistsAsync();
         
             if (!exists)
-                throw new FileNotFoundException($"Blob {blobName} does not exist.");
-    
+                return ApiResponse<Uri?>.Failure(
+                    HttpStatusCode.NotFound,
+                    $"Blob {blobName} does not exist.");
+                
             var sasUri = blobClient.GenerateSasUri(BlobSasPermissions.Read, expiresOn);
             
-            return ApiResponse<Uri?>.Success(HttpStatusCode.OK,
+            return ApiResponse<Uri?>.Success(
+                HttpStatusCode.OK,
                 sasUri,
                 "Sas uri fetched successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Uri?>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Uri?>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
         
@@ -44,26 +48,47 @@ public class BlobStorageService(BlobServiceClient client) : IBlobStorageService
         try
         {
             var expiresOn = DateTimeOffset.UtcNow.Add(Validity);
+        
             var tasks = blobNames.Select(async name => 
             {
                 var blobClient = _container.GetBlobClient(name);
                 bool exists = await blobClient.ExistsAsync();
-            
+
                 if (!exists)
-                    throw new FileNotFoundException($"Blob {name} does not exist.");
-        
-                return blobClient.GenerateSasUri(BlobSasPermissions.Read, expiresOn);
+                    return ApiResponse<Uri>.Failure(
+                        HttpStatusCode.NotFound,
+                        $"Blob {name} does not exist.");
+
+                var uri = blobClient.GenerateSasUri(BlobSasPermissions.Read, expiresOn);
+                
+                return ApiResponse<Uri>.Success(
+                    HttpStatusCode.OK,
+                    uri,
+                    "Read uri fetched successfully.");
             });
 
-            var uris = await Task.WhenAll(tasks);
-            return ApiResponse<List<Uri>>.Success(
+            var results = await Task.WhenAll(tasks);
+            var failures = results.Where(r => !r.IsSuccess).ToList();
+            
+            if (failures.Count != 0)
+            {
+                var errorMessages = failures.Select(f => f.Message).ToList();
+                
+                return ApiResponse<List<Uri>?>.Failure(
+                    HttpStatusCode.NotFound,
+                    string.Join("; ", errorMessages));
+            }
+
+            var uris = results.Where(r => r.IsSuccess).Select(r => r.Value!).ToList();
+            
+            return ApiResponse<List<Uri>?>.Success(
                 HttpStatusCode.OK,
-                uris.ToList(),
-                null);
+                uris, 
+                "Read uris fetched successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<Uri>>.Failure(
+            return ApiResponse<List<Uri>?>.Failure(
                 HttpStatusCode.InternalServerError,
                 ex.Message);
         }
@@ -82,13 +107,15 @@ public class BlobStorageService(BlobServiceClient client) : IBlobStorageService
                 BlobSasPermissions.Create | BlobSasPermissions.Write,
                 expiresOn);
             
-            return Task.FromResult(ApiResponse<Uri>.Success(HttpStatusCode.OK,
+            return Task.FromResult(ApiResponse<Uri>.Success(
+                HttpStatusCode.OK,
                 sasUri,
                 "Upload uri generated successfully.")); 
         }
         catch (Exception ex)
         {
-            return Task.FromResult(ApiResponse<Uri>.Failure(HttpStatusCode.InternalServerError,
+            return Task.FromResult(ApiResponse<Uri>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message));
         }
     }
@@ -100,13 +127,15 @@ public class BlobStorageService(BlobServiceClient client) : IBlobStorageService
             var blobClient = _container.GetBlobClient(blobName);
             await blobClient.DeleteIfExistsAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "Blob deleted successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
