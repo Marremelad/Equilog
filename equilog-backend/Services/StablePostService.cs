@@ -15,24 +15,25 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
     {
         try
         {
-            var stablePosts = await context.StablePosts
+            var stablePostDtos = mapper.Map<List<StablePostDto>>(
+                await context.StablePosts
                 .Where(sp => sp.StableIdFk == stableId)
                 .Include(sp => sp.User)
-                .ToListAsync();
-            
-            var stablePostDtos = mapper.Map<List<StablePostDto>>(stablePosts);
+                .ToListAsync());
             
              var message = stablePostDtos.Count == 0
                 ? "Operation successful but stable has no stable-posts."
                 : "Stable-posts fetched successfully.";
 
-            return ApiResponse<List<StablePostDto>>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<StablePostDto>>.Success(
+                HttpStatusCode.OK,
                 stablePostDtos,
                 message);
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<StablePostDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<StablePostDto>>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -47,16 +48,19 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
                 .FirstOrDefaultAsync();
 
             if (stablePost == null)
-                return ApiResponse<StablePostDto>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<StablePostDto>.Failure(
+                    HttpStatusCode.NotFound,
                 "Error: Stable-post not found.");
 
-            return ApiResponse<StablePostDto>.Success(HttpStatusCode.OK,
+            return ApiResponse<StablePostDto>.Success(
+                HttpStatusCode.OK,
                 mapper.Map<StablePostDto>(stablePost),
                 "Stable-post fetched successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<StablePostDto>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<StablePostDto>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -70,16 +74,17 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
             context.StablePosts.Add(stablePost);
             await context.SaveChangesAsync();
 
-            return ApiResponse<StablePostDto>.Success(HttpStatusCode.Created,
+            return ApiResponse<StablePostDto>.Success(
+                HttpStatusCode.Created,
                 mapper.Map<StablePostDto>(stablePost),
                 "Stable-post created successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<StablePostDto>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<StablePostDto>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
-           
     }
 
     public async Task<ApiResponse<Unit>> UpdateStablePostAsync(StablePostUpdateDto stablePostUpdateDto)
@@ -91,19 +96,22 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
                 .FirstOrDefaultAsync();
                 
             if ( stablePost == null) 
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound ,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound ,
                 "Error: Stable-post not found.");
 
             mapper.Map(stablePostUpdateDto, stablePost);
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "Stable-post information updated successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -117,19 +125,22 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
                 .FirstOrDefaultAsync();
             
             if (stablePost == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: Stable-post not found.");
 
             stablePost.IsPinned = !stablePost.IsPinned;
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "IsPinned flag for stable-post was changed successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -143,19 +154,22 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
                 .FirstOrDefaultAsync();
 
             if (stablePost == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                 "Error: Stable-post not found.");
 
             context.StablePosts.Remove(stablePost);
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 $"Stable-post with id '{stablePostId}' was deleted successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
