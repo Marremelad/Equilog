@@ -15,7 +15,8 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
     {
         try
         {
-            var commentDtos = mapper.Map<List<CommentDto>>(await context.Comments
+            var commentDtos = mapper.Map<List<CommentDto>>(
+                await context.Comments
                 .Include(c => c.UserComments)!
                 .ThenInclude(uc => uc.User)
                 .Where(c => c.StablePostComments != null &&
@@ -26,13 +27,15 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
                 ? "Operation was successful but the post has no comments."
                 : "Comments fetched successfully.";
             
-            return ApiResponse<List<CommentDto>?>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<CommentDto>?>.Success(
+                HttpStatusCode.OK,
                 commentDtos,
                 message);
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<CommentDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<CommentDto>>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -50,14 +53,16 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
             context.Comments.Add(comment);
             await context.SaveChangesAsync();
             
-            return ApiResponse<int>.Success(HttpStatusCode.Created,
+            return ApiResponse<int>.Success(
+                HttpStatusCode.Created,
                 comment.Id, 
                 "Comment created successfully.");
 
         }
         catch (Exception ex)
         {
-            return ApiResponse<int>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<int>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -71,19 +76,22 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
                 .FirstOrDefaultAsync();
             
             if (comment == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: Comment not found.");
 
             context.Comments.Remove(comment);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 $"Comment with id {commentId} deleted successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
