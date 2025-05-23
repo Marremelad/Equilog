@@ -18,13 +18,15 @@ public class MailTrapService : IMailTrapService
             };
             client.Send("hello@demomailtrap.co", recipient, mailTrap.Subject, mailTrap.Body);
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "Mail sent successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
