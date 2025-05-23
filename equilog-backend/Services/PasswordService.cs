@@ -17,7 +17,8 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
         {
             if (!await context.Users
                     .AnyAsync(u => u.Email == email))
-                return ApiResponse<PasswordResetRequestDto>.Failure(HttpStatusCode.BadRequest,
+                return ApiResponse<PasswordResetRequestDto>.Failure(
+                    HttpStatusCode.BadRequest,
                     $"Account with the email {email} does not exist.");
             
             var storedPasswordResetRequest = await context.PasswordResetRequests
@@ -40,13 +41,15 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
             context.PasswordResetRequests.Add(passwordResetRequest);
             await context.SaveChangesAsync();
             
-            return ApiResponse<PasswordResetRequestDto>.Success(HttpStatusCode.Created,
+            return ApiResponse<PasswordResetRequestDto>.Success(
+                HttpStatusCode.Created,
                 mapper.Map<PasswordResetRequestDto>(passwordResetRequest),
                 "Password reset request was created successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<PasswordResetRequestDto>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<PasswordResetRequestDto>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -60,7 +63,8 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
                 .FirstOrDefaultAsync();
             
             if (passwordResetRequest == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Invalid reset token.");
             
             if (passwordResetRequest.ExpirationDate < DateTime.UtcNow)
@@ -68,12 +72,14 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
                 context.PasswordResetRequests.Remove(passwordResetRequest);
                 await context.SaveChangesAsync();
                 
-                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.BadRequest,
                     "Reset token has expired. Please request a new password reset.");
             }
             
             if (passwordResetDto.NewPassword != passwordResetDto.ConfirmPassword)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.BadRequest,
                     "Passwords do not match.");
 
             var user = await context.Users
@@ -81,7 +87,8 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
                 .FirstOrDefaultAsync();
                 
             if (user == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "User account not found.");
             
             var salt = BCrypt.Net.BCrypt.GenerateSalt();
@@ -93,13 +100,15 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
             
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "Password reset successful.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -113,11 +122,13 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
                 .FirstOrDefaultAsync();
             
             if (user == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: User not found.");
             
             if (passwordChangeDto.NewPassword != passwordChangeDto.ConfirmPassword)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.BadRequest,
                     "Passwords have to match.");
             
             var salt = BCrypt.Net.BCrypt.GenerateSalt();
@@ -126,13 +137,15 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
             user.PasswordHash = passwordHash;
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value, 
                 "Password was reset successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -146,19 +159,22 @@ public class PasswordService(EquilogDbContext context, IMapper mapper) : IPasswo
                 .FirstOrDefaultAsync();
             
             if (passwordResetRequest == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: Password reset request not found.");
 
             context.PasswordResetRequests.Remove(passwordResetRequest);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "Password reset request deleted successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
