@@ -10,8 +10,8 @@ public abstract class CalendarEventEndpoints
     {
         // Get calendar events by stable id.
         app.MapGet("/api/calendar-events/{stableId:int}", GetCalendarEventsByStableId)
-            .WithName("GetCalendarEventsByStableId")
-            .RequireAuthorization();
+            .WithName("GetCalendarEventsByStableId");
+            // .RequireAuthorization();
         
         // Get calendar event by id.
         app.MapGet("/api/calendar-event/{calendarEventId:int}", GetCalendarEvent)

@@ -18,6 +18,7 @@ public class CalendarEventService(EquilogDbContext context, IMapper mapper) : IC
             var calendarEventDtos = mapper.Map<List<CalendarEventDto>>(
                 await context.CalendarEvents
                 .Where(ce => ce.StableIdFk == stableId)
+                .Include(ce => ce.User)
                 .ToListAsync());
 
             var message = calendarEventDtos.Count == 0

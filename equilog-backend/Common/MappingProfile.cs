@@ -52,7 +52,15 @@ public class MappingProfile : Profile
         CreateMap<StablePostCreateDto, StablePost>(MemberList.Source);
         CreateMap<StablePostUpdateDto, StablePost>(MemberList.Source);
 
-        CreateMap<CalendarEvent, CalendarEventDto>().ReverseMap();
+        CreateMap<CalendarEvent, CalendarEventDto>()
+            .ForMember(dest => dest.UserId,
+                opt => opt.MapFrom(src => src.User != null ? src.User.Id : 0))
+            .ForMember(dest => dest.FirstName,
+                opt => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
+            .ForMember(dest => dest.LastName,
+                opt => opt.MapFrom(src => src.User != null ? src.User.LastName : null))
+            .ForMember(dest => dest.ProfilePicture,
+                opt => opt.MapFrom(src => src.User != null ? src.User.ProfilePicture : null));
         CreateMap<CalendarEventCreateDto, CalendarEvent>(MemberList.Source);
         CreateMap<CalendarEventUpdateDto, CalendarEvent>(MemberList.Source);
         
