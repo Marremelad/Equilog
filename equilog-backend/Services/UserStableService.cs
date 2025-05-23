@@ -21,16 +21,19 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                     .ToListAsync());
 
             if (userStableDtos == null || userStableDtos.Count == 0)
-                return ApiResponse<List<UserStableDto>?>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<List<UserStableDto>?>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: User not connected to any stables.");
 
-            return ApiResponse<List<UserStableDto>?>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<UserStableDto>?>.Success(
+                HttpStatusCode.OK,
                 userStableDtos,
                 "Connections between user and stables fetched successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<UserStableDto>?>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<UserStableDto>?>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -45,18 +48,21 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                 .ToListAsync();
 
             if (userStables.Count == 0)
-                return ApiResponse<List<StableUserDto>?>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<List<StableUserDto>?>.Failure(
+                    HttpStatusCode.NotFound,
                     $"Error: No users found for stable with ID {stableId}.");
 
             var stableUserDtos = mapper.Map<List<StableUserDto>>(userStables);
 
-            return ApiResponse<List<StableUserDto>?>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<StableUserDto>?>.Success(
+                HttpStatusCode.OK,
                 stableUserDtos,
                 "Connection between stable and users fetched successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<StableUserDto>?>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<StableUserDto>?>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -70,19 +76,22 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                 .FirstOrDefaultAsync();
 
             if (userStable == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Connection between user and stable not found.");
 
             userStable.Role = userStableRole;
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK, 
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK, 
                 Unit.Value,
                 "Role updated successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -96,19 +105,22 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                 .FirstOrDefaultAsync();
                 
             if (userStable == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: User not connected to stable.");
 
             context.UserStables.Remove(userStable);
             await context.SaveChangesAsync();
                 
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "User left stable successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -122,19 +134,22 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
                 .FirstOrDefaultAsync();
 
             if (userStable == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Connection between user and stable not found.");
                 
             context.Remove(userStable);
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.NoContent,
                 Unit.Value,
                 "User successfully removed from stable.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -153,13 +168,15 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
             context.UserStables.Add(userStable);
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.Created,
                 Unit.Value,
                 "Connection between user and stable was created successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
