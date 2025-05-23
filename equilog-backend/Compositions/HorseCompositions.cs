@@ -10,7 +10,8 @@ public class HorseCompositions(
     IStableHorseService stableHorseService,
     IUserHorseService userHorseService) : IHorseComposition
 {
-    public async Task<ApiResponse<Unit>> CreateHorseCompositionAsync(HorseCompositionCreateDto horseCompositionCreateDto)
+    public async Task<ApiResponse<Unit>> CreateHorseCompositionAsync(
+        HorseCompositionCreateDto horseCompositionCreateDto)
     {
         try
         {

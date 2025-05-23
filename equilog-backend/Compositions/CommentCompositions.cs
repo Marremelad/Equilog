@@ -18,7 +18,8 @@ public class CommentCompositions(
             var commentResponse = await commentService.CreateCommentAsync(commentCompositionCreateDto.Comment);
         
             if (!commentResponse.IsSuccess)
-                return ApiResponse<Unit>.Failure(commentResponse.StatusCode,
+                return ApiResponse<Unit>.Failure(
+                    commentResponse.StatusCode,
                     $"Failed to create comment: {commentResponse.Message}");
 
             var commentId = commentResponse.Value;
@@ -46,13 +47,15 @@ public class CommentCompositions(
                 return stablePostCommentResponse;
             }
         
-            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.Created,
                 Unit.Value,
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
