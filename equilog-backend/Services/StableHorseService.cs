@@ -24,13 +24,15 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
                 ? "Operation was successful but the stable has no horses."
                 : "Horses fetched successfully";
             
-            return ApiResponse<List<StableHorseDto>?>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<StableHorseDto>?>.Success(
+                HttpStatusCode.OK,
                 stableHorseDtos,
                 message);
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<StableHorseDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<StableHorseDto>>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -51,13 +53,15 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
                 ? "Operation was successful but the stable has no horses."
                 : "Horses fetched successfully.";
             
-            return ApiResponse<List<StableHorseOwnersDto>>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<StableHorseOwnersDto>>.Success(
+                HttpStatusCode.OK,
                 stableHorseOwnersDtos,
                 message);
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<StableHorseOwnersDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<StableHorseOwnersDto>>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -75,13 +79,15 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
             context.StableHorses.Add(stableHorse);
             await context.SaveChangesAsync();
         
-            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.Created,
                 Unit.Value, 
                 "Connection between stable and horse was created successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -95,19 +101,22 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
                 .FirstOrDefaultAsync();
             
             if (stableHorse == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotAcceptable,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotAcceptable,
                     "Error: Connection between horse and stable was not found.");
 
             context.StableHorses.Remove(stableHorse);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
