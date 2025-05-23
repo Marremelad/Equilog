@@ -13,24 +13,26 @@ public class StableCompositions(
     {
         try
         {
-            var createStable = await stableService.CreateStableAsync(stableCompositionCreateDto.Stable);
+            var stableResponse = await stableService.CreateStableAsync(stableCompositionCreateDto.Stable);
 
-            if (!createStable.IsSuccess)
+            if (!stableResponse.IsSuccess)
             {
                 return ApiResponse<Unit>.Failure(
-                    createStable.StatusCode,
-                    $"Failed to create stable: {createStable.Message}");
+                    stableResponse.StatusCode,
+                    $"Failed to create stable: {stableResponse.Message}");
             }
 
-            var stableId = createStable.Value;
+            var stableId = stableResponse.Value;
             var userId = stableCompositionCreateDto.UserId;
 
-            var createUserStable = await userStableService.CreateUserStableConnectionAsync(userId, stableId);
+            var userStableResponse = await userStableService.CreateUserStableConnectionAsync(userId, stableId);
 
-            if (!createUserStable.IsSuccess)
+            if (!userStableResponse.IsSuccess)
             {
                 await stableService.DeleteStableAsync(stableId);
-                return createUserStable;
+                userStableResponse.Message =
+                    $"Failed to create connection between user and stable: {userStableResponse.Message}. Stable creation was rolled back.";
+                return userStableResponse;
             }
         
             return ApiResponse<Unit>.Success(
