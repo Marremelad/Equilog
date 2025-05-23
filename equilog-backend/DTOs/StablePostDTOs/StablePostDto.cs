@@ -9,6 +9,8 @@ public class StablePostDto
     public required string PosterFirstName { get; init; }
 
     public required string PosterLastName { get; init; }
+    
+    public required string ProfilePicture { get; init; }
 
     public required string Title { get; init; }
 

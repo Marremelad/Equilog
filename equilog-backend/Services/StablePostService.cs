@@ -42,6 +42,7 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
         try
         {  
             var stablePost = await context.StablePosts
+                .Include(sp => sp.User)
                 .Where(sp => sp.Id == stablePostId)
                 .FirstOrDefaultAsync();
 

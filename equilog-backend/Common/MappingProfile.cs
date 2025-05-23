@@ -44,6 +44,8 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
             .ForMember(dest => dest.PosterLastName, 
                 opt => opt.MapFrom(src => src.User != null ? src.User.LastName : null))
+            .ForMember(dest => dest.ProfilePicture,
+                opt =>  opt.MapFrom(src =>  src.User != null ? src.User.ProfilePicture : null))
             .ForMember(dest => dest.UserId, 
                 opt => opt.MapFrom(src => src.User != null ? src.User.Id : 0))
             .ReverseMap();
