@@ -14,19 +14,29 @@ public class EmailService(SendGridClient client) : IEmailService
         {
             var from = new EmailAddress(email.SenderEmail, email.SenderName);
             var to = new EmailAddress(recipient);
-            var message = MailHelper.CreateSingleEmail(from, to, email.Subject, plainTextContent: email.PlainTextMessage, htmlContent: email.HtmlMessage);
+            
+            var message = MailHelper.CreateSingleEmail(
+                from,
+                to,
+                email.Subject,
+                plainTextContent: email.PlainTextMessage,
+                htmlContent: email.HtmlMessage);
+            
             var response = await client.SendEmailAsync(message);
             
-            if (!response.IsSuccessStatusCode) return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            if (!response.IsSuccessStatusCode) return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 "Error: Could not send email.");
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "Email sent successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
