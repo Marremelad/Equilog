@@ -2,7 +2,7 @@ using equilog_backend.Startup;
 
 namespace equilog_backend;
 
-public partial class Program
+public class Program
 {
     public static void Main(string[] args)
     {
