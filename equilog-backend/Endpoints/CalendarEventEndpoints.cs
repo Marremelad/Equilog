@@ -8,37 +8,42 @@ public abstract class CalendarEventEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
+        // Suppressing ASP0022: RESTful routes with the same path but different HTTP methods are valid
+        // #pragma warning disable ASP0022
+        
         // Get calendar events by stable id.
-        app.MapGet("/api/calendar-events/{stableId:int}", GetCalendarEventsByStableId)
+        app.MapGet("/api/calendar-events/{stableId:int}", GetCalendarEventsByStableId) // "/api/stables/{stableId:int}/calendar-events"
             .WithName("GetCalendarEventsByStableId");
             // .RequireAuthorization();
         
-        // Get calendar event by id.
-        app.MapGet("/api/calendar-event/{calendarEventId:int}", GetCalendarEvent)
+        // Get calendar event by user id.
+        app.MapGet("/api/calendar-event/{calendarEventId:int}", GetCalendarEvent) // "/api/calendar-events/{calendarEventId:int}"
             .WithName("GetCalendarEvent")
             .RequireAuthorization();
 
         // Create calendar event.
-        app.MapPost("/api/calendar-event/create", CreateCalendarEvent)
+        app.MapPost("/api/calendar-event/create", CreateCalendarEvent) // "/api/calendar-events"
             .AddEndpointFilter<ValidationFilter<CalendarEventCreateDto>>()
             .WithName("CreateCalendarEvent");
             // .RequireAuthorization();
 
         // Update calendar event.
-        app.MapPut("/api/calendar-event/update", UpdateCalendarEvent)
+        app.MapPut("/api/calendar-event/update", UpdateCalendarEvent) // "/api/calendar-events/{calendarEventId:int}"
             .AddEndpointFilter<ValidationFilter<CalendarEventUpdateDto>>()
             .WithName("UpdateCalendarEvent")
             .RequireAuthorization();
 
         // Delete calendar event.
-        app.MapDelete("/api/calendar-event/delete/{calendarEventId:int}", DeleteCalendarEvent)
+        app.MapDelete("/api/calendar-event/delete/{calendarEventId:int}", DeleteCalendarEvent) // "/api/calendar-events/{calendarEventId:int}"
             .WithName("DeleteCalendarEvent")
             .RequireAuthorization();
         
         // Get all calendar events.
-        app.MapGet("/api/calendar-events", GetCalendarEvents)
+        app.MapGet("/api/calendar-events", GetCalendarEvents) // "/api/calendar-events"
             .WithName("GetCalendarEvents")
             .RequireAuthorization();
+        
+        // #pragma warning restore ASP0022
     }
     
     private static async Task<IResult> GetCalendarEventsByStableId(
