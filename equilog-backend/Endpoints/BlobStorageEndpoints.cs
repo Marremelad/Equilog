@@ -1,5 +1,4 @@
 ﻿using equilog_backend.Common;
-using equilog_backend.DTOs.BlobStorageDTOs;
 using equilog_backend.Interfaces;
 
 namespace equilog_backend.Endpoints;
