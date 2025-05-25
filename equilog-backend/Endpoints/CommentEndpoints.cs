@@ -10,7 +10,7 @@ public class CommentEndpoints
 	public static void RegisterEndpoints(WebApplication app)
 	{
 		// Get comments by StablePost id.
-		app.MapGet("/api/comment/{stablePostId:int}", GetCommentsByStablePostId) // "/api/stable-posts/{id:int}/comments"
+		app.MapGet("/api/comment/{stablePostId:int}", GetCommentsByStablePostId) // "/api/stable-posts/{stablePostId:int}/comments"
 			.WithName("GetCommentByStableId");
 
 		// Create comment.
@@ -19,7 +19,7 @@ public class CommentEndpoints
 			.WithName("CreateComment");
 
 		// Delete comment.
-		app.MapDelete("/api/comment/delete/{commentId:int}", DeleteComment) // "/api/comments/{id:int}"
+		app.MapDelete("/api/comment/delete/{commentId:int}", DeleteComment) // "/api/comments/{commentId:int}"
 			.WithName("DeleteComment");
 
 		// -- Endpoints for compositions --
