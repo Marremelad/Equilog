@@ -119,7 +119,7 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
                     HttpStatusCode.NotAcceptable,
                     "Error: Connection between horse and stable was not found.");
 
-            // Remove the relationship from database.
+            // Remove the relationship from the database.
             context.StableHorses.Remove(stableHorse);
             await context.SaveChangesAsync();
             
