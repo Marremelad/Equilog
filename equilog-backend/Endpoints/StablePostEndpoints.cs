@@ -9,29 +9,29 @@ public class StablePostEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         // Get all stable posts.
-        app.MapGet("/api/stable-post-by-stable-id/{stableId:int}", GetStablePostsByStableId)
+        app.MapGet("/api/stable-post-by-stable-id/{stableId:int}", GetStablePostsByStableId) // "/api/stables/{stableId:int}/posts"
             .WithName("GetStablePosts");
 
         // Get stable post.
-        app.MapGet("/api/stable-post/{stablePostId:int}", GetStablePostByStablePostId)
+        app.MapGet("/api/stable-post/{stablePostId:int}", GetStablePostByStablePostId) // "/api/stable-posts/{stablePostId:int}"
             .WithName("GetStablePost");
 
         // Create stable post.
-        app.MapPost("/api/stable-post/create", CreateStablePost)
+        app.MapPost("/api/stable-post/create", CreateStablePost) // "/api/stable-posts"
             .AddEndpointFilter<ValidationFilter<StablePostCreateDto>>()
             .WithName("CreateStablePost");
 
         // Update stable post properties.
-        app.MapPut("/api/stable-post/update", UpdateStablePost)
+        app.MapPut("/api/stable-post/update", UpdateStablePost) // "/api/stable-posts/{stablePostId:int}"
             .AddEndpointFilter<ValidationFilter<StablePostUpdateDto>>()
             .WithName("UpdateStablePost");
         
         // Change IsPinned flag.
-        app.MapPatch("/api/stable-post/is-pinned/change/{stablePostId:int}", ChangeStablePostIsPinnedFlag)
+        app.MapPatch("/api/stable-post/is-pinned/change/{stablePostId:int}", ChangeStablePostIsPinnedFlag) // "/api/stable-posts/{stablePostId:int}/pinned"
             .WithName("ChangeStablePostIsPinnedFlag");
 
         // Delete stable post.
-        app.MapDelete("/api/stable-post/delete/{stablePostId:int}", DeleteStablePost)
+        app.MapDelete("/api/stable-post/delete/{stablePostId:int}", DeleteStablePost) // "/api/stable-posts/{stablePostId:int}"
             .WithName("DeleteStablePost");
     }
 
