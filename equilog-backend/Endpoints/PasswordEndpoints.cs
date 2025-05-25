@@ -9,12 +9,12 @@ public class PasswordEndpoints
 	public static void RegisterEndpoints(WebApplication app)
 	{
 		// Reset password.
-		app.MapPost("/api/reset-password", ResetPassword)
+		app.MapPost("/api/reset-password", ResetPassword) // "/api/password-resets"
 			.AddEndpointFilter<ValidationFilter<PasswordResetDto>>()
 			.WithName("RestPassword");
 
 		// Change password.
-		app.MapPost("/api/change-password", ChangePassword)
+		app.MapPost("/api/change-password", ChangePassword) // "/api/users/password"
 			.AddEndpointFilter<ValidationFilter<PasswordChangeDto>>()
 			.WithName("ChangePassword");
 	}
