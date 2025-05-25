@@ -9,17 +9,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
 
+// Service that manages the relationship between stables and horses.
+// Handles horse assignments to stables and provides information about stable horse compositions.
 public class StableHorseService(EquilogDbContext context, IMapper mapper) : IStableHorseService
 {
+    // Retrieves all horses assigned to a specific stable with basic information.
     public async Task<ApiResponse<List<StableHorseDto>?>> GetStableHorsesAsync(int stableId)
     {
         try
         {
+            // Fetch stable-horse relationships for the specified stable.
             var stableHorseDtos = mapper.Map<List<StableHorseDto>>(
                 await context.StableHorses
                 .Where(sh => sh.StableIdFk == stableId)
                 .ToListAsync());
 
+            // Provides an appropriate message based on whether horses were found or not.
             var message = stableHorseDtos.Count == 0
                 ? "Operation was successful but the stable has no horses."
                 : "Horses fetched successfully";
@@ -37,10 +42,12 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
         }
     }
 
+    // Retrieves horses assigned to a stable along with their owner's information.
     public async Task<ApiResponse<List<StableHorseOwnersDto>?>> GetHorsesWithOwnersByStableIdAsync(int stableId)
     {
         try
         {
+            // Fetch stable-horse relationships with detailed horse and owner information.
             var stableHorseOwnersDtos = mapper.Map<List<StableHorseOwnersDto>>(
                 await context.StableHorses
                 .Where(sh => sh.StableIdFk == stableId)
@@ -49,6 +56,7 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
                 .ThenInclude(uh => uh.User)
                 .ToListAsync());
 
+            // Provides an appropriate message based on whether horses were found or not.
             var message = stableHorseOwnersDtos.Count == 0
                 ? "Operation was successful but the stable has no horses."
                 : "Horses fetched successfully.";
@@ -66,16 +74,19 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
         }
     }
     
+    // Creates a relationship between a stable and a horse (assigns horse to stable).
     public async Task<ApiResponse<Unit>> CreateStableHorseConnectionAsync(int stableId, int horseId)
     {
         try
         {
+            // Create the stable-horse relationship entity.
             var stableHorse = new StableHorse
             {
                 StableIdFk = stableId,
                 HorseIdFk = horseId
             };
 
+            // Add the relationship to the database and save.
             context.StableHorses.Add(stableHorse);
             await context.SaveChangesAsync();
         
@@ -92,19 +103,23 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
         }
     }
 
+    // Removes a horse from a stable by deleting the relationship.
     public async Task<ApiResponse<Unit>> RemoveHorseFromStableAsync(int stableHorseId)
     {
         try
         {
+            // Find the stable-horse relationship to remove.
             var stableHorse = await context.StableHorses
                 .Where(sh => sh.Id == stableHorseId)
                 .FirstOrDefaultAsync();
             
+            // Returns an error if the relationship doesn't exist.
             if (stableHorse == null)
                 return ApiResponse<Unit>.Failure(
                     HttpStatusCode.NotAcceptable,
                     "Error: Connection between horse and stable was not found.");
 
+            // Remove the relationship from database.
             context.StableHorses.Remove(stableHorse);
             await context.SaveChangesAsync();
             
