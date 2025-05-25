@@ -3,6 +3,8 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.Common;
 
+// Static utility class that converts ApiResponse objects into appropriate ASP.NET Core IResult responses.
+// Maps HTTP status codes to their corresponding Result types for consistent API responses.
 public static class Result
 {
     public static IResult Generate(IApiResponse apiResponse)
