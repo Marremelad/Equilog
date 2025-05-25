@@ -26,7 +26,7 @@ public static class PipelineInitialization
     // Configures environment-specific middleware and tools.
     private static void InitializeEnvironment(WebApplication app)
     {
-        // Enable Swagger API documentation and UI only in development environment.
+        // Enable Swagger API documentation and UI only in the development environment.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
