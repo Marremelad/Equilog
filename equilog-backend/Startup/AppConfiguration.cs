@@ -69,13 +69,13 @@ public static class AppConfiguration
     
     private static void ConfigureAzuriteEmulator(IServiceCollection services, IConfiguration configuration)
     {
-        // Register BlobServiceClient without specifying a name (it will use "Default")
+        // Register BlobServiceClient without specifying a name (it will use "Default").
         services.AddAzureClients(azureBuilder =>
         {
             azureBuilder.AddBlobServiceClient(configuration.GetConnectionString("LocalEquilogStorage"));
         });
 
-        // Register our startup filter
+        // Register our startup filter.
         services.AddSingleton<IStartupFilter, AzuriteStartupFilter>();
     }
 
