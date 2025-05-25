@@ -11,7 +11,7 @@ namespace equilog_backend.Services;
 
 public class StablePostService(EquilogDbContext context, IMapper mapper) : IStablePostService
 {
-    public async Task<ApiResponse<List<StablePostDto>?>> GetStablePostsAsync(int stableId)
+    public async Task<ApiResponse<List<StablePostDto>?>> GetStablePostsByStableIdAsync(int stableId)
     {
         try
         {
@@ -38,7 +38,7 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
         }
     }
 
-    public async Task<ApiResponse<StablePostDto?>> GetStablePostAsync(int stablePostId)
+    public async Task<ApiResponse<StablePostDto?>> GetStablePostByStablePostIdAsync(int stablePostId)
     {
         try
         {  
@@ -116,12 +116,12 @@ public class StablePostService(EquilogDbContext context, IMapper mapper) : IStab
         }
     }
 
-    public async Task<ApiResponse<Unit>> ChangeStablePostIsPinnedFlagAsync(int id)
+    public async Task<ApiResponse<Unit>> ChangeStablePostIsPinnedFlagAsync(int stablePostId)
     {
         try
         {
             var stablePost = await context.StablePosts
-                .Where(sp => sp.Id == id)
+                .Where(sp => sp.Id == stablePostId)
                 .FirstOrDefaultAsync();
             
             if (stablePost == null)

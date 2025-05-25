@@ -9,11 +9,11 @@ public class StablePostEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         // Get all stable posts.
-        app.MapGet("/api/stable-post-by-stable-id/{id:int}", GetStablePosts)
+        app.MapGet("/api/stable-post-by-stable-id/{stableId:int}", GetStablePostsByStableId)
             .WithName("GetStablePosts");
 
         // Get stable post.
-        app.MapGet("/api/stable-post/{id:int}", GetStablePost)
+        app.MapGet("/api/stable-post/{stablePostId:int}", GetStablePostByStablePostId)
             .WithName("GetStablePost");
 
         // Create stable post.
@@ -27,26 +27,26 @@ public class StablePostEndpoints
             .WithName("UpdateStablePost");
         
         // Change IsPinned flag.
-        app.MapPatch("/api/stable-post/is-pinned/change/{id:int}", ChangeStablePostIsPinnedFlag)
+        app.MapPatch("/api/stable-post/is-pinned/change/{stablePostId:int}", ChangeStablePostIsPinnedFlag)
             .WithName("ChangeStablePostIsPinnedFlag");
 
         // Delete stable post.
-        app.MapDelete("/api/stable-post/delete/{id:int}", DeleteStablePost)
+        app.MapDelete("/api/stable-post/delete/{stablePostId:int}", DeleteStablePost)
             .WithName("DeleteStablePost");
     }
 
-    private static async Task<IResult> GetStablePosts(
+    private static async Task<IResult> GetStablePostsByStableId(
         IStablePostService stablePostService,
-        int id)
+        int stableId)
     {
-        return Result.Generate(await stablePostService.GetStablePostsAsync(id));
+        return Result.Generate(await stablePostService.GetStablePostsByStableIdAsync(stableId));
     }
 
-    private static async Task<IResult> GetStablePost(
+    private static async Task<IResult> GetStablePostByStablePostId(
         IStablePostService stablePostService,
-        int id)
+        int stablePostId)
     {
-        return Result.Generate(await stablePostService.GetStablePostAsync(id));
+        return Result.Generate(await stablePostService.GetStablePostByStablePostIdAsync(stablePostId));
     }
 
     private static async Task<IResult> CreateStablePost(
@@ -65,15 +65,15 @@ public class StablePostEndpoints
 
     private static async Task<IResult> ChangeStablePostIsPinnedFlag(
         IStablePostService stablePostService,
-        int id)
+        int stablePostId)
     {
-        return Result.Generate(await stablePostService.ChangeStablePostIsPinnedFlagAsync(id));
+        return Result.Generate(await stablePostService.ChangeStablePostIsPinnedFlagAsync(stablePostId));
     }
 
     private static async Task<IResult> DeleteStablePost(
         IStablePostService stablePostService,
-        int id)
+        int stablePostId)
     {
-        return Result.Generate(await stablePostService.DeleteStablePostAsync(id));
+        return Result.Generate(await stablePostService.DeleteStablePostAsync(stablePostId));
     }
 }
