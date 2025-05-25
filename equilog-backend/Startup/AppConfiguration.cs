@@ -19,6 +19,8 @@ using Twilio;
 
 namespace equilog_backend.Startup;
 
+// Static class that configures all application services and dependencies.
+// Handles dependency injection setup, security configuration, and external service integration.
 public static class AppConfiguration
 {
     public static void ConfigureServices(WebApplicationBuilder builder)
