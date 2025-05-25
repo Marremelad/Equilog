@@ -2,7 +2,7 @@
 
 namespace equilog_backend.Common;
 
-// Generic endpoint filter that validates request DTOs using FluentValidation
+// Generic endpoint filter that validates request DTOs using FluentValidation.
 // Applied to API endpoints to automatically validate incoming request data.
 public class ValidationFilter<T> : IEndpointFilter
 {
