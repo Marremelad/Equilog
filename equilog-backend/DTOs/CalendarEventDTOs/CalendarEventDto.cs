@@ -9,6 +9,12 @@ public class CalendarEventDto
     public required DateTime StartDateTime { get; init; }
 
     public required DateTime EndDateTime { get; init; }
+    
+    public required int UserId { get; init; }
 
-    public required int UserIdFk { get; init; }
+    public required string FirstName { get; init; }
+    
+    public required string LastName { get; init; }
+    
+    public required string ProfilePicture { get; init; }
 }

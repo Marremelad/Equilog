@@ -22,13 +22,15 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
                 .Select(sjr => sjr.User)
                 .ToListAsync();
 
-            return ApiResponse<List<UserDto>>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<UserDto>>.Success(
+                HttpStatusCode.OK,
                 mapper.Map<List<UserDto>>(stableJoinRequests),
                 "Stable join requests was fetched successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<UserDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<UserDto>>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -42,13 +44,15 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
                 .Select(sjr => sjr.Stable)
                 .ToListAsync();
 
-            return ApiResponse<List<StableDto>>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<StableDto>>.Success(
+                HttpStatusCode.OK,
                 mapper.Map<List<StableDto>>(stableJoinRequests),
                 "Stable join requests fetched successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<StableDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<StableDto>>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -63,7 +67,8 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
                 .FirstOrDefaultAsync();
 
             if (userStable != null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.BadRequest,
                     "User is already a member of this stable.");
 
             var storedStableJoinRequest = await context.StableJoinRequests
@@ -72,7 +77,8 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
                 .FirstOrDefaultAsync();
             
             if (storedStableJoinRequest != null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.BadRequest,
                     "User har already sent a join request to this stable.");
             
             var stableJoinRequest = new StableJoinRequest
@@ -84,13 +90,15 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
             context.StableJoinRequests.Add(stableJoinRequest);
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.Created,
                 Unit.Value,
                 "Stable join request created successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -106,7 +114,8 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
                 .FirstOrDefaultAsync();
             
             if (stableJoinRequest == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: Stable join request not found.");
 
             context.StableJoinRequests.Remove(stableJoinRequest);
@@ -122,13 +131,15 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
             context.UserStables.Add(userStable);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "User was accepted into stable successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -144,19 +155,22 @@ public class StableJoinRequestService(EquilogDbContext context, IMapper mapper) 
                 .FirstOrDefaultAsync();
             
             if (stableJoinRequest == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: Stable join request not found.");
 
             context.StableJoinRequests.Remove(stableJoinRequest);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "User was not accepted into stable successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

@@ -10,38 +10,40 @@ public class HorseEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         // Get horse profile
-        app.MapGet("/api/horse/{horseId:int}/profile", GetHorseProfile)
+        app.MapGet("/api/horse/{horseId:int}/profile", GetHorseProfile) // "/api/horses/{horseId:int}/profile"
             .WithName("GetHorseProfile");
 
         // Create horse.
-        app.MapPost("/api/horse/create", CreateHorse)
+        app.MapPost("/api/horse/create", CreateHorse) // "/api/horses"
             .AddEndpointFilter<ValidationFilter<HorseCreateDto>>()
             .WithName("CreateHorse");
 
         // Update horse properties.
-        app.MapPut("/api/horse/update", UpdateHorse)
+        app.MapPut("/api/horse/update", UpdateHorse) // "/api/horses/{horseId:int}"
             .AddEndpointFilter<ValidationFilter<HorseUpdateDto>>()
             .WithName("UpdateHorse");
 
         // Delete horse.
-        app.MapDelete("/api/horse/delete/{id:int}", DeleteHorse)
+        app.MapDelete("/api/horse/delete/{horseId:int}", DeleteHorse) // "/api/horses/{horseId:int}"
             .WithName("DeleteHorse");
         
-        // // Get all horses.
-        // app.MapGet("/api/horse", GetHorses)
-        //     .WithName("GetHorses")
-        // .RequireAuthorization();
-        
-        // // Get Horse.
-        // app.MapGet("/api/horse/{id:int}", GetHorse)
-        //     .WithName("GetHorse");
-
         // -- Endpoints for compositions --
 
         // Create a horse with required relations.
-        app.MapPost("/api/horse/create/composition", CreateHorseComposition)
+        app.MapPost("/api/horse/create/composition", CreateHorseComposition) // "/api/horses/compositions"
             .AddEndpointFilter<ValidationFilter<HorseCompositionCreateDto>>()
             .WithName("CreateHorseComposition");
+        
+        // -- Endpoints for testing --
+        
+        // Get all horses.
+        app.MapGet("/api/horse", GetHorses) // "/api/horses"
+            .WithName("GetHorses")
+            .RequireAuthorization();
+        
+        // Get Horse.
+        app.MapGet("/api/horse/{horseId:int}", GetHorse) // "/api/horses/{horseId:int}"
+            .WithName("GetHorse");
     }
     
     private static async Task<IResult> GetHorseProfile(
@@ -67,9 +69,9 @@ public class HorseEndpoints
 
     private static async Task<IResult> DeleteHorse(
         IHorseService horseService,
-        int id)
+        int horseId)
     {
-        return Result.Generate(await horseService.DeleteHorseAsync(id));
+        return Result.Generate(await horseService.DeleteHorseAsync(horseId));
     }
 
     private static async Task<IResult> CreateHorseComposition(
@@ -79,16 +81,17 @@ public class HorseEndpoints
         return Result.Generate(await horseComposition.CreateHorseCompositionAsync(horseCompositionCreateDto));
     }
     
-    // private static async Task<IResult> GetHorses(
-    //     IHorseService horseService)
-    // {
-    //     return Result.Generate(await horseService.GetHorsesAsync());
-    // }
+    // Used for testing.
+    private static async Task<IResult> GetHorses(
+        IHorseService horseService)
+    {
+        return Result.Generate(await horseService.GetHorsesAsync());
+    }
     
-    // private static async Task<IResult> GetHorse(
-    //     IHorseService horseService,
-    //     int id)
-    // {
-    //     return Result.Generate(await horseService.GetHorseAsync(id));
-    // }
+    private static async Task<IResult> GetHorse(
+        IHorseService horseService,
+        int horseId)
+    {
+        return Result.Generate(await horseService.GetHorseAsync(horseId));
+    }
 }

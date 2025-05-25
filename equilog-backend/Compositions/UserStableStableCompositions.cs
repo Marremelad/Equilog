@@ -13,23 +13,25 @@ public class UserStableStableCompositions(
     {
         try
         {
-            var transferStableOwnership = await TransferStableOwnership(userId);
+            var transferResponse = await TransferStableOwnership(userId);
 
-            if (!transferStableOwnership.IsSuccess)
-                return transferStableOwnership;
+            if (!transferResponse.IsSuccess)
+                return transferResponse;
 
-            var deleteUser = await userService.DeleteUserAsync(userId);
+            var userResponse = await userService.DeleteUserAsync(userId);
 
-            if (!deleteUser.IsSuccess)
-                return deleteUser;
+            if (!userResponse.IsSuccess)
+                return userResponse;
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "User deleted successfully");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -48,13 +50,15 @@ public class UserStableStableCompositions(
             if (!userStableResponse.IsSuccess)
                 return transferResponse;
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "User left stable successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -66,7 +70,8 @@ public class UserStableStableCompositions(
             var connections = await userStableService.GetConnectionsWithOwnerRole(userId);
         
             if (connections.Count == 0)
-                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                return ApiResponse<Unit>.Success(
+                    HttpStatusCode.OK,
                     Unit.Value,
                     null);
 
@@ -91,13 +96,15 @@ public class UserStableStableCompositions(
                 await userStableService.SetRoleToOwner(await userStableService.FindAdminOrUser(connection.StableIdFk, userId));
             }
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

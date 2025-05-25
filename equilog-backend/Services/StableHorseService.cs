@@ -18,19 +18,21 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
             var stableHorseDtos = mapper.Map<List<StableHorseDto>>(
                 await context.StableHorses
                 .Where(sh => sh.StableIdFk == stableId)
-                .ToListAsync()); 
+                .ToListAsync());
+
+            var message = stableHorseDtos.Count == 0
+                ? "Operation was successful but the stable has no horses."
+                : "Horses fetched successfully";
             
-            if (stableHorseDtos.Count == 0 )
-                return ApiResponse<List<StableHorseDto>?>.Failure(HttpStatusCode.OK,
-                    "Operation was successful but the stable has no horses.");
-            
-            return ApiResponse<List<StableHorseDto>?>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<StableHorseDto>?>.Success(
+                HttpStatusCode.OK,
                 stableHorseDtos,
-                "Horses fetched successfully");
+                message);
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<StableHorseDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<StableHorseDto>>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -39,26 +41,27 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
     {
         try
         {
-            var stableHorses = await context.StableHorses
+            var stableHorseOwnersDtos = mapper.Map<List<StableHorseOwnersDto>>(
+                await context.StableHorses
                 .Where(sh => sh.StableIdFk == stableId)
                 .Include(sh => sh.Horse)
                 .ThenInclude(h => h!.UserHorses)!
-                    .ThenInclude(uh => uh.User)
-            .ToListAsync();
+                .ThenInclude(uh => uh.User)
+                .ToListAsync());
 
-            if (stableHorses.Count == 0)
-                return ApiResponse<List<StableHorseOwnersDto>>.Failure(HttpStatusCode.OK,
-                    "Operation was successful but the stable has no horses.");
-
-            var stableHorseOwnersDtos = mapper.Map<List<StableHorseOwnersDto>>(stableHorses);
-
-            return ApiResponse<List<StableHorseOwnersDto>>.Success(HttpStatusCode.OK,
+            var message = stableHorseOwnersDtos.Count == 0
+                ? "Operation was successful but the stable has no horses."
+                : "Horses fetched successfully.";
+            
+            return ApiResponse<List<StableHorseOwnersDto>>.Success(
+                HttpStatusCode.OK,
                 stableHorseOwnersDtos,
-                "Horses fetched successfully.");
+                message);
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<StableHorseOwnersDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<StableHorseOwnersDto>>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -76,13 +79,15 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
             context.StableHorses.Add(stableHorse);
             await context.SaveChangesAsync();
         
-            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.Created,
                 Unit.Value, 
                 "Connection between stable and horse was created successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -96,19 +101,22 @@ public class StableHorseService(EquilogDbContext context, IMapper mapper) : ISta
                 .FirstOrDefaultAsync();
             
             if (stableHorse == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotAcceptable,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotAcceptable,
                     "Error: Connection between horse and stable was not found.");
 
             context.StableHorses.Remove(stableHorse);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

@@ -15,31 +15,27 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
     {
         try
         {
-            var comments = await context.Comments
+            var commentDtos = mapper.Map<List<CommentDto>>(
+                await context.Comments
                 .Include(c => c.UserComments)!
                 .ThenInclude(uc => uc.User)
                 .Where(c => c.StablePostComments != null &&
                             c.StablePostComments.Any(spc => spc.StablePostIdFk == stablePostId))
-                .ToListAsync(); 
-                
-            if (comments.Count == 0)
-                return ApiResponse<List<CommentDto>?>.Failure(HttpStatusCode.NotFound,
-                    "Error: Post not found.");
+                .ToListAsync());
+
+            var message = commentDtos.Count == 0
+                ? "Operation was successful but the post has no comments."
+                : "Comments fetched successfully.";
             
-            var commentDtos = mapper.Map<List<CommentDto>>(comments);
-        
-            if (comments.Count == 0)
-                return ApiResponse<List<CommentDto>?>.Success(HttpStatusCode.OK,
-                    commentDtos,
-                    "Operation was successful but the post has no comments.");
-        
-            return ApiResponse<List<CommentDto>?>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<CommentDto>?>.Success(
+                HttpStatusCode.OK,
                 commentDtos,
-                "Comments fetched successfully.");
+                message);
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<CommentDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<CommentDto>>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -57,14 +53,16 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
             context.Comments.Add(comment);
             await context.SaveChangesAsync();
             
-            return ApiResponse<int>.Success(HttpStatusCode.Created,
-                comment.Id,
+            return ApiResponse<int>.Success(
+                HttpStatusCode.Created,
+                comment.Id, 
                 "Comment created successfully.");
 
         }
         catch (Exception ex)
         {
-            return ApiResponse<int>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<int>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -78,19 +76,22 @@ public class CommentService(EquilogDbContext context, IMapper mapper) : IComment
                 .FirstOrDefaultAsync();
             
             if (comment == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: Comment not found.");
 
             context.Comments.Remove(comment);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 $"Comment with id {commentId} deleted successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

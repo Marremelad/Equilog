@@ -9,7 +9,7 @@ public class MailTrapEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         // Send MailTrap email.
-        app.MapPost("/api/mail-trap-send/welcome", SendEmail)
+        app.MapPost("/api/mail-trap-send/welcome", SendEmail) // "/api/mailtrap-emails/welcome"
             .WithName("SendEmail");
     }
 

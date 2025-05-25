@@ -18,7 +18,8 @@ namespace equilog_backend.Services
 				string postcodeDigits = Regex.Replace(postcode, @"\D", "");
 
 				if (postcodeDigits.Length != 5)
-					return ApiResponse<StableLocationDto>.Failure(HttpStatusCode.NotFound,
+					return ApiResponse<StableLocationDto>.Failure(
+						HttpStatusCode.NotFound,
 					"Error: Post code must contain exactly 5 digits.");
 
 				var stableLocation = await context.StableLocation
@@ -26,16 +27,19 @@ namespace equilog_backend.Services
 					.FirstOrDefaultAsync();
 
 				if (stableLocation == null)
-					return ApiResponse<StableLocationDto>.Failure(HttpStatusCode.NotFound,
+					return ApiResponse<StableLocationDto>.Failure(
+						HttpStatusCode.NotFound,
 					"Error: Post code not found.");
 
-				return ApiResponse<StableLocationDto>.Success(HttpStatusCode.OK,
+				return ApiResponse<StableLocationDto>.Success(
+					HttpStatusCode.OK,
 					mapper.Map<StableLocationDto>(stableLocation),
 					null);
 			}
 			catch (Exception ex)
 			{
-				return ApiResponse<StableLocationDto>.Failure(HttpStatusCode.InternalServerError,
+				return ApiResponse<StableLocationDto>.Failure(
+					HttpStatusCode.InternalServerError,
 					ex.Message);
 			}
 		}

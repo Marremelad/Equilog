@@ -5,15 +5,15 @@ namespace equilog_backend.Interfaces;
 
 public interface IStablePostService
 {
-    Task<ApiResponse<List<StablePostDto>?>> GetStablePostsAsync(int stableId);
+    Task<ApiResponse<List<StablePostDto>?>> GetStablePostsByStableIdAsync(int stableId);
 
-    Task<ApiResponse<StablePostDto?>> GetStablePostAsync(int stablePostId);
+    Task<ApiResponse<StablePostDto?>> GetStablePostByStablePostIdAsync(int stablePostId);
 
     Task<ApiResponse<StablePostDto?>> CreateStablePostAsync(StablePostCreateDto stablePostCreateDto);
 
     Task<ApiResponse<Unit>> UpdateStablePostAsync(StablePostUpdateDto stablePostUpdateDto);
 
-    Task<ApiResponse<Unit>> ChangeStablePostIsPinnedFlagAsync(int id);
+    Task<ApiResponse<Unit>> ChangeStablePostIsPinnedFlagAsync(int stablePostId);
 
     Task<ApiResponse<Unit>> DeleteStablePostAsync(int stablePostId);
 }

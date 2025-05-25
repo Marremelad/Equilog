@@ -134,20 +134,24 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                 .FirstOrDefaultAsync();
             
             if (user == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound, 
                     "Error: User not found.");
             
             if (BCrypt.Net.BCrypt.Verify(validatePasswordDto.Password, user.PasswordHash))
-                return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+                return ApiResponse<Unit>.Success(
+                    HttpStatusCode.OK,
                     Unit.Value,
                     "Password verified successfully.");
             
-            return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.BadRequest,
                 "Incorrect password.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

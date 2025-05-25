@@ -22,13 +22,15 @@ public class UserCommentService(EquilogDbContext context) : IUserCommentService
             context.UserComments.Add(userComment);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.Created,
                 Unit.Value,
                 "Connection between user and comment was created successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError, 
                 ex.Message);
         }
     }
@@ -42,19 +44,22 @@ public class UserCommentService(EquilogDbContext context) : IUserCommentService
                 .FirstOrDefaultAsync();
             
             if (userComment == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound, 
                     "Error: Connection between user and comment not found.");
             
             context.UserComments.Remove(userComment);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "Connection between user and comment was removed successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

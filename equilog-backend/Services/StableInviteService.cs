@@ -21,13 +21,15 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
                 .Select(si => si.User)
                 .ToListAsync();
 
-            return ApiResponse<List<UserDto>>.Success(HttpStatusCode.OK,
+            return ApiResponse<List<UserDto>>.Success(
+                HttpStatusCode.OK,
                 mapper.Map<List<UserDto>>(stableInvites),
                 "Stable invites fetched successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<List<UserDto>>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<List<UserDto>>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -42,7 +44,8 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
                 .FirstOrDefaultAsync();
 
             if (userStable != null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.BadRequest,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.BadRequest,
                     "Error: User is already a member of this stable.");
             
             var stableInvite = new StableInvite
@@ -54,13 +57,15 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
             context.StableInvites.Add(stableInvite);
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.Created,
                 Unit.Value,
                 "Stable invite created successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -76,7 +81,8 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
                 .FirstOrDefaultAsync();
             
             if (stableInvite == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: Stable invite not found.");
 
             context.StableInvites.Remove(stableInvite);
@@ -92,13 +98,15 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
             context.UserStables.Add(userStable);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "User was accepted into stable successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -114,19 +122,22 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
                 .FirstOrDefaultAsync();
             
             if (stableInvite == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: Stable invite not found.");
 
             context.StableInvites.Remove(stableInvite);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
                 "User was not accepted into stable successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

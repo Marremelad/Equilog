@@ -10,35 +10,35 @@ public class StableEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         // Get stable by stableId.
-        app.MapGet("/api/stable/{id:int}", GetStableByStableId)
+        app.MapGet("/api/stable/{stableId:int}", GetStableByStableId) // "/api/stables/{stableId:int}"
             .WithName("GetStableByStableId");
 
         // Get stables by name.
-        app.MapGet("/api/stable/search", SearchStables)
+        app.MapGet("/api/stable/search", SearchStables) // "/api/stables"
             .WithName("SearchStables");
 
         // Update stable.
-        app.MapPut("/api/stable/update", UpdateStable)
+        app.MapPut("/api/stable/update", UpdateStable) // "/api/stables/{stableId:int}"
             .AddEndpointFilter<ValidationFilter<StableUpdateDto>>()
             .WithName("UpdateStable");
 
         // Delete stable.
-        app.MapDelete("/api/stable/delete/{id:int}", DeleteStable)
+        app.MapDelete("/api/stable/delete/{stableId:int}", DeleteStable) // "/api/stables/{stableId:int}"
             .WithName("DeleteStable");
 
         // -- Endpoints for compositions --
 
         // Create stable with required components and relations.
-        app.MapPost("/api/stable/create", CreateStableComposition)
+        app.MapPost("/api/stable/create", CreateStableComposition) // "/api/stables"
             .AddEndpointFilter<ValidationFilter<StableCompositionCreateDto>>()
             .WithName("CreateStable");
     }
 
     private static async Task<IResult> GetStableByStableId(
         IStableService stableService,
-        int id)
+        int stableId)
     {
-        return Result.Generate(await stableService.GetStableByStableIdAsync(id));
+        return Result.Generate(await stableService.GetStableByStableIdAsync(stableId));
     }
 
     private static async Task<IResult> SearchStables(
@@ -57,9 +57,9 @@ public class StableEndpoints
 
     private static async Task<IResult> DeleteStable(
         IStableService stableService,
-        int id)
+        int stableId)
     {
-        return Result.Generate(await stableService.DeleteStableAsync(id));
+        return Result.Generate(await stableService.DeleteStableAsync(stableId));
     }
 
     // -- Result generators for compositions --

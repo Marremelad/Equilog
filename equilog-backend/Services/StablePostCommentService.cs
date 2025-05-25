@@ -22,13 +22,15 @@ public class StablePostCommentService(EquilogDbContext context) : IStablePostCom
             context.StablePostComments.Add(stablePostComment);
             await context.SaveChangesAsync();
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value, 
                 "Connection between stable-post and comment created successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
@@ -42,19 +44,22 @@ public class StablePostCommentService(EquilogDbContext context) : IStablePostCom
                 .FirstOrDefaultAsync();
             
             if (stablePostComment == null)
-                return ApiResponse<Unit>.Failure(HttpStatusCode.NotFound,
+                return ApiResponse<Unit>.Failure(
+                    HttpStatusCode.NotFound,
                     "Error: Connection between stable-post and Comment not found");
 
             context.StablePostComments.Remove(stablePostComment);
             await context.SaveChangesAsync();
             
-            return ApiResponse<Unit>.Success(HttpStatusCode.NoContent,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.NoContent,
                 Unit.Value,
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

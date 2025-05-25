@@ -44,13 +44,23 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
             .ForMember(dest => dest.PosterLastName, 
                 opt => opt.MapFrom(src => src.User != null ? src.User.LastName : null))
+            .ForMember(dest => dest.ProfilePicture,
+                opt =>  opt.MapFrom(src =>  src.User != null ? src.User.ProfilePicture : null))
             .ForMember(dest => dest.UserId, 
                 opt => opt.MapFrom(src => src.User != null ? src.User.Id : 0))
             .ReverseMap();
         CreateMap<StablePostCreateDto, StablePost>(MemberList.Source);
         CreateMap<StablePostUpdateDto, StablePost>(MemberList.Source);
 
-        CreateMap<CalendarEvent, CalendarEventDto>().ReverseMap();
+        CreateMap<CalendarEvent, CalendarEventDto>()
+            .ForMember(dest => dest.UserId,
+                opt => opt.MapFrom(src => src.User != null ? src.User.Id : 0))
+            .ForMember(dest => dest.FirstName,
+                opt => opt.MapFrom(src => src.User != null ? src.User.FirstName : null))
+            .ForMember(dest => dest.LastName,
+                opt => opt.MapFrom(src => src.User != null ? src.User.LastName : null))
+            .ForMember(dest => dest.ProfilePicture,
+                opt => opt.MapFrom(src => src.User != null ? src.User.ProfilePicture : null));
         CreateMap<CalendarEventCreateDto, CalendarEvent>(MemberList.Source);
         CreateMap<CalendarEventUpdateDto, CalendarEvent>(MemberList.Source);
         
@@ -91,6 +101,10 @@ public class MappingProfile : Profile
                     : new List<string>()));
 
         CreateMap<Comment, CommentDto>()
+            .ForMember(dest => dest.UserId,
+                opt => opt.MapFrom(src => src.UserComments != null && src.UserComments.Count != 0
+                ? src.UserComments.First().User!.Id
+                : 0))
             .ForMember(dest => dest.ProfilePicture, 
                 opt => opt.MapFrom(src => src.UserComments != null && src.UserComments.Count != 0
                     ? src.UserComments.First().User!.ProfilePicture 
@@ -121,9 +135,9 @@ public class MappingProfile : Profile
         
         CreateMap<UserStable, UserStableRoleDto>();
 
-        CreateMap<UserHorse, HorseWithUserHorseRoleDto>();
-
+        CreateMap<UserHorse, HorseWithUserHorseRoleDto>().ReverseMap();
         CreateMap<UserHorse, UserWithUserHorseRoleDto>();
+        
         CreateMap<StableHorse, StableHorseOwnersDto>()
             .ForMember(dest => dest.HorseId, 
                 opt => opt.MapFrom(src => src.Horse!.Id))

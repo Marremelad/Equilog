@@ -13,7 +13,8 @@ public interface IHorseService
 
     Task<ApiResponse<Unit>> DeleteHorseAsync(int horseId);
     
-    // Task<ApiResponse<List<HorseDto>?>> GetHorsesAsync();
+    // Used for testing.
+    Task<ApiResponse<List<HorseDto>?>> GetHorsesAsync();
     
-    // Task<ApiResponse<HorseDto?>> GetHorseAsync(int horseId);
+    Task<ApiResponse<HorseDto?>> GetHorseAsync(int horseId);
 }

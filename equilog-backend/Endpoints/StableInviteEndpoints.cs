@@ -8,24 +8,24 @@ public class StableInviteEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        app.MapGet("/api/get-stable-invite-by-stable/{id:int}", GetStableInviteByStableId)
+        app.MapGet("/api/get-stable-invite-by-stable/{stableId:int}", GetStableInviteByStableId) // "/api/stables/{stableId:int}/invites"
             .WithName("GetStableInviteByStableId");
 
-        app.MapPost("/api/create-stable-invite", CreateStableInvite)
+        app.MapPost("/api/create-stable-invite", CreateStableInvite) // "/api/stable-invites"
             .WithName("CreateStableInvite");
 
-        app.MapPost("/api/accept-stable-invite", AcceptStableInvite)
+        app.MapPost("/api/accept-stable-invite", AcceptStableInvite) // "/api/stable-invites/{inviteId:int}/accept"
             .WithName("AcceptStableInvite");
 
-        app.MapPost("/api/refuse-stable-invite", RefuseStableInvite)
+        app.MapPost("/api/refuse-stable-invite", RefuseStableInvite) // "/api/stable-invites/{inviteId:int}/refuse"
             .WithName("RefuseStableInvite");
     }
 
     private static async Task<IResult> GetStableInviteByStableId(
         IStableInviteService stableInviteService,
-        int id)
+        int stableId)
     {
-        return Result.Generate(await stableInviteService.GetStableInvitesByStableIdAsync(id));
+        return Result.Generate(await stableInviteService.GetStableInvitesByStableIdAsync(stableId));
     }
 
     private static async Task<IResult> CreateStableInvite(
