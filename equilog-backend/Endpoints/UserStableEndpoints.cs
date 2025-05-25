@@ -25,7 +25,7 @@ public class UserStableEndpoints
             
         // -- Endpoints for compositions --
 
-        // Composition for removing user from a stable.
+        // Composition for removing a user from a stable.
         app.MapDelete("/api/user-stables/leave/{userId:int}/{stableId:int}", LeaveStableComposition) // "/api/users/{userId:int}/stables/{stableId:int}"
             .WithName("LeaveStableComposition");
     }
