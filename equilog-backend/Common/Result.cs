@@ -9,7 +9,7 @@ public static class Result
     {
         return apiResponse.StatusCode switch
         {
-            // 2xx Success
+            // 2xx Success.
             HttpStatusCode.OK => Results.Ok(apiResponse),
             HttpStatusCode.Created => Results.Json(apiResponse, statusCode: 201),
             HttpStatusCode.Accepted => Results.Json(apiResponse, statusCode: 202),
@@ -18,7 +18,7 @@ public static class Result
             HttpStatusCode.ResetContent => Results.Json(apiResponse, statusCode: 205),
             HttpStatusCode.PartialContent => Results.Json(apiResponse, statusCode: 206),
             
-            // 3xx Redirection
+            // 3xx Redirection.
             HttpStatusCode.MultipleChoices => Results.Json(apiResponse, statusCode: 300),
             HttpStatusCode.MovedPermanently => Results.Json(apiResponse, statusCode: 301),
             HttpStatusCode.Found => Results.Json(apiResponse, statusCode: 302),
@@ -28,7 +28,7 @@ public static class Result
             HttpStatusCode.TemporaryRedirect => Results.Json(apiResponse, statusCode: 307),
             HttpStatusCode.PermanentRedirect => Results.Json(apiResponse, statusCode: 308),
             
-            // 4xx Client Errors
+            // 4xx Client Errors.
             HttpStatusCode.BadRequest => Results.BadRequest(apiResponse),
             HttpStatusCode.Unauthorized => Results.Unauthorized(),
             HttpStatusCode.PaymentRequired => Results.Json(apiResponse, statusCode: 402),
@@ -57,7 +57,7 @@ public static class Result
             HttpStatusCode.RequestHeaderFieldsTooLarge => Results.Json(apiResponse, statusCode: 431),
             HttpStatusCode.UnavailableForLegalReasons => Results.Json(apiResponse, statusCode: 451),
             
-            // 5xx Server Errors
+            // 5xx Server Errors.
             HttpStatusCode.InternalServerError => Results.Problem(apiResponse.Message, statusCode: 500),
             HttpStatusCode.NotImplemented => Results.Json(apiResponse, statusCode: 501),
             HttpStatusCode.BadGateway => Results.Json(apiResponse, statusCode: 502),
@@ -70,7 +70,7 @@ public static class Result
             HttpStatusCode.NotExtended => Results.Json(apiResponse, statusCode: 510),
             HttpStatusCode.NetworkAuthenticationRequired => Results.Json(apiResponse, statusCode: 511),
             
-            // Default fallback for any unhandled status codes
+            // Default fallback for any unhandled status codes.
             _ => Results.Problem(apiResponse.Message)
         };
     }
