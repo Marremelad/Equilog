@@ -8,15 +8,19 @@ public class StableInviteEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
+        // Get invitation sent by stable.
         app.MapGet("/api/get-stable-invite-by-stable/{stableId:int}", GetStableInviteByStableId) // "/api/stables/{stableId:int}/invites"
             .WithName("GetStableInviteByStableId");
 
+        // Create invitation to stable.
         app.MapPost("/api/create-stable-invite", CreateStableInvite) // "/api/stable-invites"
             .WithName("CreateStableInvite");
 
+        // Accept invitation to stable.
         app.MapPost("/api/accept-stable-invite", AcceptStableInvite) // "/api/stable-invites/{inviteId:int}/accept"
             .WithName("AcceptStableInvite");
 
+        // Refuse invitation to stable.
         app.MapPost("/api/refuse-stable-invite", RefuseStableInvite) // "/api/stable-invites/{inviteId:int}/refuse"
             .WithName("RefuseStableInvite");
     }
