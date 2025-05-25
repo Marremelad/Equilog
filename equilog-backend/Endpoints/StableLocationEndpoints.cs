@@ -8,6 +8,7 @@ public class StableLocationEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
 
+        // Get stable location.
         app.MapGet("/api/stable-location/{postcode}", GetStableLocation) // "/api/stable-locations/{postcode}"
             .WithName("GetStableLocation");
     }
