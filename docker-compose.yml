@@ -19,16 +19,16 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.api-${STACK_NAMN}-http.rule=Host(`api.${STACK_NAMN}.cc25.chasacademy.dev`)
-        - traefik.http.routers.api-${STACK_NAMN}-http.entrypoints=http
-        - traefik.http.routers.api-${STACK_NAMN}-http.middlewares=https-redirect
-        - traefik.http.routers.api-${STACK_NAMN}-https.rule=Host(`api.${STACK_NAMN}.cc25.chasacademy.dev`)
-        - traefik.http.routers.api-${STACK_NAMN}-https.entrypoints=https
-        - traefik.http.routers.api-${STACK_NAMN}-https.tls=true
-        - traefik.http.routers.api-${STACK_NAMN}-https.tls.certresolver=le
-        - traefik.http.routers.api-${STACK_NAMN}-https.tls.domains[0].main=cc25.chasacademy.dev
-        - traefik.http.routers.api-${STACK_NAMN}-https.tls.domains[0].sans=*.cc25.chasacademy.dev
-        - traefik.http.services.api-${STACK_NAMN}.loadbalancer.server.port=80
+        - traefik.http.routers.api-${STACK_NAMND}-http.rule=Host(`api.${STACK_NAMND}.cc25.chasacademy.dev`)
+        - traefik.http.routers.api-${STACK_NAMND}-http.entrypoints=http
+        - traefik.http.routers.api-${STACK_NAMND}-http.middlewares=https-redirect
+        - traefik.http.routers.api-${STACK_NAMND}-https.rule=Host(`api.${STACK_NAMND}.cc25.chasacademy.dev`)
+        - traefik.http.routers.api-${STACK_NAMND}-https.entrypoints=https
+        - traefik.http.routers.api-${STACK_NAMND}-https.tls=true
+        - traefik.http.routers.api-${STACK_NAMND}-https.tls.certresolver=le
+        - traefik.http.routers.api-${STACK_NAMND}-https.tls.domains[0].main=cc25.chasacademy.dev
+        - traefik.http.routers.api-${STACK_NAMND}-https.tls.domains[0].sans=*.cc25.chasacademy.dev
+        - traefik.http.services.api-${STACK_NAMND}.loadbalancer.server.port=80
     environment:
       - DB_PASSWORD=${DB_PASSWORD} # Exportera DB-lösenordet från GitLab-variabler, entrypoint.sh-scriptet för databasinitiering behöver det!
       - ASPNETCORE_ENVIRONMENT=Production # appsettings.json läses in, värde Development gör att apsetting.Development.json läses in!
