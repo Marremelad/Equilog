@@ -1,4 +1,5 @@
 stages:
+
   - bygga
   - testa
   - leverera
@@ -13,7 +14,6 @@ variables:
   services:
     - docker:24.0.5-dind
   variables:
-    IMAGE_REPO: "$CI_REGISTRY/cc25group-10/equilog-backend"
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
     - docker info
