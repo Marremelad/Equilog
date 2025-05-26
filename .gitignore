@@ -483,5 +483,10 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-#Appsettings file
+# Appsettings file
 appsettings.Development.json
+
+# Azurite files
+AzuriteConfig
+__azurite_db_*.json
+__blobstorage__/

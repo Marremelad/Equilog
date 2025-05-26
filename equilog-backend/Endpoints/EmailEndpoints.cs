@@ -10,14 +10,15 @@ public class EmailEndpoints
     public static void RegisterEndpoints(WebApplication app)
     {
         // Send Email.
-        app.MapPost("/api/email-send/welcome/", SendEmail)
+        app.MapPost("/api/email-send/welcome/", SendEmail) // "/api/emails/welcome"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<EmailDto>>()
-            .WithName("SendTwilioMail");
+            .WithName("SendEmail");
         
         // -- Endpoints for compositions --
         
         // Send password reset email.
-        app.MapPost("/api/password-reset-email/send", SendPasswordResetEmail)
+        app.MapPost("/api/password-reset-email/send", SendPasswordResetEmail) // "/api/password-resets"
             .AddEndpointFilter<ValidationFilter<EmailDto>>()
             .WithName("SendPasswordResetEmail");
     }

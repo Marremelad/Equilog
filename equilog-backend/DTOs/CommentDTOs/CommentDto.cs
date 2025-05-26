@@ -7,6 +7,8 @@ public class CommentDto
     public required DateTime CommentDate { get; init; }
     
     public required string Content { get; init; }
+
+    public required int UserId { get; init; }
     
     public required string FirstName { get; init; }
     

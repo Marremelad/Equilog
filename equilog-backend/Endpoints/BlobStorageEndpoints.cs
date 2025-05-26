@@ -1,5 +1,4 @@
 ﻿using equilog_backend.Common;
-using equilog_backend.DTOs.BlobStorageDTOs;
 using equilog_backend.Interfaces;
 
 namespace equilog_backend.Endpoints;
@@ -8,13 +7,19 @@ public class BlobStorageEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        app.MapGet("/api/blob-storage/get-upload-uri", GetUploadUri)
+        // Get upload uri.
+        app.MapGet("/api/blob-storage/get-upload-uri", GetUploadUri) // "/api/blobs/{blobName}/upload-uri"
+            .RequireAuthorization()
             .WithName("GetUploadUri");
 
-        app.MapGet("/api/blob-storage/get-read-uri", GetReadUri)
+        // Get read uri.
+        app.MapGet("/api/blob-storage/get-read-uri", GetReadUri) // "/api/blobs/{blobName}/read-uri"
+            .RequireAuthorization()
             .WithName("GetReadUri");
 
-        app.MapDelete("/api/blob-storage/delete-blob", DeleteBlob)
+        // Delete blob from blob storage.
+        app.MapDelete("/api/blob-storage/delete-blob", DeleteBlob) // "/api/blobs/{blobName}"
+            .RequireAuthorization()
             .WithName("DeleteBlob");
     }
 

@@ -1,6 +1,5 @@
 ﻿using equilog_backend.Common;
 using equilog_backend.Interfaces;
-using equilog_backend.Models;
 
 namespace equilog_backend.Endpoints;
 
@@ -8,24 +7,30 @@ public class StableHorseEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        app.MapGet("/api/stable-horses/{id:int}", GetStableHorses)
+        // Get connection between stable and horses.
+        app.MapGet("/api/stable-horses/{stableId:int}", GetStableHorses) // "/api/stables/{stableId:int}/horses"
+            .RequireAuthorization()
             .WithName("GetStableHorses");
 
-        app.MapGet("/api/stable-horses/{stableId:int}/horses/with-owners", GetHorsesWithOwnersByStable)
+        // Get horse and owner information.
+        app.MapGet("/api/stable-horses/{stableId:int}/horses/with-owners", GetHorsesWithOwnersByStableId) // "/api/stables/{stableId:int}/horses?include=owners"
+            .RequireAuthorization()
             .WithName("GetHorsesWithOwnersByStable");
 
-        app.MapGet("/api/stable-horse/remove-horse/{id:int}", RemoveHorseFromStable)
+        // Remove the connection between stable and horse.
+        app.MapGet("/api/stable-horse/remove-horse/{stableHorseId:int}", RemoveHorseFromStable) // "/api/stable-horses/{stableHorseId:int}"
+            .RequireAuthorization()
             .WithName("RemoveHorseFromStable");
     }
 
     private static async Task<IResult> GetStableHorses(
         IStableHorseService stableHorseService,
-        int id)
+        int stableId)
     {
-        return Result.Generate(await stableHorseService.GetStableHorsesAsync(id));
+        return Result.Generate(await stableHorseService.GetStableHorsesAsync(stableId));
     }
 
-    private static async Task<IResult> GetHorsesWithOwnersByStable(
+    private static async Task<IResult> GetHorsesWithOwnersByStableId(
         IStableHorseService stableHorseService,
         int stableId)
     {
@@ -34,8 +39,8 @@ public class StableHorseEndpoints
 
     private static async Task<IResult> RemoveHorseFromStable(
         IStableHorseService stableHorseService,
-        int id)
+        int stableHorseId)
     {
-        return Result.Generate(await stableHorseService.RemoveHorseFromStableAsync(id));
+        return Result.Generate(await stableHorseService.RemoveHorseFromStableAsync(stableHorseId));
     }
 }

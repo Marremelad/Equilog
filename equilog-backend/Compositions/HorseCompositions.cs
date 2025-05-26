@@ -5,50 +5,66 @@ using System.Net;
 
 namespace equilog_backend.Compositions;
 
+// Composition service that orchestrates the creation of a horse with all required relationships.
+// Handles the complex operation of creating a horse and linking it to both stable and user.
 public class HorseCompositions(
     IHorseService horseService,
     IStableHorseService stableHorseService,
     IUserHorseService userHorseService) : IHorseComposition
 {
-    public async Task<ApiResponse<Unit>> CreateHorseCompositionAsync(HorseCompositionCreateDto horseCompositionCreateDto)
+    // Creates a complete horse composition including the horse and all its relationships.
+    public async Task<ApiResponse<Unit>> CreateHorseCompositionAsync(
+        HorseCompositionCreateDto horseCompositionCreateDto)
     {
         try
         {
-            var createHorse = await horseService.CreateHorseAsync(horseCompositionCreateDto.Horse);
+            // Step 1: Create the core horse entity.
+            var horseResponse = await horseService.CreateHorseAsync(horseCompositionCreateDto.Horse);
 
-            if (!createHorse.IsSuccess)
-                return ApiResponse<Unit>.Failure(createHorse.StatusCode,
-                    $"Failed to create horse: {createHorse.Message}");
+            if (!horseResponse.IsSuccess)
+                return ApiResponse<Unit>.Failure(
+                    horseResponse.StatusCode,
+                    $"Failed to create horse: {horseResponse.Message}");
 
-            var horseId = createHorse.Value;
+            // Extract IDs for creating the relationships.
+            var horseId = horseResponse.Value;
             var stableId = horseCompositionCreateDto.StableId;
             var userId = horseCompositionCreateDto.UserId;
 
-            var createStableHorse = await stableHorseService.CreateStableHorseConnectionAsync(stableId, horseId);
+            // Step 2: Create the stable-horse relationship (assign horse to stable).
+            var stableHorseResponse = await stableHorseService.CreateStableHorseConnectionAsync(stableId, horseId);
 
-            if (!createStableHorse.IsSuccess)
+            // If the stable-horse relationship fails, rollback by deleting the horse.
+            if (!stableHorseResponse.IsSuccess)
             {
                 await horseService.DeleteHorseAsync(horseId);
-                return ApiResponse<Unit>.Failure(createStableHorse.StatusCode,
-                    $"{createStableHorse.Message}: Horse creation was rolled back");
+                stableHorseResponse.Message =
+                    $"Failed to create connection between stable and horse: {stableHorseResponse.Message}. Horse creation was rolled back.";
+                return stableHorseResponse;
             }
         
-            var createUserHorse = await userHorseService.CreateUserHorseConnectionAsync(userId, horseId);
+            // Step 3: Create the user-horse relationship (assign ownership to a user).
+            var userHorseResponse = await userHorseService.CreateUserHorseConnectionAsync(userId, horseId);
 
-            if (!createUserHorse.IsSuccess)
+            // If the user-horse relationship fails, rollback by deleting the horse.
+            // Note: Stable-horse relationship will be automatically cleaned up via cascade delete.
+            if (!userHorseResponse.IsSuccess)
             {
                 await horseService.DeleteHorseAsync(horseId);
-                return ApiResponse<Unit>.Failure(createUserHorse.StatusCode,
-                    $"{createUserHorse.Message}: Horse creation and connection between stable and horse was rolled back.");
+                userHorseResponse.Message =
+                    $"Failed to create connection between user and horse: {userHorseResponse.Message}.Horse creation was rolled back.";
             }
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+            // All operations successful - return success response.
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.Created,
                 Unit.Value,
                 "Horse created successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

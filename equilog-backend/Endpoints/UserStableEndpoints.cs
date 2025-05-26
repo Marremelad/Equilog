@@ -7,44 +7,54 @@ public class UserStableEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
-        app.MapGet("/api/user-stables/user/{id:int}", GetUserStablesByUserId)
+        // Get connections between users and stable by user ID.
+        app.MapGet("/api/user-stables/user/{userId:int}", GetUserStablesByUserId) // "/api/users/{userId:int}/stables"
+            .RequireAuthorization()
             .WithName("GetUserStablesByUserId");
 
-        app.MapGet("/api/user-stables/stable/{id:int}", GetUserStablesByStableId)
+        // Get connection between user and stable by stable ID.
+        app.MapGet("/api/user-stables/stable/{stableId:int}", GetUserStablesByStableId) // "/api/stables/{stableId:int}/users"
+            .RequireAuthorization()
             .WithName("GetUserStablesByStableId");
 
-        app.MapPut("/api/user-stables/stable-user/{id:int}", UpdateStableUserRole)
+        // Update a user's role in a stable.
+        app.MapPut("/api/user-stables/stable-user/{userStableId:int}", UpdateStableUserRole) // "/api/user-stables/{userStableId:int}/role"
+            .RequireAuthorization()
             .WithName("UpdateStableUserRole");
             
-        app.MapDelete("/api/user-stables/{userStableId:int}", RemoveUserFromStable)
+        // Remove a user from a stable.
+        app.MapDelete("/api/user-stables/{userStableId:int}", RemoveUserFromStable) // "/api/user-stables/{userStableId:int}"
+            .RequireAuthorization()
             .WithName("RemoveUserFromStable");
             
         // -- Endpoints for compositions --
 
-        app.MapDelete("/api/user-stables/leave/{userId:int}/{stableId:int}", LeaveStableComposition)
+        // Composition for removing a user from a stable.
+        app.MapDelete("/api/user-stables/leave/{userId:int}/{stableId:int}", LeaveStableComposition) // "/api/users/{userId:int}/stables/{stableId:int}"
+            .RequireAuthorization()
             .WithName("LeaveStableComposition");
     }
         
     private static async Task<IResult> GetUserStablesByUserId(
         IUserStableService userStableService,
-        int id)
+        int userId)
     {
-        return Result.Generate(await userStableService.GetUserStablesByUserIdAsync(id));
+        return Result.Generate(await userStableService.GetUserStablesByUserIdAsync(userId));
     }
 
     private static async Task<IResult> GetUserStablesByStableId(
         IUserStableService userStableService,
-        int id)
+        int stableId)
     {
-        return Result.Generate(await userStableService.GetUserStablesByStableIdAsync(id));
+        return Result.Generate(await userStableService.GetUserStablesByStableIdAsync(stableId));
     }
 
     private static async Task<IResult> UpdateStableUserRole(
         IUserStableService userStableService,
-        int id,
+        int userStableId,
         int userStableRole)
     {
-        return Result.Generate(await userStableService.UpdateStableUserRoleAsync(id, userStableRole));
+        return Result.Generate(await userStableService.UpdateStableUserRoleAsync(userStableId, userStableRole));
     }
 
     private static async Task<IResult> LeaveStableComposition(

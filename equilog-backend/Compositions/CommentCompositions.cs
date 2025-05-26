@@ -5,50 +5,68 @@ using equilog_backend.Interfaces;
 
 namespace equilog_backend.Compositions;
 
+// Composition service that orchestrates the creation of a comment with all required relationships.
+// Handles the complex operation of creating a comment and linking it to both user and stable post.
 public class CommentCompositions(
     ICommentService commentService,
     IUserCommentService userCommentService,
     IStablePostCommentService stablePostCommentService) : ICommentComposition
 {
+    // Creates a complete comment composition including the comment and all its relationships.
     public async Task<ApiResponse<Unit>> CreateCommentComposition(
         CommentCompositionCreateDto commentCompositionCreateDto)
     {
         try
         {
-            var createComment = await commentService.CreateCommentAsync(commentCompositionCreateDto.Comment);
+            // Step 1: Create the core comment entity.
+            var commentResponse = await commentService.CreateCommentAsync(commentCompositionCreateDto.Comment);
         
-            if (!createComment.IsSuccess)
-                return ApiResponse<Unit>.Failure(createComment.StatusCode,
-                    $"Failed to create comment: {createComment.Message}");
+            // If comment creation fails, return immediately without creating relationships.
+            if (!commentResponse.IsSuccess)
+                return ApiResponse<Unit>.Failure(
+                    commentResponse.StatusCode,
+                    $"Failed to create comment: {commentResponse.Message}");
 
-            var commentId = createComment.Value;
+            // Extract IDs for creating the relationships.
+            var commentId = commentResponse.Value;
             var userId = commentCompositionCreateDto.UserId;
             var stablePostId = commentCompositionCreateDto.StablePostId;
 
-            var createUserComment = await userCommentService.CreateUserCommentConnectionAsync(userId, commentId);
+            // Step 2: Create the user-comment relationship.
+            var userCommentResponse = await userCommentService.CreateUserCommentConnectionAsync(userId, commentId);
 
-            if (!createUserComment.IsSuccess)
+            // If the user-comment relationship fails, rollback by deleting the comment.
+            if (!userCommentResponse.IsSuccess)
             {
                 await commentService.DeleteCommentAsync(commentId);
-                return createUserComment;
+                userCommentResponse.Message =
+                    $"Failed to create connection between user and comment: {userCommentResponse.Message}. Comment creation was rolled back.";
+                return userCommentResponse;
             }
         
-            var createStablePostComment =
+            // Step 3: Create a stable post-comment relationship.
+            var stablePostCommentResponse =
                 await stablePostCommentService.CreateStablePostCommentConnectionAsync(stablePostId, commentId);
 
-            if (!createStablePostComment.IsSuccess)
+            // If the stable post-comment relationship fails, rollback by deleting the comment.
+            if (!stablePostCommentResponse.IsSuccess)
             {
                 await commentService.DeleteCommentAsync(commentId);
-                return createStablePostComment;
+                stablePostCommentResponse.Message =
+                    $"Failed to create connection between stable-post and comment: {userCommentResponse.Message}. Comment creation was rolled back.";
+                return stablePostCommentResponse;
             }
         
-            return ApiResponse<Unit>.Success(HttpStatusCode.Created,
+            // All operations successful - return success response.
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.Created,
                 Unit.Value,
                 null);
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }

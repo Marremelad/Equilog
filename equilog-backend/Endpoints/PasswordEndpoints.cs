@@ -8,13 +8,14 @@ public class PasswordEndpoints
 {
 	public static void RegisterEndpoints(WebApplication app)
 	{
-		// Reset password.
-		app.MapPost("/api/reset-password", ResetPassword)
+		// Reset password. Does not require authorization since the operation will take place outside the application.
+		app.MapPost("/api/reset-password", ResetPassword) // "/api/password-resets"
 			.AddEndpointFilter<ValidationFilter<PasswordResetDto>>()
 			.WithName("RestPassword");
 
 		// Change password.
-		app.MapPost("/api/change-password", ChangePassword)
+		app.MapPost("/api/change-password", ChangePassword) // "/api/users/password"
+			.RequireAuthorization() // Operation takes place inside the application.
 			.AddEndpointFilter<ValidationFilter<PasswordChangeDto>>()
 			.WithName("ChangePassword");
 	}

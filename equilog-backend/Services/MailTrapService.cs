@@ -7,24 +7,27 @@ namespace equilog_backend.Services;
 
 public class MailTrapService : IMailTrapService
 {
+    // Used if the sendgrid api is not available.
     public ApiResponse<Unit> SendEmail(IMailTrap mailTrap, string recipient)
     {
         try
         {
             var client = new SmtpClient("live.smtp.mailtrap.io", 587)
             {
-                Credentials = new NetworkCredential("api", "f22eb97375cb24dce3f488034c22baab"),
+                // Add credentials when this service is used.
                 EnableSsl = true
             };
             client.Send("hello@demomailtrap.co", recipient, mailTrap.Subject, mailTrap.Body);
 
-            return ApiResponse<Unit>.Success(HttpStatusCode.OK,
+            return ApiResponse<Unit>.Success(
+                HttpStatusCode.OK,
                 Unit.Value,
-                null);
+                "Mail sent successfully.");
         }
         catch (Exception ex)
         {
-            return ApiResponse<Unit>.Failure(HttpStatusCode.InternalServerError,
+            return ApiResponse<Unit>.Failure(
+                HttpStatusCode.InternalServerError,
                 ex.Message);
         }
     }
