@@ -13,36 +13,36 @@ public abstract class CalendarEventEndpoints
         
         // Get calendar events by stable id.
         app.MapGet("/api/calendar-events/{stableId:int}", GetCalendarEventsByStableId) // "/api/stables/{stableId:int}/calendar-events"
+            .RequireAuthorization()
             .WithName("GetCalendarEventsByStableId");
-            // .RequireAuthorization();
         
         // Get calendar event by user id.
         app.MapGet("/api/calendar-event/{calendarEventId:int}", GetCalendarEvent) // "/api/calendar-events/{calendarEventId:int}"
-            .WithName("GetCalendarEvent")
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .WithName("GetCalendarEvent");
 
         // Create calendar event.
         app.MapPost("/api/calendar-event/create", CreateCalendarEvent) // "/api/calendar-events"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<CalendarEventCreateDto>>()
             .WithName("CreateCalendarEvent");
-            // .RequireAuthorization();
 
         // Update calendar event.
         app.MapPut("/api/calendar-event/update", UpdateCalendarEvent) // "/api/calendar-events/{calendarEventId:int}"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<CalendarEventUpdateDto>>()
-            .WithName("UpdateCalendarEvent")
-            .RequireAuthorization();
+            .WithName("UpdateCalendarEvent");
 
         // Delete calendar event.
         app.MapDelete("/api/calendar-event/delete/{calendarEventId:int}", DeleteCalendarEvent) // "/api/calendar-events/{calendarEventId:int}"
-            .WithName("DeleteCalendarEvent")
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .WithName("DeleteCalendarEvent");
         
         // Get all calendar events.
         app.MapGet("/api/calendar-events", GetCalendarEvents) // "/api/calendar-events"
-            .WithName("GetCalendarEvents")
-            .RequireAuthorization();
-        
+            .RequireAuthorization()
+            .WithName("GetCalendarEvents");
+
         // #pragma warning restore ASP0022
     }
     

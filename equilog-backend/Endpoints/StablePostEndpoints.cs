@@ -10,28 +10,34 @@ public class StablePostEndpoints
     {
         // Get all stable posts.
         app.MapGet("/api/stable-post-by-stable-id/{stableId:int}", GetStablePostsByStableId) // "/api/stables/{stableId:int}/posts"
+            .RequireAuthorization()
             .WithName("GetStablePosts");
 
         // Get stable post.
         app.MapGet("/api/stable-post/{stablePostId:int}", GetStablePostByStablePostId) // "/api/stable-posts/{stablePostId:int}"
+            .RequireAuthorization()
             .WithName("GetStablePost");
 
         // Create stable post.
         app.MapPost("/api/stable-post/create", CreateStablePost) // "/api/stable-posts"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<StablePostCreateDto>>()
             .WithName("CreateStablePost");
 
         // Update stable post properties.
         app.MapPut("/api/stable-post/update", UpdateStablePost) // "/api/stable-posts/{stablePostId:int}"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<StablePostUpdateDto>>()
             .WithName("UpdateStablePost");
         
         // Change IsPinned flag.
         app.MapPatch("/api/stable-post/is-pinned/change/{stablePostId:int}", ChangeStablePostIsPinnedFlag) // "/api/stable-posts/{stablePostId:int}/pinned"
+            .RequireAuthorization()
             .WithName("ChangeStablePostIsPinnedFlag");
 
         // Delete stable post.
         app.MapDelete("/api/stable-post/delete/{stablePostId:int}", DeleteStablePost) // "/api/stable-posts/{stablePostId:int}"
+            .RequireAuthorization()
             .WithName("DeleteStablePost");
     }
 

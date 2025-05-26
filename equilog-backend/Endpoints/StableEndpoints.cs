@@ -11,25 +11,30 @@ public class StableEndpoints
     {
         // Get stable by stableId.
         app.MapGet("/api/stable/{stableId:int}", GetStableByStableId) // "/api/stables/{stableId:int}"
+            .RequireAuthorization()
             .WithName("GetStableByStableId");
 
         // Get stables by name.
         app.MapGet("/api/stable/search", SearchStables) // "/api/stables"
+            .RequireAuthorization()
             .WithName("SearchStables");
 
         // Update stable.
         app.MapPut("/api/stable/update", UpdateStable) // "/api/stables/{stableId:int}"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<StableUpdateDto>>()
             .WithName("UpdateStable");
 
         // Delete stable.
         app.MapDelete("/api/stable/delete/{stableId:int}", DeleteStable) // "/api/stables/{stableId:int}"
+            .RequireAuthorization()
             .WithName("DeleteStable");
 
         // -- Endpoints for compositions --
 
         // Create stable with required components and relations.
         app.MapPost("/api/stable/create", CreateStableComposition) // "/api/stables"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<StableCompositionCreateDto>>()
             .WithName("CreateStable");
     }
