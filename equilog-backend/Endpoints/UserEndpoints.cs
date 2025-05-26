@@ -11,31 +11,38 @@ public class UserEndpoints
     { 
         // Get user.
         app.MapGet("/api/user/{userId:int}", GetUser) // "/api/users/{userId:int}"
+            .RequireAuthorization()
             .WithName("GetUser");
 
         // Get user profile.
         app.MapGet("/api/user/{userId:int}/stable/{stableId:int}", GetUserProfile) // "/api/users/{userId:int}/stables/{stableId:int}/profile"
+            .RequireAuthorization()
             .WithName("GetUserProfile");
 
         // Update user properties.
         app.MapPut("/api/user/update", UpdateUser) // "/api/users/{userId:int}"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<UserUpdateDto>>()
             .WithName("UpdateUser");
 
         // Delete user.
         app.MapDelete("/api/user/delete/{userId:int}", DeleteUser) // "/api/users/{userId:int}"
+            .RequireAuthorization()
             .WithName("DeleteUser");
 
         // Set the user's profile picture.
         app.MapPost("/api/user/set-profile-picture", SetProfilePicture) // "/api/users/{userId:int}/profile-picture"
+            .RequireAuthorization()
             .WithName("SetProfilePicture");
         
         // Get all users.
         app.MapGet("/api/user", GetUsers) // "/api/users"
+            .RequireAuthorization()
             .WithName("GetUsers");
             
         // -- Endpoints for compositions --
         app.MapDelete("/api/user/delete/composition/{userId:int}", DeleteUserComposition) // "/api/users/{userId:int}/compositions"
+            .RequireAuthorization()
             .WithName("DeleteUserComposition");
     }
     
