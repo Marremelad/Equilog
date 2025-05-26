@@ -10,22 +10,27 @@ public class StableJoinRequestEndpoints
     {
         // Get join-requests for a specific stable.
         app.MapGet("/api/get-stable-join-request-by-stable/{stableId:int}", GetStableJoinRequestByStableId) // "/api/stables/{stableId:int}/join-requests"
+            .RequireAuthorization()
             .WithName("GetStableJoinRequestByStableId");
         
         // Get join-requests sent by a specific user.
         app.MapGet("/api/get-stable-join-requests-by-user/{userId:int}", GetStableJoinRequestByUserId) // "/api/users/{userId:int}/join-requests"
+            .RequireAuthorization()
             .WithName("GetStableJoinRequestByUserId");
         
         // Create join-request.
         app.MapPost("/api/create-stable-join-request", CreateStableJoinRequest) // "/api/stable-join-requests"
+            .RequireAuthorization()
             .WithName("CreateStableJoinRequest");
 
         // Accept join-request.
         app.MapPost("/api/accept-stable-join-request", AcceptStableJoinRequest) // "/api/stable-join-requests/{requestId:int}/accept"
+            .RequireAuthorization()
             .WithName("AcceptStableJoinRequest");
 
         // Refuse join-request.
         app.MapPost("/api/refuse-stable-join-request", RefuseStableJoinRequest) // "/api/stable-join-requests/{requestId:int}/refuse"
+            .RequireAuthorization()
             .WithName("RefuseStableJoinRequest");
     }
 
