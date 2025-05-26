@@ -1,7 +1,8 @@
-# Base image
-# Runs portainer.py to deploy/teardown stacks in a portainer environment
+# Basbild
+# Kör portainer.py för att distribuera/avsluta stackar i en Portainer-miljö
 FROM python:3.13-alpine
-# Set directory and copy over files
+
+# Ställ in katalog och kopiera filer
 WORKDIR /app
 COPY requirements-api-handler.txt requirements.txt
 RUN pip install -r requirements.txt
