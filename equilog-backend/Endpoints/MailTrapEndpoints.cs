@@ -12,7 +12,7 @@ public class MailTrapEndpoints
         // Send MailTrap email.
         app.MapPost("/api/mail-trap-send/welcome", SendEmail) // "/api/mail-trap-emails/welcome"
             .RequireAuthorization()
-            .WithName("SendEmail");
+            .WithName("SendMailTrapEmail");
     }
 
     private static IResult SendEmail(
