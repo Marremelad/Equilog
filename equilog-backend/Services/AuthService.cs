@@ -14,13 +14,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace equilog_backend.Services;
 
+// Service that handles security-related functionality.
 public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMapper mapper) : IAuthService
 {
+    // Creates a JWT token for the authenticated user.
     private string CreateJwt(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
         
+        // Configure the token with user claims and expiration.
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity([
@@ -35,14 +38,17 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                 SecurityAlgorithms.HmacSha512Signature)
         };
         
+        // Generate and return the JWT token as a string.
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
     
+    // Registers a new user and returns authentication tokens.
     public async Task<ApiResponse<AuthResponseDto?>> RegisterAsync(RegisterDto registerDto)
     {
         try
         {
+            // Check if a user with this email already exists.
             var existingUserByEmail = await context.Users
                 .FirstOrDefaultAsync(u => u.Email.ToLower() == registerDto.Email.ToLower());
 
@@ -53,18 +59,23 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     "Email already exists.");
             }
             
+            // Hash the password using BCrypt with generated salt.
             var salt = BCrypt.Net.BCrypt.GenerateSalt();
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password, salt);
 
+            // Create a new user entity and set the hashed password.
             var user = mapper.Map<User>(registerDto);
             user.PasswordHash = passwordHash;
 
+            // Save the new user to the database.
             context.Users.Add(user);
             await context.SaveChangesAsync();
             
+            // Generate authentication tokens for the new user.
             var accessToken = CreateJwt(user);
             var refreshToken = await CreateRefreshTokenAsync(user.Id);
             
+            // Return a successful response with tokens.
             var response = new AuthResponseDto
             {
                 AccessToken = accessToken, // JWT.
@@ -84,10 +95,12 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         }
     }
 
+    // Authenticates user credentials and returns tokens if valid.
     public async Task<ApiResponse<AuthResponseDto?>> LoginAsync(LoginDto loginDto)
     {
         try
         {
+            // Find a user by email (case-insensitive).
             var user = await context.Users
                 .FirstOrDefaultAsync(u => u.Email.ToLower() == loginDto.Email.ToLower());
 
@@ -96,6 +109,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     HttpStatusCode.Unauthorized, 
                     "Invalid email or password.");
             
+            // Verify the provided password against stored hash.
             var isValidPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash);
             
             if(!isValidPassword)
@@ -103,6 +117,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     HttpStatusCode.Unauthorized, 
                     "Invalid email or password.");
 
+            // Generate new authentication tokens for successful login.
             var accessToken = CreateJwt(user);
             var refreshToken = await CreateRefreshTokenAsync(user.Id);
             
@@ -125,10 +140,12 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         }
     }
     
+    // Validates if the provided password matches the user's stored password.
     public async Task<ApiResponse<Unit>> ValidatePasswordAsync(ValidatePasswordDto validatePasswordDto)
     {
         try
         {
+            // Find the user by ID.
             var user = await context.Users
                 .Where(u => u.Id == validatePasswordDto.UserId)
                 .FirstOrDefaultAsync();
@@ -138,6 +155,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     HttpStatusCode.NotFound, 
                     "Error: User not found.");
             
+            // Check if the provided password matches the stored hash.
             if (BCrypt.Net.BCrypt.Verify(validatePasswordDto.Password, user.PasswordHash))
                 return ApiResponse<Unit>.Success(
                     HttpStatusCode.OK,
@@ -156,10 +174,12 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         }
     }
     
+    // Creates a new refresh token for the specified user.
     private async Task<RefreshToken> CreateRefreshTokenAsync(int userId)
     {
         var token = Guid.NewGuid().ToString();
     
+        // Create a refresh token with 7-day expiration.
         var refreshToken = new RefreshToken
         {
             Token = token,
@@ -170,38 +190,46 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
             IsUsed = false
         };
     
+        // Save the refresh token to the database.
         await context.RefreshTokens.AddAsync(refreshToken);
         await context.SaveChangesAsync();
     
         return refreshToken;
     }
     
+    // Validates refresh token by checking expiration, usage, and revocation status.
     private bool ValidateRefreshToken(RefreshToken? token)
     {
         if (token == null)
             return false;
         
+        // Check if the token has expired.
         if (token.ExpirationDate <= DateTime.UtcNow)
             return false;
         
+        // Check if the token has already been used.
         if (token.IsUsed)
             return false;
         
+        // Check if the token has been revoked.
         if (token.IsRevoked)
             return false;
         
         return true;
     }
     
+    // Uses refresh token to generate new access and refresh tokens.
     public async Task<ApiResponse<AuthResponseDto?>> RefreshTokenAsync(string refreshToken)
     {
         try
         {
+            // Find the refresh token in the database with the associated user.
             var storedRefreshToken = await context.RefreshTokens
                 .Include(rt => rt.User)
                 .Where(rt => rt.Token == refreshToken)
                 .FirstOrDefaultAsync();
-
+            
+            // Validate the refresh token.
             if (storedRefreshToken == null || !ValidateRefreshToken(storedRefreshToken))
             {
                 return ApiResponse<AuthResponseDto?>.Failure(
@@ -209,11 +237,13 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     "Invalid refresh token.");
             }
 
+            // Mark the current refresh token as used.
             storedRefreshToken.IsUsed = true;
             context.RefreshTokens.Update(storedRefreshToken);
         
             var user = storedRefreshToken.User!;
         
+            // Generate new tokens for the user.
             var newRefreshToken = await CreateRefreshTokenAsync(user.Id);
         
             var newAccessToken = CreateJwt(user);
@@ -239,10 +269,12 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
         }
     }
     
+    // Revokes a refresh token to prevent further use.
     public async Task<ApiResponse<Unit>> RevokeRefreshTokenAsync(string refreshToken)
     {
         try
         {
+            // Find the refresh token in the database.
             var storedRefreshToken = await context.RefreshTokens
                 .Where(rt => rt.Token == refreshToken)
                 .FirstOrDefaultAsync();
@@ -254,6 +286,7 @@ public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMap
                     "Invalid refresh token.");
             }
 
+            // Mark the token as revoked.
             storedRefreshToken.IsRevoked = true;
             await context.SaveChangesAsync();
 

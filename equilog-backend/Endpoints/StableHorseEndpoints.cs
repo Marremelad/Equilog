@@ -7,13 +7,19 @@ public class StableHorseEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
+        // Get connection between stable and horses.
         app.MapGet("/api/stable-horses/{stableId:int}", GetStableHorses) // "/api/stables/{stableId:int}/horses"
+            .RequireAuthorization()
             .WithName("GetStableHorses");
 
+        // Get horse and owner information.
         app.MapGet("/api/stable-horses/{stableId:int}/horses/with-owners", GetHorsesWithOwnersByStableId) // "/api/stables/{stableId:int}/horses?include=owners"
+            .RequireAuthorization()
             .WithName("GetHorsesWithOwnersByStable");
 
+        // Remove the connection between stable and horse.
         app.MapGet("/api/stable-horse/remove-horse/{stableHorseId:int}", RemoveHorseFromStable) // "/api/stable-horses/{stableHorseId:int}"
+            .RequireAuthorization()
             .WithName("RemoveHorseFromStable");
     }
 

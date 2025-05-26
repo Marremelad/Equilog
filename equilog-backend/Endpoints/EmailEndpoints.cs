@@ -11,8 +11,9 @@ public class EmailEndpoints
     {
         // Send Email.
         app.MapPost("/api/email-send/welcome/", SendEmail) // "/api/emails/welcome"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<EmailDto>>()
-            .WithName("SendTwilioMail");
+            .WithName("SendEmail");
         
         // -- Endpoints for compositions --
         

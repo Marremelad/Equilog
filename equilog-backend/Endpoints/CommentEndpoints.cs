@@ -11,21 +11,25 @@ public class CommentEndpoints
 	{
 		// Get comments by StablePost id.
 		app.MapGet("/api/comment/{stablePostId:int}", GetCommentsByStablePostId) // "/api/stable-posts/{stablePostId:int}/comments"
+			.RequireAuthorization()
 			.WithName("GetCommentByStableId");
 
 		// Create comment.
 		app.MapPost("/api/comment/create", CreateComment) // "/api/comments"
+			.RequireAuthorization()
 			.AddEndpointFilter<ValidationFilter<CommentCreateDto>>()
 			.WithName("CreateComment");
 
 		// Delete comment.
 		app.MapDelete("/api/comment/delete/{commentId:int}", DeleteComment) // "/api/comments/{commentId:int}"
+			.RequireAuthorization()
 			.WithName("DeleteComment");
 
 		// -- Endpoints for compositions --
 
 		// create a comment with required components and relations.
 		app.MapPost("/api/comment/create/composition", CreateCommentComposition) // "/api/comments/compositions"
+			.RequireAuthorization()
 			.AddEndpointFilter<ValidationFilter<CommentCompositionCreateDto>>()
 			.WithName("CreateCommentComposition");
 	}

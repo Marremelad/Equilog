@@ -10,12 +10,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace equilog_backend.Services;
 
+// Service that manages stable invitations sent by stable administrators to potential members.
+// Handles the invitation lifecycle from creation to acceptance or refusal.
 public class StableInviteService(EquilogDbContext context, IMapper mapper) : IStableInviteService
 {
+    // Retrieves all users who have been invited to join a specific stable.
     public async Task<ApiResponse<List<UserDto>?>> GetStableInvitesByStableIdAsync(int stableId)
     {
         try
         {
+            // Fetch invited users for the stable through the StableInvites junction table.
             var stableInvites = await context.StableInvites
                 .Where(si => si.StableIdFk == stableId)
                 .Select(si => si.User)
@@ -34,26 +38,31 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
         }
     }
     
+    // Creates a new invitation for a user to join a stable.
     public async Task<ApiResponse<Unit>> CreateStableInviteAsync(StableInviteDto stableInviteDto)
     {
         try
         {
+            // Check if the user is already a member of the stable.
             var userStable = await context.UserStables
                 .Where(us => us.UserIdFk == stableInviteDto.UserId &&
                              us.StableIdFk == stableInviteDto.StableId)
                 .FirstOrDefaultAsync();
 
+            // Prevent inviting users who are already members.
             if (userStable != null)
                 return ApiResponse<Unit>.Failure(
                     HttpStatusCode.BadRequest,
                     "Error: User is already a member of this stable.");
             
+            // Creates a stable invitation relationship.
             var stableInvite = new StableInvite
             {
                 UserIdFk = stableInviteDto.UserId,
                 StableIdFk = stableInviteDto.StableId
             };
 
+            // Add the invitation to the database.
             context.StableInvites.Add(stableInvite);
             await context.SaveChangesAsync();
 
@@ -70,24 +79,29 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
         }
     }
 
+    // Processes acceptance of a stable invitation by converting it to membership.
     public async Task<ApiResponse<Unit>> AcceptStableInviteAsync(StableInviteDto stableInviteDto)
     {
         try
         {
+            // Find the existing invitation.
             var stableInvite = await context.StableInvites
                 .Where(si =>
                     si.UserIdFk == stableInviteDto.UserId && 
                     si.StableIdFk == stableInviteDto.StableId)
                 .FirstOrDefaultAsync();
             
+            // Returns an error if the invitation doesn't exist.
             if (stableInvite == null)
                 return ApiResponse<Unit>.Failure(
                     HttpStatusCode.NotFound,
                     "Error: Stable invite not found.");
 
+            // Remove the invitation since it's being accepted.
             context.StableInvites.Remove(stableInvite);
             await context.SaveChangesAsync();
 
+            // Create user-stable membership with a regular user role (role 2).
             var userStable = new UserStable
             {
                 UserIdFk = stableInviteDto.UserId,
@@ -95,6 +109,7 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
                 Role = 2
             };
 
+            // Add the new membership to the database.
             context.UserStables.Add(userStable);
             await context.SaveChangesAsync();
             
@@ -111,21 +126,25 @@ public class StableInviteService(EquilogDbContext context, IMapper mapper) : ISt
         }
     }
 
+    // Processes refusal of a stable invitation by removing it without creating membership.
     public async Task<ApiResponse<Unit>> RefuseStableInviteAsync(StableInviteDto stableInviteDto)
     {
         try
         {
+            // Find the existing invitation.
             var stableInvite = await context.StableInvites
                 .Where(si =>
                     si.UserIdFk == stableInviteDto.UserId && 
                     si.StableIdFk == stableInviteDto.StableId)
                 .FirstOrDefaultAsync();
             
+            // Returns an error if the invitation doesn't exist.
             if (stableInvite == null)
                 return ApiResponse<Unit>.Failure(
                     HttpStatusCode.NotFound,
                     "Error: Stable invite not found.");
 
+            // Remove the invitation without creating membership.
             context.StableInvites.Remove(stableInvite);
             await context.SaveChangesAsync();
             
