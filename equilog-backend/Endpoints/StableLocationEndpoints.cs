@@ -10,6 +10,7 @@ public class StableLocationEndpoints
 
         // Get stable location.
         app.MapGet("/api/stable-location/{postcode}", GetStableLocation) // "/api/stable-locations/{postcode}"
+            .RequireAuthorization()
             .WithName("GetStableLocation");
     }
     private static async Task<IResult> GetStableLocation(
