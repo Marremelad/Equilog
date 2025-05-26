@@ -102,6 +102,8 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src => src.Horse!.Name))
             .ForMember(dest => dest.HorseColor, 
                 opt => opt.MapFrom(src => src.Horse!.Color))
+            .ForMember(dest => dest.HorseBreed,
+                opt => opt.MapFrom(src => src.Horse!.Breed))
             .ForMember(dest => dest.HorseOwners, 
                 opt => opt.MapFrom(src => src.Horse!.UserHorses != null 
                     ? src.Horse.UserHorses
