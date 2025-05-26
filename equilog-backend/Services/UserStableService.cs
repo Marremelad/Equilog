@@ -205,7 +205,7 @@ public class UserStableService(EquilogDbContext context, IMapper mapper) : IUser
         }
     }
     
-    // Retrieves all stable connections where the user has owner role (used for ownership transfer).
+    // Retrieves all stable connections where the user has an owner role (used for ownership transfer).
     public async Task<List<UserStable>> GetConnectionsWithOwnerRole(int userId)
     {
         return await context.UserStables
