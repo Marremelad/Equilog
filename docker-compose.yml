@@ -2,6 +2,10 @@ version: '3.8' # Se till att du använder en version som stöder Swarm-funktione
 services:
   equilog-backend:
     image: registry.chasacademy.dev/cc25group-10/equilog-backend/dotnet:${DOCKER_TAG}
+    secrets:
+      - appsettings.json
+    volumes:
+      - /run/secrets/appsettings.json:/App/appsettings.json # Skriv över appsettings.json från Portainer Secrets!
     networks:
       - prod-equilog-internal-network
       - traefik-public
@@ -26,17 +30,19 @@ services:
         - traefik.http.routers.api-${STACK_NAMN}-https.tls.domains[0].sans=*.cc25.chasacademy.dev
         - traefik.http.services.api-${STACK_NAMN}.loadbalancer.server.port=80
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=prod-equilog-db;Database=EquilogDB;User=sa;Password=${DB_PASSWORD};TrustServerCertificate=True
-      - CorsConnection__Url=https://g10-main.cc25.chasacademy.dev  # Lägg till denna rad för att skriva över CORS-URL:en
+      - DB_PASSWORD=${DB_PASSWORD} # Exportera DB-lösenordet från GitLab-variabler, entrypoint.sh-scriptet för databasinitiering behöver det!
+      - ASPNETCORE_ENVIRONMENT=Production # appsettings.json läses in, värde Development gör att apsetting.Development.json läses in!
+      # - ASPNETCORE_URLS=http://+:80 #Skriver över variabeln från appsettings.json
+      # - ConnectionStrings__DefaultConnection=Server=prod-equilog-db;Database=EquilogDB;User=sa;Password=${DB_PASSWORD};TrustServerCertificate=True
+      # - CorsConnection__Url=https://g10-main.cc25.chasacademy.dev  # Lägg till denna rad för att skriva över CORS-URL:en
+      # appsetting.json läses in från Portainer secrets!
     depends_on:
-      - prod-equilog-db
+      - prod-equilog-db # Väntar på databas tjänsten att komma upp korrekt.
 
   prod-equilog-db:
     image: registry.chasacademy.dev/cc25group-10/equilog-backend/mssql-db:${DOCKER_TAG}
     networks:
-      - prod-equilog-internal-network # Only internal net is enough
+      - prod-equilog-internal-network # Intern nätverk räcker för databasen!
       # - traefik-public
     deploy:
       mode: replicated
@@ -46,7 +52,7 @@ services:
         max_attempts: 3
       placement:
         constraints:
-          - node.labels.storage == true
+          - node.labels.storage == true # Kör på storage noden!
     volumes:
       - g10-prod-mssql-persistent-db-dir:/var/opt/mssql
     environment:
@@ -61,9 +67,9 @@ services:
     image: mcr.microsoft.com/azure-storage/azurite
     command: azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --skipApiVersionCheck --disableProductStyleUrl --loose --location /data --debug /data/debug.log
     networks:
-      - prod-equilog-internal-network # Only internal net is enough
+      - prod-equilog-internal-network # Internal net
       # Uncomment below to expose azurite to internet
-      # - traefik-public
+      - traefik-public
     volumes:
       - g10-prod-blob-data:/data
 
@@ -77,46 +83,46 @@ services:
         constraints:
           - node.labels.storage == true
       # Uncomment below to expose azurite to internet
-      # labels:
-      #   - traefik.enable=true
-      #   - traefik.docker.network=traefik-public
-      #   - traefik.constraint-label=traefik-public
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
 
-      #   # Blob Service
-      #   - traefik.http.routers.blobstorage-http.rule=Host(`azuritegrup10blob.cc25.chasacademy.dev`)
-      #   - traefik.http.routers.blobstorage-http.entrypoints=http
-      #   - traefik.http.routers.blobstorage-http.middlewares=https-redirect
-      #   - traefik.http.routers.blobstorage-https.rule=Host(`azuritegrup10blob.cc25.chasacademy.dev`)
-      #   - traefik.http.routers.blobstorage-https.entrypoints=https
-      #   - traefik.http.routers.blobstorage-https.tls=true
-      #   - traefik.http.routers.blobstorage-https.tls.certresolver=le
-      #   - traefik.http.routers.blobstorage-https.service=blobstorage-service
-      #   - traefik.http.services.blobstorage-service.loadbalancer.server.port=10000
-      #   - traefik.http.services.blobstorage-service.loadbalancer.server.scheme=http
+        # Blob Service
+        - traefik.http.routers.blobstorage-http.rule=Host(`azuritegrup10blob.cc25.chasacademy.dev`)
+        - traefik.http.routers.blobstorage-http.entrypoints=http
+        - traefik.http.routers.blobstorage-http.middlewares=https-redirect
+        - traefik.http.routers.blobstorage-https.rule=Host(`azuritegrup10blob.cc25.chasacademy.dev`)
+        - traefik.http.routers.blobstorage-https.entrypoints=https
+        - traefik.http.routers.blobstorage-https.tls=true
+        - traefik.http.routers.blobstorage-https.tls.certresolver=le
+        - traefik.http.routers.blobstorage-https.service=blobstorage-service
+        - traefik.http.services.blobstorage-service.loadbalancer.server.port=10000
+        - traefik.http.services.blobstorage-service.loadbalancer.server.scheme=http
 
-      #   # Queue Service
-      #   - traefik.http.routers.queuestorage-http.rule=Host(`azuritegrup10queue.cc25.chasacademy.dev`)
-      #   - traefik.http.routers.queuestorage-http.entrypoints=http
-      #   - traefik.http.routers.queuestorage-http.middlewares=https-redirect
-      #   - traefik.http.routers.queuestorage-https.rule=Host(`azuritegrup10queue.cc25.chasacademy.dev`)
-      #   - traefik.http.routers.queuestorage-https.entrypoints=https
-      #   - traefik.http.routers.queuestorage-https.tls=true
-      #   - traefik.http.routers.queuestorage-https.tls.certresolver=le
-      #   - traefik.http.routers.queuestorage-https.service=queuestorage-service
-      #   - traefik.http.services.queuestorage-service.loadbalancer.server.port=10001
-      #   - traefik.http.services.queuestorage-service.loadbalancer.server.scheme=http
+        # Queue Service
+        - traefik.http.routers.queuestorage-http.rule=Host(`azuritegrup10queue.cc25.chasacademy.dev`)
+        - traefik.http.routers.queuestorage-http.entrypoints=http
+        - traefik.http.routers.queuestorage-http.middlewares=https-redirect
+        - traefik.http.routers.queuestorage-https.rule=Host(`azuritegrup10queue.cc25.chasacademy.dev`)
+        - traefik.http.routers.queuestorage-https.entrypoints=https
+        - traefik.http.routers.queuestorage-https.tls=true
+        - traefik.http.routers.queuestorage-https.tls.certresolver=le
+        - traefik.http.routers.queuestorage-https.service=queuestorage-service
+        - traefik.http.services.queuestorage-service.loadbalancer.server.port=10001
+        - traefik.http.services.queuestorage-service.loadbalancer.server.scheme=http
 
-      #   # Table Service
-      #   - traefik.http.routers.tablestorage-http.rule=Host(`azuritegrup10table.cc25.chasacademy.dev`)
-      #   - traefik.http.routers.tablestorage-http.entrypoints=http
-      #   - traefik.http.routers.tablestorage-http.middlewares=https-redirect
-      #   - traefik.http.routers.tablestorage-https.rule=Host(`azuritegrup10table.cc25.chasacademy.dev`)
-      #   - traefik.http.routers.tablestorage-https.entrypoints=https
-      #   - traefik.http.routers.tablestorage-https.tls=true
-      #   - traefik.http.routers.tablestorage-https.tls.certresolver=le
-      #   - traefik.http.routers.tablestorage-https.service=tablestorage-service
-      #   - traefik.http.services.tablestorage-service.loadbalancer.server.port=10002
-      #   - traefik.http.services.tablestorage-service.loadbalancer.server.scheme=http
+        # Table Service
+        - traefik.http.routers.tablestorage-http.rule=Host(`azuritegrup10table.cc25.chasacademy.dev`)
+        - traefik.http.routers.tablestorage-http.entrypoints=http
+        - traefik.http.routers.tablestorage-http.middlewares=https-redirect
+        - traefik.http.routers.tablestorage-https.rule=Host(`azuritegrup10table.cc25.chasacademy.dev`)
+        - traefik.http.routers.tablestorage-https.entrypoints=https
+        - traefik.http.routers.tablestorage-https.tls=true
+        - traefik.http.routers.tablestorage-https.tls.certresolver=le
+        - traefik.http.routers.tablestorage-https.service=tablestorage-service
+        - traefik.http.services.tablestorage-service.loadbalancer.server.port=10002
+        - traefik.http.services.tablestorage-service.loadbalancer.server.scheme=http
 
 volumes:
   g10-prod-blob-data:
@@ -126,4 +132,8 @@ networks:
   traefik-public:
     external: true
   prod-equilog-internal-network: # se till att nätvereket är skapat i förhand i portainer! Den ska vara internal!
+    external: true
+
+secrets:
+  appsettings.json:
     external: true
