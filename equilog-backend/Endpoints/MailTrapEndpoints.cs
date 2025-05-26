@@ -4,12 +4,14 @@ using equilog_backend.Services;
 
 namespace equilog_backend.Endpoints;
 
+// Used if the regular email endpoints stop working. 
 public class MailTrapEndpoints
 {
     public static void RegisterEndpoints(WebApplication app)
     {
         // Send MailTrap email.
-        app.MapPost("/api/mail-trap-send/welcome", SendEmail) // "/api/mailtrap-emails/welcome"
+        app.MapPost("/api/mail-trap-send/welcome", SendEmail) // "/api/mail-trap-emails/welcome"
+            .RequireAuthorization()
             .WithName("SendEmail");
     }
 
