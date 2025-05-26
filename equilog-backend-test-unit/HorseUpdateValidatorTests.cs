@@ -146,7 +146,7 @@ namespace equilog_backend_test_unit
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Age)
-                .WithErrorMessage("Age can't be a date in the future.");
+                .WithErrorMessage("Age must be today or a past date.");
         }
 
         [Fact]
