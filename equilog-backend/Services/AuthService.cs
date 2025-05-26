@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace equilog_backend.Services;
 
+// Service that handles security-related functionality.
 public class AuthService(EquilogDbContext context, JwtSettings jwtSettings, IMapper mapper) : IAuthService
 {
     // Creates a JWT token for the authenticated user.
