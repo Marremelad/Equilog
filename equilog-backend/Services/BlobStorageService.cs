@@ -153,7 +153,7 @@ public class BlobStorageService(BlobServiceClient client) : IBlobStorageService
         {
             var blobClient = _container.GetBlobClient(blobName);
             
-            // Delete the blob only if it exists (won't throw error if it doesn't exist).
+            // Delete the blob only if it exists (won't throw an error if it doesn't exist).
             await blobClient.DeleteIfExistsAsync();
 
             return ApiResponse<Unit>.Success(
