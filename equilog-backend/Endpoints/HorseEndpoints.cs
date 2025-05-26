@@ -11,26 +11,31 @@ public class HorseEndpoints
     {
         // Get horse profile
         app.MapGet("/api/horse/{horseId:int}/profile", GetHorseProfile) // "/api/horses/{horseId:int}/profile"
+            .RequireAuthorization()
             .WithName("GetHorseProfile");
 
         // Create horse.
         app.MapPost("/api/horse/create", CreateHorse) // "/api/horses"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<HorseCreateDto>>()
             .WithName("CreateHorse");
 
         // Update horse properties.
         app.MapPut("/api/horse/update", UpdateHorse) // "/api/horses/{horseId:int}"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<HorseUpdateDto>>()
             .WithName("UpdateHorse");
 
         // Delete horse.
         app.MapDelete("/api/horse/delete/{horseId:int}", DeleteHorse) // "/api/horses/{horseId:int}"
+            .RequireAuthorization()
             .WithName("DeleteHorse");
         
         // -- Endpoints for compositions --
 
         // Create a horse with required relations.
         app.MapPost("/api/horse/create/composition", CreateHorseComposition) // "/api/horses/compositions"
+            .RequireAuthorization()
             .AddEndpointFilter<ValidationFilter<HorseCompositionCreateDto>>()
             .WithName("CreateHorseComposition");
         
@@ -38,11 +43,12 @@ public class HorseEndpoints
         
         // Get all horses.
         app.MapGet("/api/horse", GetHorses) // "/api/horses"
-            .WithName("GetHorses")
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .WithName("GetHorses");
         
         // Get Horse.
         app.MapGet("/api/horse/{horseId:int}", GetHorse) // "/api/horses/{horseId:int}"
+            .RequireAuthorization()
             .WithName("GetHorse");
     }
     
