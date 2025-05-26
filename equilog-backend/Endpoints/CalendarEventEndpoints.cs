@@ -23,14 +23,14 @@ public abstract class CalendarEventEndpoints
 
         // Create calendar event.
         app.MapPost("/api/calendar-event/create", CreateCalendarEvent) // "/api/calendar-events"
-            .AddEndpointFilter<ValidationFilter<CalendarEventCreateDto>>()
             .RequireAuthorization()
+            .AddEndpointFilter<ValidationFilter<CalendarEventCreateDto>>()
             .WithName("CreateCalendarEvent");
 
         // Update calendar event.
         app.MapPut("/api/calendar-event/update", UpdateCalendarEvent) // "/api/calendar-events/{calendarEventId:int}"
-            .AddEndpointFilter<ValidationFilter<CalendarEventUpdateDto>>()
             .RequireAuthorization()
+            .AddEndpointFilter<ValidationFilter<CalendarEventUpdateDto>>()
             .WithName("UpdateCalendarEvent");
 
         // Delete calendar event.
