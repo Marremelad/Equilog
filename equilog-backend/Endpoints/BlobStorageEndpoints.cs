@@ -9,14 +9,17 @@ public class BlobStorageEndpoints
     {
         // Get upload uri.
         app.MapGet("/api/blob-storage/get-upload-uri", GetUploadUri) // "/api/blobs/{blobName}/upload-uri"
+            .RequireAuthorization()
             .WithName("GetUploadUri");
 
         // Get read uri.
         app.MapGet("/api/blob-storage/get-read-uri", GetReadUri) // "/api/blobs/{blobName}/read-uri"
+            .RequireAuthorization()
             .WithName("GetReadUri");
 
         // Delete blob from blob storage.
         app.MapDelete("/api/blob-storage/delete-blob", DeleteBlob) // "/api/blobs/{blobName}"
+            .RequireAuthorization()
             .WithName("DeleteBlob");
     }
 
