@@ -70,6 +70,7 @@ kora-tester:
     - export CI_PROJECT_NAME=$(echo "$CI_PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
     - export CI_DEFAULT_BRANCH=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
     - export STACK_NAMN="g10-backend-$CI_DEFAULT_BRANCH"
+    - export STACK_NAMND="g10-$CI_DEFAULT_BRANCH"
     - set -e
 
 .miljo_installning: &miljo_installning
