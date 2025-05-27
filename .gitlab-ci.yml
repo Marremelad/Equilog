@@ -82,7 +82,7 @@ leverera-till-miljo:
   stage: leverera
   environment:
     <<: *miljo_installning
-    url: https://api.g10-$CI_DEFAULT_BRANCH.cc25.chasacademy.dev/swagger/index.html
+    url: https://api-g10-$CI_DEFAULT_BRANCH.cc25.chasacademy.dev/swagger/index.html
     # on_stop: avsluta-miljo
   script:
     - echo "Levererar till miljö"
