@@ -13,7 +13,6 @@ variables:
   services:
     - docker:24.0.5-dind
   variables:
-    IMAGE_REPO: "$CI_REGISTRY/cc25group-10/equilog-backend"
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
     - docker info
@@ -26,63 +25,46 @@ blob-image-build:
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/blob:$DOCKER_TAG"
     - echo "Startar build för $IMAGE_NAME"
-    - docker buildx build \
-        --cache-from=type=registry,ref="$IMAGE_NAME" \
-        --cache-to=type=inline \
-        -t "$IMAGE_NAME" \
-        --push \
-        -f Dockerfile-blob .
+    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-blob .
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 databas-bygge:
   <<: *imagebyggare
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/mssql-db:$DOCKER_TAG"
-    - if [[ $CI_DEFAULT_BRANCH = $CI_DEFAULT_BRANCH ]]; then mv prod-db-init.sql db-init.sql; else mv prod-db-init.sql db-init.sql; fi
     - echo "Bygger $IMAGE_NAME"
-    - docker buildx build \
-        --cache-from=type=registry,ref="$IMAGE_NAME" \
-        --cache-to=type=inline \
-        -t "$IMAGE_NAME" \
-        --push \
-        -f Dockerfile-databas .
+    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-databas .
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 dotnet-bygge:
   <<: *imagebyggare
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/dotnet:$DOCKER_TAG"
     - echo "Startar bygge för $IMAGE_NAME"
-    - docker buildx build \
-        --cache-from=type=registry,ref="$IMAGE_NAME" \
-        --cache-to=type=inline \
-        -t "$IMAGE_NAME" \
-        --push \
-        -f Dockerfile-backend .
+    - sed -i "s|<DB_PASSWORD>|$DB_PASSWORD|g" equilog-backend/appsettings.json
+    - sed -i "s|EmptyToken|$API_KEY|g" equilog-backend/appsettings.json
+    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-backend .
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 bygga-verktyg:
   <<: *imagebyggare
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/utils:latest"
-    - echo "Skapar $IMAGE_NAME"
-    - docker buildx build \
-        --cache-from=type=registry,ref="$IMAGE_NAME" \
-        --cache-to=type=inline \
-        -t "$IMAGE_NAME" \
-        --push \
-        -f Dockerfile-utils .
+    - echo "Startar build för $IMAGE_NAME"
+    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-utils .
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 kora-tester:
   stage: testa
   script:
     - echo "TOTAL                  353     20    94%"
   coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
 
 .deploy_verktyg_bas: &deploy_verktyg_bas
   image: $CI_REGISTRY_IMAGE/utils:latest
@@ -90,7 +72,8 @@ kora-tester:
     - export ENDPOINT_ALIAS="primary"
     - export CI_PROJECT_NAME=$(echo "$CI_PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
     - export CI_DEFAULT_BRANCH=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
-    - export STACK_NAMN="g10-$CI_DEFAULT_BRANCH"
+    - export STACK_NAMN="g10-backend-$CI_DEFAULT_BRANCH"
+    - export STACK_NAMND="g10-$CI_DEFAULT_BRANCH"
     - set -e
 
 .miljo_installning: &miljo_installning
@@ -101,19 +84,18 @@ leverera-till-miljo:
   stage: leverera
   environment:
     <<: *miljo_installning
-    # url: https://g10-$CI_DEFAULT_BRANCH.cc25.chasacademy.dev
-    on_stop: avsluta-miljo
+    url: https://api-g10-$CI_DEFAULT_BRANCH.cc25.chasacademy.dev/swagger/index.html
+    # on_stop: avsluta-miljo
   script:
     - echo "Levererar till miljö"
-    - if [[ $CI_DEFAULT_BRANCH = $CI_DEFAULT_BRANCH ]]; then DOCKER_COMPOSE=docker-compose.yml; else DOCKER_COMPOSE=docker-compose-test.yml; fi
+    - export DOCKER_COMPOSE="docker-compose.yml"
     - python portainer.py $CI_JOB_STAGE -dc $DOCKER_COMPOSE
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 avsluta-miljo:
   extends: .deploy_verktyg_bas
   stage: rensa
-  image: $CI_REGISTRY_IMAGE/utils:latest
   environment:
     <<: *miljo_installning
     action: stop
@@ -122,5 +104,3 @@ avsluta-miljo:
     - python portainer.py $CI_JOB_STAGE
   rules:
     - when: manual
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: manual

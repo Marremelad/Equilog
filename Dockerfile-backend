@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /App
 
 # Installera dotnet-ef globalt
-RUN dotnet tool install --global dotnet-ef
+RUN dotnet tool install --global dotnet-ef --version 8.0.14
 ENV PATH="$PATH:/root/.dotnet/tools"
 
 # Kopiera lösning och projektfiler
@@ -16,9 +16,10 @@ RUN dotnet restore
 # Skapa migrationsbundle (för EF Core migrering vid uppstart)
 RUN dotnet ef migrations bundle \
     --self-contained -r linux-x64 \
-    -o migrations \
+    -o migrationslnx64 \
     --project equilog-backend/equilog-backend.csproj \
-    --startup-project equilog-backend/equilog-backend.csproj
+    --startup-project equilog-backend/equilog-backend.csproj \
+    --verbose
 
 # Publicera applikationen
 RUN dotnet publish equilog-backend/equilog-backend.csproj \
@@ -33,8 +34,8 @@ WORKDIR /App
 COPY --from=build /App/out .
 
 # Kopiera migrationsbundle och gör den körbar
-COPY --from=build /App/migrations ./migrations
-RUN chmod +x migrations
+COPY --from=build /App/migrationslnx64 ./migrationslnx64
+RUN chmod +x migrationslnx64
 
 # Kopiera startscript och gör det körbart
 COPY --from=build /App/entrypoint.sh .

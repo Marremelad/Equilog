@@ -3,9 +3,11 @@ set -e
 
 echo "Väntar på att databasen ska bli tillgänglig..."
 
-until ./migrations -v; do
-  echo "Databasen är inte redo ännu – försöker igen om 5 sekunder..."
-  sleep 5
+until ./migrationslnx64 -v \
+  --connection "Server=prod-equilog-db;Database=EquilogDB;User=sa;Password=$MSSQL_SA_PASSWORD;TrustServerCertificate=True"
+do
+  echo "Databasen är inte redo ännu – försöker igen om 10 sekunder..."
+  sleep 10
 done
 
 echo "Databas uppdaterad – startar applikationen..."

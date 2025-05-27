@@ -1,32 +1,32 @@
 #!/bin/bash
 
-# Start sqlserver
+# Starta SQL Server
 /opt/mssql/bin/sqlservr &
 
-# Wait for server to start
-echo "Waiting for SQL server to start..."
+# Vänta på att servern ska starta
+echo "Väntar på att SQL Server ska starta..."
 
 TOOL=/opt/mssql-tools18/bin/sqlcmd
 
-# Wait for server to start, attempt to run basic query, check exit status
+# Vänta på att servern ska starta, försök köra en grundläggande fråga, kontrollera avslutningsstatus
 sleep 10s
 while ! "$TOOL" -No -U sa -P "$MSSQL_SA_PASSWORD" -Q "SELECT 1"; do
-    echo "Still waiting..."
+    echo "Väntar fortfarande..."
     sleep 20s
 done
 
-# Edgecase needed maybe
+# Edgefall som kanske behövs
 sleep 20s
 
-echo "Server started, loading init data"
+echo "Server startad, laddar initieringsdata"
 $TOOL -No -U sa -P "$MSSQL_SA_PASSWORD" -i db-init.sql
 
-if [ $? -eq 0 ];then
-    echo "Successfully initialized DB"
+if [ $? -eq 0 ]; then
+    echo "Databas initierad framgångsrikt"
 else
-    echo "DB initialization failed"
+    echo "Databasinitiering misslyckades"
     exit 1
 fi
 
-# Think this is needed to not exit container?
+# Tror detta behövs för att inte avsluta containern?
 sleep infinity
