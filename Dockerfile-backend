@@ -18,7 +18,8 @@ RUN dotnet ef migrations bundle \
     --self-contained -r linux-x64 \
     -o migrationslnx64 \
     --project equilog-backend/equilog-backend.csproj \
-    --startup-project equilog-backend/equilog-backend.csproj
+    --startup-project equilog-backend/equilog-backend.csproj \
+    --verbose
 
 # Publicera applikationen
 RUN dotnet publish equilog-backend/equilog-backend.csproj \
