@@ -1,5 +1,4 @@
 stages:
-
   - bygga
   - testa
   - leverera
@@ -62,6 +61,8 @@ kora-tester:
   script:
     - echo "TOTAL                  353     20    94%"
   coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  rules:
+    - if: '$CI_MERGE_REQUEST_ID'
 
 .deploy_verktyg_bas: &deploy_verktyg_bas
   image: $CI_REGISTRY_IMAGE/utils:latest
@@ -102,5 +103,3 @@ avsluta-miljo:
     - python portainer.py $CI_JOB_STAGE
   rules:
     - when: manual
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: manual
