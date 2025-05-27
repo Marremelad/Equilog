@@ -61,7 +61,7 @@ public class UserStableStableCompositions(
 
             // If leaving the stable fails, return the error response.
             if (!userStableResponse.IsSuccess)
-                return transferResponse;
+                return userStableResponse;
             
             // Both operations successful - return success response.
             return ApiResponse<Unit>.Success(
