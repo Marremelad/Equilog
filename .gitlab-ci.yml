@@ -27,7 +27,7 @@ blob-image-build:
     - echo "Startar build för $IMAGE_NAME"
     - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-blob .
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 databas-bygge:
   <<: *imagebyggare
@@ -36,7 +36,7 @@ databas-bygge:
     - echo "Bygger $IMAGE_NAME"
     - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-databas .
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 dotnet-bygge:
   <<: *imagebyggare
@@ -45,16 +45,16 @@ dotnet-bygge:
     - echo "Startar bygge för $IMAGE_NAME"
     - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-backend .
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 bygga-verktyg:
   <<: *imagebyggare
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/utils:latest"
-    - echo "Skapar $IMAGE_NAME"
+    - echo "Startar build för $IMAGE_NAME"
     - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-utils .
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 kora-tester:
   stage: testa
@@ -62,7 +62,7 @@ kora-tester:
     - echo "TOTAL                  353     20    94%"
   coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 .deploy_verktyg_bas: &deploy_verktyg_bas
   image: $CI_REGISTRY_IMAGE/utils:latest
@@ -83,18 +83,17 @@ leverera-till-miljo:
   environment:
     <<: *miljo_installning
     url: https://api.g10-$CI_DEFAULT_BRANCH.cc25.chasacademy.dev/swagger/index.html
-    on_stop: avsluta-miljo
+    # on_stop: avsluta-miljo
   script:
     - echo "Levererar till miljö"
-    - if [[ $CI_DEFAULT_BRANCH = $CI_DEFAULT_BRANCH ]]; then DOCKER_COMPOSE=docker-compose.yml; else DOCKER_COMPOSE=docker-compose-test.yml; fi
+    - export DOCKER_COMPOSE="docker-compose.yml"
     - python portainer.py $CI_JOB_STAGE -dc $DOCKER_COMPOSE
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 avsluta-miljo:
   extends: .deploy_verktyg_bas
   stage: rensa
-  image: $CI_REGISTRY_IMAGE/utils:latest
   environment:
     <<: *miljo_installning
     action: stop
