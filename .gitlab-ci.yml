@@ -43,6 +43,8 @@ dotnet-bygge:
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/dotnet:$DOCKER_TAG"
     - echo "Startar bygge för $IMAGE_NAME"
+    - sed -i "s|<DB_PASSWORD>|$DB_PASSWORD|g" equilog-backend/appsettings.json
+    - sed -i "s|EmptyToken|$API_KEY|g" equilog-backend/appsettings.json
     - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-backend .
   rules:
     - if: $CI_MERGE_REQUEST_ID
