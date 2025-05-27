@@ -3,9 +3,8 @@ services:
   equilog-backend:
     image: registry.chasacademy.dev/cc25group-10/equilog-backend/dotnet:${DOCKER_TAG}
     secrets:
-      - appsettings.json
-    volumes:
-      - /run/secrets/appsettings.json:/App/appsettings.json # Skriv över appsettings.json från Portainer Secrets!
+      - source: appsettings.json
+        targe: /App/appsettings.json
     networks:
       - prod-equilog-internal-network
       - traefik-public
@@ -38,7 +37,7 @@ services:
         - traefik.http.services.api-${STACK_NAMND}.loadbalancer.server.scheme=http
     environment:
       - DB_PASSWORD=${DB_PASSWORD} # Exportera DB-lösenordet från GitLab-variabler, entrypoint.sh-scriptet för databasinitiering behöver det!
-      - ASPNETCORE_ENVIRONMENT=Production # appsettings.json läses in, värde Development gör att apsetting.Development.json läses in!
+      - ASPNETCORE_ENVIRONMENT=Development # appsettings.json läses in, värde Development gör att apsetting.Development.json läses in!
       # - ASPNETCORE_URLS=http://+:80 #Skriver över variabeln från appsettings.json
       # - ConnectionStrings__DefaultConnection=Server=prod-equilog-db;Database=EquilogDB;User=sa;Password=${DB_PASSWORD};TrustServerCertificate=True
       # - CorsConnection__Url=https://${STACK_NAMND}.cc25.chasacademy.dev  # Lägg till denna rad för att skriva över CORS-URL:en
